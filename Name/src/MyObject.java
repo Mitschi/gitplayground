@@ -25,7 +25,6 @@ public class MyObject {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(length);
     }
 }

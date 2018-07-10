@@ -50,15 +50,21 @@ public class App extends Application {
 
     @FXML
     protected void choosePath(ActionEvent event){
-        DirectoryChooser fileChooser = new DirectoryChooser();
-        File file = fileChooser.showDialog(stage);
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(stage);
+        try{
+            if(!file.getName().equals("pom.xml")){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "File has to be a pom.xml file!");
+                alert.show();
+            }else{
+                textFieldPath.setText(file.getPath());
+            }
+        }catch (RuntimeException e){
 
-        if(!Files.exists(Paths.get((file.getPath()+"\\pom.xml")))){
-            Alert alert = new Alert(Alert.AlertType.ERROR, "pom.xml could not be found!");
-            alert.show();
         }
 
-        textFieldPath.setText(file.getPath());
+
+
     }
 
     @FXML

@@ -1,23 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
 
-<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.mitschi.App">
-    <columnConstraints>
-        <ColumnConstraints />
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints />
-    </rowConstraints>
-    <children>
-        <Pane prefHeight="300.0" prefWidth="400.0">
-         <children>
-            <Button layoutX="88.0" layoutY="109.0" mnemonicParsing="false" onAction="#messageOutput" text="Button" />
-         </children>
-        </Pane>
-    </children>
-</GridPane>
+<TabPane prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.mitschi.App">
+    <tabs>
+        <Tab text="BuildMedic">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <Pane prefHeight="45.0" prefWidth="800.0">
+                            <children>
+                                <Label layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="76.0" text="Pfad:" />
+                                <TextField layoutX="52.0" layoutY="10.0" prefHeight="25.0" prefWidth="540.0" />
+                                <Button fx:id="pathChoose" layoutX="614.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Choose" />
+                            </children>
+                        </Pane>
+                        <Pane layoutY="45.0" prefHeight="52.0" prefWidth="800.0">
+                            <children>
+                                <Label layoutX="14.0" layoutY="18.0" prefHeight="17.0" prefWidth="46.0" text="Schritte:" />
+                                <ChoiceBox layoutX="74.0" layoutY="14.0" prefWidth="150.0" />
+                            </children>
+                        </Pane>
+                        <Pane layoutY="97.0" prefHeight="240.0" prefWidth="800.0">
+                            <children>
+                                <Label layoutX="14.0" layoutY="14.0" text="Strategien:" />
+                                <CheckBox layoutX="70.0" layoutY="50.0" mnemonicParsing="false" text="Delete Depandancy" />
+                                <CheckBox layoutX="70.0" layoutY="100.0" mnemonicParsing="false" text="Add Depository" />
+                                <CheckBox layoutX="70.0" layoutY="150.0" mnemonicParsing="false" text="Insert Dependency" />
+                                <CheckBox layoutX="70.0" layoutY="200.0" mnemonicParsing="false" text="Version Update" />
+                            </children>
+                        </Pane>
+                        <Pane layoutY="337.0" prefHeight="42.0" prefWidth="800.0">
+                            <children>
+                                <Label layoutX="14.0" layoutY="13.0" text="Logfile:" />
+                                <TextField layoutX="59.0" layoutY="9.0" prefHeight="25.0" prefWidth="343.0" />
+                                <Button layoutX="428.0" layoutY="9.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Choose" />
+                            </children>
+                        </Pane>
+                        <Pane layoutY="379.0" prefHeight="193.0" prefWidth="800.0">
+                            <children>
+                                <ProgressBar layoutX="14.0" layoutY="23.0" prefHeight="18.0" prefWidth="393.0" progress="0.0" />
+                                <Button layoutX="14.0" layoutY="61.0" mnemonicParsing="false" text="Start" />
+                                <Button layoutX="66.0" layoutY="61.0" mnemonicParsing="false" text="Abbruch" />
+                            </children>
+                        </Pane>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+        <Tab text="BuildDiff">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>

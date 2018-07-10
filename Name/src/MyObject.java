@@ -3,7 +3,7 @@ import java.util.Objects;
 public class MyObject {
     private int length;
 
-    public MyObject(int length){
+    public MyObject(int length) {
         this.length = length;
     }
 
@@ -13,6 +13,7 @@ public class MyObject {
 
     public void setLength(int length) {
         this.length = length;
+
     }
 
     @Override

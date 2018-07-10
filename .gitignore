@@ -2,3 +2,4 @@ Name.iml
 *.iml
 .idea
 **/*.iml
+**/target

@@ -74,7 +74,8 @@ public class App extends Application {
 
         if (pomFile.equals("")) {
             lblPath.setTextFill(Color.web("#FF0000"));
-        }
+        }else
+            lblPath.setTextFill(Color.web("#000000"));
 
 
     }

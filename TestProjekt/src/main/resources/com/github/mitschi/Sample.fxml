@@ -41,7 +41,7 @@
                         </Pane>
                         <Pane layoutY="97.0" prefHeight="240.0" prefWidth="800.0">
                             <children>
-                                <Label fx:id="lblStrategy"layoutX="14.0" layoutY="14.0" text="Strategy*:" />
+                                <Label fx:id="lblStrategy" layoutX="14.0" layoutY="14.0" text="Strategy*:" />
                                 <CheckBox layoutX="70.0" layoutY="50.0" mnemonicParsing="false" text="Delete Depandancy">
                                     <tooltip>
                                         <Tooltip text="Test S1" />

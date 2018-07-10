@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Alert;
 
-import at.aau.building.BuildLog;
+//import at.aau.building.BuildLog;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -27,26 +27,20 @@ import java.util.List;
 import java.util.Properties;
 
 public class App extends Application {
+
     protected Stage stage;
     protected static String logPath;
     protected static String repoFolder;
     protected static String pomFile;
-    @FXML protected TextField textFieldPath;
-    @FXML protected TextField textFieldLog;
-    @FXML protected ChoiceBox choiceBox;
+    @FXML
+    protected TextField textFieldPath;
+    @FXML
+    protected TextField textFieldLog;
+    @FXML
+    protected ChoiceBox choiceBox;
 
     protected static int maxSteps;
 
-    public void initialize() {
-
-        choiceBox.setItems(FXCollections.observableArrayList("1","2","3","4","5","6","7","8","9","10","12","13","14","15","16","17","18","19","20"));
-        List options = choiceBox.getItems();
-
-        choiceBox.setValue("1");
-        String pick = choiceBox.getValue().toString();
-        maxSteps = Integer.parseInt(pick);
-
-    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -72,52 +66,54 @@ public class App extends Application {
     }
 
 
-
-
-
-
-    @FXML public void onChangeCountClick(ActionEvent actionEvent) {
-
-    }
-
-    @FXML protected void startProgram(ActionEvent event) {
-
-
-    }
-
-    @FXML protected void cancelProgram(ActionEvent event) {
+    @FXML
+    protected void startProgram(ActionEvent event) {
     }
 
     @FXML
-    protected void choosePath(ActionEvent event){
+    protected void cancelProgram(ActionEvent event) {
+    }
+
+    public void initialize() {
+
+        choiceBox.setItems(FXCollections.observableArrayList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "15", "16", "17", "18", "19", "20"));
+        List options = choiceBox.getItems();
+
+        choiceBox.setValue("1");
+        String pick = choiceBox.getValue().toString();
+        maxSteps = Integer.parseInt(pick);
+    }
+
+
+    @FXML
+    protected void choosePath(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
 
         File file = fileChooser.showOpenDialog(stage);
-        try{
-            if(!file.getName().equals("pom.xml")){
+        try {
+            if (!file.getName().equals("pom.xml")) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "File has to be a pom.xml file!");
                 alert.show();
-            }else{
+            } else {
                 textFieldPath.setText(file.getPath());
                 pomFile = file.getPath();
             }
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
 
         }
 
 
-
     }
 
     @FXML
-    protected void chooseLog(ActionEvent event){
+    protected void chooseLog(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(stage);
         logPath = file.getPath();
         textFieldLog.setText(logPath);
     }
 
-    private static void saveProperties(){
+    private static void saveProperties() {
         Properties properties = new Properties();
         properties.setProperty("logPath", logPath);
 //        properties.setProperty("pomFile", pomFile);

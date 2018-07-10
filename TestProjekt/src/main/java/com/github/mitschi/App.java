@@ -15,6 +15,8 @@ import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class App extends Application {
     protected Stage stage;
@@ -47,6 +49,11 @@ public class App extends Application {
     protected void choosePath(ActionEvent event){
         DirectoryChooser fileChooser = new DirectoryChooser();
         File file = fileChooser.showDialog(stage);
+
+        if(!Files.exists(Paths.get((file.getPath()+"\\pom.xml")))){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "pom.xml could not be found!");
+            alert.show();
+        }
 
         textFieldPath.setText(file.getPath());
     }

@@ -33,10 +33,20 @@ public class App extends Application {
     protected static String pomFile;
     @FXML protected TextField textFieldPath;
     @FXML protected TextField textFieldLog;
-
-
-
     @FXML protected ChoiceBox choiceBox;
+
+    protected static int maxSteps;
+
+    public void initialize() {
+
+        choiceBox.setItems(FXCollections.observableArrayList("1","2","3","4","5","6","7","8","9","10","12","13","14","15","16","17","18","19","20"));
+        List options = choiceBox.getItems();
+
+        choiceBox.setValue("1");
+        String pick = choiceBox.getValue().toString();
+        maxSteps = Integer.parseInt(pick);
+
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -48,15 +58,6 @@ public class App extends Application {
         primaryStage.setTitle("BuildMedic");
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
-
-        choiceBox= new ChoiceBox(FXCollections.observableArrayList("1","2","3"));
-        List options = choiceBox.getItems();
-
-       choiceBox.setValue("1");
-       String pick = choiceBox.getValue().toString();
-
-      // choiceBox.getSelectionModel().selectedIndexProperty().addListener();
-
     }
 
 

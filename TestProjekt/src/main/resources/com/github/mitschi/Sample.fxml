@@ -42,8 +42,8 @@
                         <Pane layoutY="337.0" prefHeight="42.0" prefWidth="800.0">
                             <children>
                                 <Label layoutX="14.0" layoutY="13.0" text="Logfile:" />
-                                <TextField layoutX="59.0" layoutY="9.0" prefHeight="25.0" prefWidth="343.0" />
-                                <Button layoutX="428.0" layoutY="9.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Choose" />
+                                <TextField fx:id="textFieldLog" layoutX="59.0" layoutY="9.0" prefHeight="25.0" prefWidth="343.0" />
+                                <Button layoutX="428.0" layoutY="9.0" mnemonicParsing="false" onAction="#chooseLog" prefHeight="25.0" prefWidth="112.0" text="Choose" />
                             </children>
                         </Pane>
                         <Pane layoutY="379.0" prefHeight="193.0" prefWidth="800.0">

@@ -20,13 +20,16 @@ import java.nio.file.Paths;
 
 public class App extends Application {
     protected Stage stage;
+    protected String logPath;
     @FXML protected TextField textFieldPath;
+    @FXML protected TextField textFieldLog;
 
 
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
+        logPath = "";
         Parent root = FXMLLoader.load(getClass().getResource("Sample.fxml"));
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(new Scene(root, 800, 600));
@@ -56,6 +59,14 @@ public class App extends Application {
         }
 
         textFieldPath.setText(file.getPath());
+    }
+
+    @FXML
+    protected void chooseLog(ActionEvent event){
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(stage);
+        logPath = file.getPath();
+        textFieldLog.setText(logPath);
     }
 
 }

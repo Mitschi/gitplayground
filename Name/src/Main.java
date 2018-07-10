@@ -7,9 +7,21 @@ public class Main {
         System.out.print("Anders");
         int[] array = {1,2,3};
         printArray(array);
+
+        System.out.println(factorial(5));
     }
 
     public static void printArray(int[] array){
         System.out.println(Arrays.toString(array));
+    }
+
+    public static int factorial(int n){
+        int factorial = n;
+
+        for(int i = n - 1; i > 1; i--){
+            factorial *= i;
+        }
+
+        return factorial;
     }
 }

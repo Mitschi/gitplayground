@@ -28,20 +28,19 @@ public class App extends Application {
     protected String logPath;
     @FXML protected TextField textFieldPath;
     @FXML protected TextField textFieldLog;
-
-
-
     @FXML protected ChoiceBox choiceBox;
 
+    protected static int maxSteps;
+
     public void initialize() {
-//        choiceBox= new ChoiceBox(FXCollections.observableArrayList("1","2","3"));
-        choiceBox.setItems(FXCollections.observableArrayList("1","2","3"));
+
+        choiceBox.setItems(FXCollections.observableArrayList("1","2","3","4","5","6","7","8","9","10","12","13","14","15","16","17","18","19","20"));
         List options = choiceBox.getItems();
 
         choiceBox.setValue("1");
         String pick = choiceBox.getValue().toString();
+        maxSteps = Integer.parseInt(pick);
 
-        // choiceBox.getSelectionModel().selectedIndexProperty().addListener();
     }
 
     @Override

@@ -12,8 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<TabPane prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.121"
-         xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.mitschi.App">
+<TabPane prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.mitschi.App">
     <tabs>
         <Tab text="BuildMedic">
             <content>
@@ -21,7 +20,7 @@
                     <children>
                         <Pane prefHeight="45.0" prefWidth="800.0">
                             <children>
-                                <Label layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="76.0" text="Pfad:" />
+                                <Label layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="76.0" text="Path*:" />
                                 <TextField fx:id="textFieldPath" layoutX="52.0" layoutY="10.0" prefHeight="25.0" prefWidth="540.0" />
                                 <Button fx:id="pathChoose" layoutX="614.0" layoutY="10.0" mnemonicParsing="false" onAction="#choosePath" prefHeight="25.0" prefWidth="112.0" text="Choose" />
                             </children>
@@ -31,9 +30,8 @@
 
 
                             <children>
-                                <Label layoutX="14.0" layoutY="18.0" prefHeight="17.0" prefWidth="46.0"
-                                       text="Schritte:"/>
-                                <ChoiceBox fx:id="choiceBox" layoutX="74.0" layoutY="14.0" prefWidth="150.0"/>
+                                <Label layoutX="14.0" layoutY="18.0" prefHeight="17.0" prefWidth="46.0" text="Step*:" />
+                                <ChoiceBox fx:id="choiceBox" layoutX="74.0" layoutY="14.0" prefWidth="150.0" />
 
 
                             </children>
@@ -43,47 +41,42 @@
                         </Pane>
                         <Pane layoutY="97.0" prefHeight="240.0" prefWidth="800.0">
                             <children>
-                                <Label layoutX="14.0" layoutY="14.0" text="Strategien:"/>
-                                <CheckBox layoutX="70.0" layoutY="50.0" mnemonicParsing="false"
-                                          text="Delete Depandancy">
+                                <Label layoutX="14.0" layoutY="14.0" text="Strategy*:" />
+                                <CheckBox layoutX="70.0" layoutY="50.0" mnemonicParsing="false" text="Delete Depandancy">
                                     <tooltip>
-                                        <Tooltip text="Test"/>
+                                        <Tooltip text="Test" />
                                     </tooltip>
                                 </CheckBox>
                                 <CheckBox layoutX="70.0" layoutY="100.0" mnemonicParsing="false" text="Add Depository">
                                     <tooltip>
-                                        <Tooltip text="Empty Tooltip"/>
+                                        <Tooltip text="Empty Tooltip" />
                                     </tooltip>
                                 </CheckBox>
-                                <CheckBox layoutX="70.0" layoutY="150.0" mnemonicParsing="false"
-                                          text="Insert Dependency">
+                                <CheckBox layoutX="70.0" layoutY="150.0" mnemonicParsing="false" text="Insert Dependency">
                                     <tooltip>
-                                        <Tooltip text="Empty Tooltip"/>
+                                        <Tooltip text="Empty Tooltip" />
                                     </tooltip>
                                 </CheckBox>
                                 <CheckBox layoutX="70.0" layoutY="200.0" mnemonicParsing="false" text="Version Update">
                                     <tooltip>
-                                        <Tooltip text="Empty Tooltip"/>
+                                        <Tooltip text="Empty Tooltip" />
                                     </tooltip>
                                 </CheckBox>
                             </children>
                         </Pane>
                         <Pane layoutY="337.0" prefHeight="42.0" prefWidth="800.0">
                             <children>
-                                <Label layoutX="14.0" layoutY="13.0" text="Logfile:"/>
-                                <TextField fx:id="textFieldLog" layoutX="59.0" layoutY="9.0" prefHeight="25.0" prefWidth="343.0"/>
-                                <Button layoutX="428.0" layoutY="9.0" mnemonicParsing="false" onAction="#chooseLog" prefHeight="25.0"
-                                        prefWidth="112.0" text="Choose"/>
+                                <Label layoutX="14.0" layoutY="13.0" text="Logfile:" />
+                                <TextField fx:id="textFieldLog" layoutX="59.0" layoutY="9.0" prefHeight="25.0" prefWidth="343.0" />
+                                <Button layoutX="428.0" layoutY="9.0" mnemonicParsing="false" onAction="#chooseLog" prefHeight="25.0" prefWidth="112.0" text="Choose" />
                             </children>
                         </Pane>
                         <Pane layoutY="379.0" prefHeight="193.0" prefWidth="800.0">
                             <children>
-                                <ProgressBar layoutX="14.0" layoutY="23.0" prefHeight="18.0" prefWidth="393.0"
-                                             progress="0.0"/>
-                                <Button layoutX="14.0" layoutY="61.0" mnemonicParsing="false" onAction="#startProgram"
-                                        text="Start"/>
-                                <Button layoutX="66.0" layoutY="61.0" mnemonicParsing="false" onAction="#cancelProgram"
-                                        text="Cancel"/>
+                                <ProgressBar layoutX="14.0" layoutY="23.0" prefHeight="18.0" prefWidth="393.0" progress="0.0" />
+                                <Button layoutX="14.0" layoutY="61.0" mnemonicParsing="false" onAction="#startProgram" text="Start" />
+                                <Button layoutX="66.0" layoutY="61.0" mnemonicParsing="false" onAction="#cancelProgram" text="Cancel" />
+                        <Label layoutX="14.0" layoutY="155.0" prefHeight="17.0" prefWidth="240.0" text=" Fields marked with * have to be selected" underline="true" />
                             </children>
                         </Pane>
                     </children>
@@ -92,7 +85,7 @@
         </Tab>
         <Tab text="BuildDiff">
             <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>
         </Tab>
     </tabs>

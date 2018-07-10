@@ -47,6 +47,7 @@ public class App extends Application {
         stage = primaryStage;
         logPath = "";
         repoFolder = "";
+        pomFile = "";
 
         Parent root = FXMLLoader.load(getClass().getResource("Sample.fxml"));
         primaryStage.setTitle("BuildMedic");
@@ -116,10 +117,12 @@ public class App extends Application {
     private static void saveProperties() {
         Properties properties = new Properties();
         properties.setProperty("logPath", logPath);
-//        properties.setProperty("pomFile", pomFile);
-
+        properties.setProperty("pomFile", pomFile);
+        properties.setProperty("max_steps", maxSteps+"");
+        String savePath = System.getProperty("user.home") + "\\.buildMedic\\config.properties";
         try {
-            properties.store(System.out, "Properties");
+            properties.store(new FileWriter(savePath), "Properties");
+
         } catch (IOException e) {
             e.printStackTrace();
         }

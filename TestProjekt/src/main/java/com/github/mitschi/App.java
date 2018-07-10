@@ -33,6 +33,17 @@ public class App extends Application {
 
     @FXML protected ChoiceBox choiceBox;
 
+    public void initialize() {
+//        choiceBox= new ChoiceBox(FXCollections.observableArrayList("1","2","3"));
+        choiceBox.setItems(FXCollections.observableArrayList("1","2","3"));
+        List options = choiceBox.getItems();
+
+        choiceBox.setValue("1");
+        String pick = choiceBox.getValue().toString();
+
+        // choiceBox.getSelectionModel().selectedIndexProperty().addListener();
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
@@ -41,15 +52,6 @@ public class App extends Application {
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
-
-        choiceBox= new ChoiceBox(FXCollections.observableArrayList("1","2","3"));
-        List options = choiceBox.getItems();
-
-       choiceBox.setValue("1");
-       String pick = choiceBox.getValue().toString();
-
-      // choiceBox.getSelectionModel().selectedIndexProperty().addListener();
-
     }
 
 

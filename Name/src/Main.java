@@ -8,7 +8,7 @@ public class Main {
         int[] array = {1,2,3};
         printArray(array);
 
-        System.out.println(factorial(5));
+        System.out.println(factorial(6));
     }
 
     public static void printArray(int[] array){

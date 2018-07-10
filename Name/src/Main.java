@@ -8,7 +8,7 @@ public class Main {
         int[] array = {1,2,3};
         printArray(array);
 
-        sum(20,20);
+        sum(20,30);
 
         System.out.println(factorial(6));
     }

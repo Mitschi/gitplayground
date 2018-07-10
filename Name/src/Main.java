@@ -8,6 +8,8 @@ public class Main {
         int[] array = {1,2,3};
         printArray(array);
 
+        sum(10,20);
+
         System.out.println(factorial(6));
     }
 
@@ -23,5 +25,9 @@ public class Main {
         }
 
         return factorial;
+    }
+
+    public static void sum(int a, int b){
+        System.out.println(a+b);
     }
 }

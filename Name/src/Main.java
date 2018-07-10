@@ -5,15 +5,15 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello World!");
         System.out.print("Anders");
-        int[] array = {1,2,3};
+        int[] array = {3,3,3};
         printArray(array);
 
         double[] doubleArray = {1.2,2.2,3.2};
         printDoubleArray(doubleArray);
 
-        sum(20,30);
+        sum(70,30);
 
-        System.out.println(factorial(6));
+        System.out.println(factorial(3));
     }
 
     public static void printArray(int[] array){
@@ -35,5 +35,9 @@ public class Main {
 
     public static void sum(int a, int b){
         System.out.println(a+b);
+    }
+
+    public static void minus(int a, int b){
+        System.out.println(a-b);
     }
 }

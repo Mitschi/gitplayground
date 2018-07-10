@@ -9,9 +9,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
@@ -30,23 +29,26 @@ public class App extends Application {
 
     protected Stage stage;
     protected static String logPath;
-    protected static String repoFolder;
     protected static String pomFile;
+    protected static int maxSteps;
+
     @FXML
     protected TextField textFieldPath;
     @FXML
     protected TextField textFieldLog;
     @FXML
     protected ChoiceBox choiceBox;
-
-    protected static int maxSteps;
+    @FXML
+    protected Label lblPath;
+    @FXML
+    protected Label lblStrategy;
 
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
         logPath = "";
-        repoFolder = "";
+        maxSteps = 1;
         pomFile = "";
 
         Parent root = FXMLLoader.load(getClass().getResource("Sample.fxml"));
@@ -69,6 +71,12 @@ public class App extends Application {
 
     @FXML
     protected void startProgram(ActionEvent event) {
+
+        if (pomFile.equals("")) {
+            lblPath.setTextFill(Color.web("#FF0000"));
+        }
+
+
     }
 
     @FXML

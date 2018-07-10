@@ -17,15 +17,20 @@ import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Alert;
 
-import java.io.File;
+import at.aau.building.BuildLog;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import java.util.List;
+import java.util.Properties;
 
 public class App extends Application {
     protected Stage stage;
-    protected String logPath;
+    protected static String logPath;
+    protected static String repoFolder;
+    protected static String pomFile;
     @FXML protected TextField textFieldPath;
     @FXML protected TextField textFieldLog;
 
@@ -37,8 +42,10 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
         logPath = "";
+        repoFolder = "";
+
         Parent root = FXMLLoader.load(getClass().getResource("Sample.fxml"));
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("BuildMedic");
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
 
@@ -55,6 +62,12 @@ public class App extends Application {
 
     public static void main(String[] args) {
         launch(args);
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+
+            public void run() {
+                saveProperties();
+            }
+        }));
     }
 
 
@@ -67,6 +80,8 @@ public class App extends Application {
     }
 
     @FXML protected void startProgram(ActionEvent event) {
+
+
     }
 
     @FXML protected void cancelProgram(ActionEvent event) {
@@ -75,6 +90,7 @@ public class App extends Application {
     @FXML
     protected void choosePath(ActionEvent event){
         FileChooser fileChooser = new FileChooser();
+
         File file = fileChooser.showOpenDialog(stage);
         try{
             if(!file.getName().equals("pom.xml")){
@@ -82,6 +98,7 @@ public class App extends Application {
                 alert.show();
             }else{
                 textFieldPath.setText(file.getPath());
+                pomFile = file.getPath();
             }
         }catch (RuntimeException e){
 
@@ -97,6 +114,19 @@ public class App extends Application {
         File file = fileChooser.showOpenDialog(stage);
         logPath = file.getPath();
         textFieldLog.setText(logPath);
+    }
+
+    private static void saveProperties(){
+        Properties properties = new Properties();
+        properties.setProperty("logPath", logPath);
+//        properties.setProperty("pomFile", pomFile);
+
+        try {
+            properties.store(System.out, "Properties");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

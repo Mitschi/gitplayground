@@ -24,6 +24,8 @@ import javafx.scene.control.Alert;
 import javafx.geometry.*;
 import java.io.*;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 public class App extends Application {
@@ -153,10 +155,17 @@ public class App extends Application {
         properties.setProperty("logPath", logPath);
         properties.setProperty("pomFile", pomFile);
         properties.setProperty("max_steps", maxSteps+"");
-        String savePath = System.getProperty("user.home") + "\\.buildMedic\\config.properties";
+        String savePath = System.getProperty("user.home") + "\\.buildMedic";
         try {
-            properties.store(new FileWriter(savePath), "Properties");
+            if(!Files.exists(Paths.get(savePath))){
+                new File(savePath).mkdirs();
+                properties.store(new FileWriter(savePath+"\\config.properties"), "Properties");
+                System.out.println("Closed but with Creating!");
+            }else {
+                properties.store(new FileWriter(savePath+"\\config.properties"), "Properties");
+                System.out.println("Succesfully closed!");
 
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

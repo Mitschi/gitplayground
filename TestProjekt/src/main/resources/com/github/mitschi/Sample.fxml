@@ -73,10 +73,12 @@
                         </Pane>
                         <Pane layoutY="379.0" prefHeight="193.0" prefWidth="800.0">
                             <children>
-                                <ProgressBar layoutX="14.0" layoutY="23.0" prefHeight="18.0" prefWidth="393.0" progress="0.0" />
-                                <Button layoutX="14.0" layoutY="61.0" mnemonicParsing="false" onAction="#startProgram" text="Start" />
-                                <Button layoutX="66.0" layoutY="61.0" mnemonicParsing="false" onAction="#cancelProgram" text="Cancel" />
+                                <ProgressBar layoutX="14.0" layoutY="81.0" prefHeight="18.0" prefWidth="393.0" progress="0.0" />
+                                <Button layoutX="14.0" layoutY="119.0" mnemonicParsing="false" onAction="#startProgram" text="Start" />
+                                <Button layoutX="66.0" layoutY="119.0" mnemonicParsing="false" onAction="#cancelProgram" text="Cancel" />
                         <Label layoutX="14.0" layoutY="153.0" prefHeight="17.0" prefWidth="240.0" text="Fields marked with * have to be selected" underline="true" />
+                        <Label layoutX="14.0" layoutY="38.0" text="Revision:" />
+                        <TextField fx:id="textFieldRevision" layoutX="66.0" layoutY="34.0" prefHeight="25.0" prefWidth="476.0" />
                             </children>
                         </Pane>
                     </children>

@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Alert;
@@ -42,16 +43,22 @@ public class App extends Application {
     protected Label lblPath;
     @FXML
     protected Label lblStrategy;
+    @FXML
+    protected TextField textFieldRevision;
+
+    protected String revision;
 
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         stage = primaryStage;
         logPath = "";
         maxSteps = 1;
         pomFile = "";
 
         Parent root = FXMLLoader.load(getClass().getResource("Sample.fxml"));
+
         primaryStage.setTitle("BuildMedic");
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
@@ -71,13 +78,12 @@ public class App extends Application {
 
     @FXML
     protected void startProgram(ActionEvent event) {
-
         if (pomFile.equals("")) {
             lblPath.setTextFill(Color.web("#FF0000"));
         }else
             lblPath.setTextFill(Color.web("#000000"));
 
-
+        getRevision();
     }
 
     @FXML
@@ -100,6 +106,7 @@ public class App extends Application {
         FileChooser fileChooser = new FileChooser();
 
         File file = fileChooser.showOpenDialog(stage);
+
         try {
             if (!file.getName().equals("pom.xml")) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "File has to be a pom.xml file!");
@@ -136,6 +143,10 @@ public class App extends Application {
             e.printStackTrace();
         }
 
+    }
+
+    protected void getRevision(){
+        revision = textFieldRevision.getText();
     }
 
 }

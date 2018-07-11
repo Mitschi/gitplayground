@@ -1,6 +1,7 @@
 package com.github.mitschi;
 
 
+import at.aau.FixAction;
 import at.aau.Repair;
 import at.aau.RepairListener;
 import javafx.application.Application;
@@ -21,7 +22,7 @@ import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Alert;
 
-//import at.aau.building.BuildLog;
+
 
 import javax.swing.table.TableColumn;
 import java.io.*;
@@ -29,6 +30,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Properties;
 
 public class App extends Application implements RepairListener {
@@ -59,11 +61,15 @@ public class App extends Application implements RepairListener {
 
 
     @FXML
-    protected TableView<String> tableView;
+    protected TableView<TableRow> tableView;
     @FXML
-    protected javafx.scene.control.TableColumn repaired;
+    protected javafx.scene.control.TableColumn step;
     @FXML
-    protected javafx.scene.control.TableColumn unrepairable;
+    protected javafx.scene.control.TableColumn strategies;
+
+    @FXML
+    protected javafx.scene.control.TableColumn buildResult;
+
 
 
     @FXML
@@ -135,6 +141,7 @@ public class App extends Application implements RepairListener {
 
 
         getRevision();
+
     }
 
     @FXML
@@ -153,8 +160,13 @@ public class App extends Application implements RepairListener {
 
         tableView.setEditable(true);
         //tableView.getColumns().add("123");
-        // repaired.setCellValueFactory(new PropertyValueFactory<String, String>());
+        step.setCellValueFactory(new PropertyValueFactory<TableRow, Integer>("step"));
+        strategies.setCellValueFactory(new PropertyValueFactory<TableRow, String>("strategie"));
+        buildResult.setCellValueFactory(new PropertyValueFactory<TableRow, String>("buildResult"));
 
+        ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1","success"));
+
+        tableView.setItems(data);
 
         try {
             Properties startProperties = new Properties();
@@ -228,7 +240,7 @@ public class App extends Application implements RepairListener {
     }
 
     @Override
-    public void repairStarted() {
+    public void repairStarted(File file, String s, int i, List<Class> list) {
 
     }
 
@@ -238,12 +250,17 @@ public class App extends Application implements RepairListener {
     }
 
     @Override
-    public void stepPerformed() {
+    public void stepStarted(int i, int i1) {
 
     }
 
     @Override
-    public void repairFound() {
+    public void stepEnded(int i, int i1) {
+
+    }
+
+    @Override
+    public void repairFound(List<FixAction> list) {
 
     }
 

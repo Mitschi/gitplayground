@@ -44,22 +44,22 @@
                         <Pane layoutY="97.0" prefHeight="240.0" prefWidth="800.0">
                             <children>
                                 <Label fx:id="lblStrategy" layoutX="14.0" layoutY="14.0" text="Strategy*:" />
-                                <CheckBox layoutX="70.0" layoutY="50.0" mnemonicParsing="false" text="Delete Depandancy">
+                                <CheckBox fx:id="delete" layoutX="70.0" layoutY="50.0" mnemonicParsing="false" text="Delete Depandancy">
                                     <tooltip>
                                         <Tooltip text="Test S1" />
                                     </tooltip>
                                 </CheckBox>
-                                <CheckBox layoutX="70.0" layoutY="100.0" mnemonicParsing="false" text="Add Depository">
+                                <CheckBox fx:id="add" layoutX="70.0" layoutY="100.0" mnemonicParsing="false" text="Add Depository">
                                     <tooltip>
                                         <Tooltip text="Test S2" />
                                     </tooltip>
                                 </CheckBox>
-                                <CheckBox layoutX="70.0" layoutY="150.0" mnemonicParsing="false" text="Insert Dependency">
+                                <CheckBox fx:id="insert" layoutX="70.0" layoutY="150.0" mnemonicParsing="false" text="Insert Dependency">
                                     <tooltip>
                                         <Tooltip text="Test S3" />
                                     </tooltip>
                                 </CheckBox>
-                                <CheckBox layoutX="70.0" layoutY="200.0" mnemonicParsing="false" text="Version Update">
+                                <CheckBox fx:id="version" layoutX="70.0" layoutY="200.0" mnemonicParsing="false" text="Version Update">
                                     <tooltip>
                                         <Tooltip text="Test S4" />
                                     </tooltip>
@@ -69,8 +69,8 @@
 
                         <TableView fx:id="tableView" layoutX="334.0" layoutY="17.0" prefHeight="200.0" prefWidth="400.0">
                           <columns>
-                            <TableColumn maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Repaired" />
-                            <TableColumn maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Irreparable" />
+                            <TableColumn fx:id="repaired" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Repaired" />
+                            <TableColumn fx:id="unrepairable" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Unrepaired" />
                           </columns>
                         </TableView>
 

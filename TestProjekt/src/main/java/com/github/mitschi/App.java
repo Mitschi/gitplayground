@@ -3,16 +3,16 @@ package com.github.mitschi;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 
 import javafx.stage.Stage;
@@ -21,7 +21,7 @@ import javafx.scene.control.Alert;
 
 //import at.aau.building.BuildLog;
 
-import javafx.geometry.*;
+import javax.swing.table.TableColumn;
 import java.io.*;
 
 import java.nio.file.Files;
@@ -37,6 +37,10 @@ public class App extends Application {
     protected Scene scene;
     protected static String savePath;
 
+    protected String revision;
+    protected ObservableList<String> list;
+
+
     @FXML
     protected TextField textFieldPath;
     @FXML
@@ -50,12 +54,26 @@ public class App extends Application {
     @FXML
     protected TextField textFieldRevision;
 
-    protected String revision;
 
 
-    @FXML protected TableView tableView;
-    @FXML protected TableView tvRepaired;
-    @FXML protected TableView tvIrreparable;
+
+    @FXML
+    protected TableView<String> tableView;
+    @FXML
+    protected javafx.scene.control.TableColumn repaired;
+    @FXML
+    protected javafx.scene.control.TableColumn unrepairable;
+
+
+    @FXML
+    protected CheckBox delete;
+    @FXML
+    protected CheckBox add;
+    @FXML
+    protected CheckBox insert;
+    @FXML
+    protected CheckBox version;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -63,6 +81,8 @@ public class App extends Application {
         logPath = "";
         maxSteps = 1;
         pomFile = "";
+
+        list = FXCollections.observableArrayList("1", "2", "3");
 
         Parent root = FXMLLoader.load(getClass().getResource("Sample.fxml"));
         scene = new Scene(root, 800, 600);
@@ -90,10 +110,17 @@ public class App extends Application {
 
     @FXML
     protected void startProgram(ActionEvent event) {
-        if (pomFile.equals("")) {
+        if (pomFile.equals(""))
             lblPath.setTextFill(Color.web("#FF0000"));
-        }else
+        else
             lblPath.setTextFill(Color.web("#000000"));
+
+
+        if (!delete.isSelected() && !add.isSelected() && !insert.isSelected() && !version.isSelected())
+            lblStrategy.setTextFill(Color.web("#FF0000"));
+        else
+            lblStrategy.setTextFill(Color.web("#000000"));
+
 
         getRevision();
     }
@@ -102,18 +129,6 @@ public class App extends Application {
     protected void cancelProgram(ActionEvent event) {
     }
 
-    public  void initTable(){
-
-        final VBox vbox = new VBox();
-        vbox.setSpacing(5);
-        vbox.setPadding(new Insets(10, 0, 0, 10));
-        vbox.getChildren().addAll(tableView);
-
-        ((Group) scene.getRoot()).getChildren().addAll(vbox);
-
-        stage.setScene(scene);
-        stage.show();
-    }
 
     public void initialize() {
 
@@ -123,7 +138,12 @@ public class App extends Application {
         String pick = choiceBox.getValue().toString();
         maxSteps = Integer.parseInt(pick);
 
-        try{
+        tableView.setEditable(true);
+        //tableView.getColumns().add("123");
+        // repaired.setCellValueFactory(new PropertyValueFactory<String, String>());
+
+
+        try {
             Properties startProperties = new Properties();
             savePath = System.getProperty("user.home") + "\\.buildMedic";
             startProperties.load(new FileReader(savePath+"\\config.properties"));
@@ -173,15 +193,15 @@ public class App extends Application {
         Properties properties = new Properties();
         properties.setProperty("logPath", logPath);
         properties.setProperty("pomFile", pomFile);
-        properties.setProperty("max_steps", maxSteps+"");
+        properties.setProperty("max_steps", maxSteps + "");
 
         try {
-            if(!Files.exists(Paths.get(savePath))){
+            if (!Files.exists(Paths.get(savePath))) {
                 new File(savePath).mkdirs();
-                properties.store(new FileWriter(savePath+"\\config.properties"), "Properties");
+                properties.store(new FileWriter(savePath + "\\config.properties"), "Properties");
 
-            }else {
-                properties.store(new FileWriter(savePath+"\\config.properties"), "Properties");
+            } else {
+                properties.store(new FileWriter(savePath + "\\config.properties"), "Properties");
 
 
             }
@@ -190,7 +210,7 @@ public class App extends Application {
 
     }
 
-    protected void getRevision(){
+    protected void getRevision() {
         revision = textFieldRevision.getText();
     }
 

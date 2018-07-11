@@ -1,6 +1,8 @@
 package com.github.mitschi;
 
 
+import at.aau.Repair;
+import at.aau.RepairListener;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,9 +28,10 @@ import java.io.*;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.util.Properties;
 
-public class App extends Application {
+public class App extends Application implements RepairListener {
 
     protected Stage stage;
     protected static String logPath;
@@ -53,8 +56,6 @@ public class App extends Application {
     protected Label lblStrategy;
     @FXML
     protected TextField textFieldRevision;
-
-
 
 
     @FXML
@@ -121,12 +122,24 @@ public class App extends Application {
         else
             lblStrategy.setTextFill(Color.web("#000000"));
 
+        Repair repair = new Repair();
+        repair.addRepairListener(this);
+
+        try {
+            repair.repair(new File("C:\\Users\\jana\\gitplayground\\TestProjekt\\pom.xml"),null,5,null, null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
 
         getRevision();
     }
 
     @FXML
     protected void cancelProgram(ActionEvent event) {
+
     }
 
 
@@ -146,7 +159,7 @@ public class App extends Application {
         try {
             Properties startProperties = new Properties();
             savePath = System.getProperty("user.home") + "\\.buildMedic";
-            startProperties.load(new FileReader(savePath+"\\config.properties"));
+            startProperties.load(new FileReader(savePath + "\\config.properties"));
             logPath = startProperties.getProperty("logPath");
             pomFile = startProperties.getProperty("pomFile");
             maxSteps = Integer.parseInt(startProperties.getProperty("max_steps"));
@@ -154,7 +167,7 @@ public class App extends Application {
             textFieldLog.setText(logPath);
             textFieldPath.setText(pomFile);
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -214,4 +227,28 @@ public class App extends Application {
         revision = textFieldRevision.getText();
     }
 
+    @Override
+    public void repairStarted() {
+
+    }
+
+    @Override
+    public void repairEnded() {
+
+    }
+
+    @Override
+    public void stepPerformed() {
+
+    }
+
+    @Override
+    public void repairFound() {
+
+    }
+
+    @Override
+    public void printText(String s) {
+
+    }
 }

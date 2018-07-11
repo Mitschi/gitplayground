@@ -132,7 +132,7 @@ public class App extends Application implements RepairListener {
         repair.addRepairListener(this);
 
         File repoFile = new File(pomFile);
-
+        getRevision();
 
 //        try {
 //            repair.repair(repoFile,revision,maxSteps,null, null);
@@ -143,7 +143,7 @@ public class App extends Application implements RepairListener {
 //        }
 
 
-        getRevision();
+
 
     }
 

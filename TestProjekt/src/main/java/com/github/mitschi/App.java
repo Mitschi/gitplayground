@@ -58,6 +58,11 @@ public class App extends Application implements RepairListener {
     @FXML
     protected TextField textFieldRevision;
 
+    @FXML
+    protected Tab detailsTab;
+
+    @FXML
+    protected TabPane tapPane;
 
     @FXML
     protected TableView<TableRow> tableView;
@@ -83,6 +88,7 @@ public class App extends Application implements RepairListener {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         stage = primaryStage;
         logPath = "";
         maxSteps = 1;
@@ -117,6 +123,10 @@ public class App extends Application implements RepairListener {
 
     @FXML
     protected void startProgram(ActionEvent event) {
+        tapPane.getTabs().add(detailsTab);
+        SingleSelectionModel<Tab> selectionModel = tapPane.getSelectionModel();
+        selectionModel.select(detailsTab);
+
         if (pomFile.equals(""))
             lblPath.setTextFill(Color.web("#FF0000"));
         else
@@ -156,7 +166,7 @@ public class App extends Application implements RepairListener {
     public void initialize() {
 
         choiceBox.setItems(FXCollections.observableArrayList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "15", "16", "17", "18", "19", "20"));
-
+        tapPane.getTabs().remove(detailsTab);
         choiceBox.setValue("1");
         String pick = choiceBox.getValue().toString();
         maxSteps = Integer.parseInt(pick);
@@ -167,7 +177,7 @@ public class App extends Application implements RepairListener {
         strategies.setCellValueFactory(new PropertyValueFactory<TableRow, String>("strategie"));
         buildResult.setCellValueFactory(new PropertyValueFactory<TableRow, String>("buildResult"));
 
-        ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1","success"));
+        ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1","success"),new TableRow(2, "strat2","failed"));
 
         tableView.setItems(data);
 

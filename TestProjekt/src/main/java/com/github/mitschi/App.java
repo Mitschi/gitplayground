@@ -127,7 +127,6 @@ public class App extends Application {
             Properties startProperties = new Properties();
             savePath = System.getProperty("user.home") + "\\.buildMedic";
             startProperties.load(new FileReader(savePath+"\\config.properties"));
-            System.out.println(startProperties);
             logPath = startProperties.getProperty("logPath");
             pomFile = startProperties.getProperty("pomFile");
             maxSteps = Integer.parseInt(startProperties.getProperty("max_steps"));
@@ -136,7 +135,6 @@ public class App extends Application {
             textFieldPath.setText(pomFile);
 
         }catch (Exception e){
-            e.printStackTrace();
 
         }
     }
@@ -188,7 +186,6 @@ public class App extends Application {
 
             }
         } catch (IOException e) {
-            e.printStackTrace();
         }
 
     }

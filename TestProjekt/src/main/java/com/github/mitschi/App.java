@@ -42,7 +42,6 @@ public class App extends Application implements RepairListener {
     protected static String savePath;
 
     protected String revision;
-    protected ObservableList<String> list;
 
 
     @FXML
@@ -89,29 +88,26 @@ public class App extends Application implements RepairListener {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        stage = primaryStage;
-        logPath = "";
-        maxSteps = 1;
-        pomFile = "";
+        stage = primaryStage; // make an global reference for primaryStage
+        logPath = ""; // initializing logPath
+        maxSteps = 1; // initializing maxSteps
+        pomFile = ""; // initializing pomFile
 
-        list = FXCollections.observableArrayList("1", "2", "3");
+        Parent root = FXMLLoader.load(getClass().getResource("Sample.fxml")); // loading fxml-File
+        scene = new Scene(root, 800, 600); // initializing scene
 
-        Parent root = FXMLLoader.load(getClass().getResource("Sample.fxml"));
-        scene = new Scene(root, 800, 600);
-
-
-        primaryStage.setTitle("BuildMedic");
-        primaryStage.setResizable(false);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        primaryStage.setTitle("BuildMedic"); // Setting Title of Application
+        primaryStage.setResizable(false); // Set Stage to not resizeable
+        primaryStage.setScene(scene); // Adding Scene to Stage
+        primaryStage.show(); // Showing Stage
 
 
     }
 
 
     public static void main(String[] args) {
-        launch(args);
-
+        launch(args); // Launch the Application
+        // Saves Properties before the Application terminates
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 
             public void run() {
@@ -123,10 +119,12 @@ public class App extends Application implements RepairListener {
 
     @FXML
     protected void startProgram(ActionEvent event) {
+        // show detailsTab when the Startbutton is pressed
         tapPane.getTabs().add(detailsTab);
         SingleSelectionModel<Tab> selectionModel = tapPane.getSelectionModel();
         selectionModel.select(detailsTab);
 
+        // Marking missing parameters
         if (pomFile.equals(""))
             lblPath.setTextFill(Color.web("#FF0000"));
         else
@@ -138,11 +136,16 @@ public class App extends Application implements RepairListener {
         else
             lblStrategy.setTextFill(Color.web("#000000"));
 
+        // Start the Repairtool
         Repair repair = new Repair();
         repair.addRepairListener(this);
 
-        File repoFile = new File(pomFile);
-        getRevision();
+        File repoFile = new File(pomFile); // Load File
+        getRevision(); // Load Revision-String
+
+        //Load maxSteps from ChoiceBox
+        String pick = choiceBox.getValue().toString();
+        maxSteps = Integer.parseInt(pick);
 
 //        try {
 //            repair.repair(repoFile,revision,maxSteps,null, null);
@@ -164,13 +167,16 @@ public class App extends Application implements RepairListener {
 
 
     public void initialize() {
-
-        choiceBox.setItems(FXCollections.observableArrayList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "15", "16", "17", "18", "19", "20"));
+        // Set detailsTab to non-visible in the beginning
         tapPane.getTabs().remove(detailsTab);
+
+        // Setting up ChoiceBox
+        choiceBox.setItems(FXCollections.observableArrayList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "15", "16", "17", "18", "19", "20"));
         choiceBox.setValue("1");
         String pick = choiceBox.getValue().toString();
         maxSteps = Integer.parseInt(pick);
 
+        // Setting up TableView
         tableView.setEditable(true);
         //tableView.getColumns().add("123");
         step.setCellValueFactory(new PropertyValueFactory<TableRow, Integer>("step"));
@@ -181,9 +187,10 @@ public class App extends Application implements RepairListener {
 
         tableView.setItems(data);
 
+        // Load existing Properties
         try {
             Properties startProperties = new Properties();
-            savePath = System.getProperty("user.home") + "\\.buildMedic";
+            savePath = System.getProperty("user.home") + "\\.buildMedic"; // initializing savePath
             startProperties.load(new FileReader(savePath + "\\config.properties"));
             logPath = startProperties.getProperty("logPath");
             pomFile = startProperties.getProperty("pomFile");
@@ -200,11 +207,14 @@ public class App extends Application implements RepairListener {
 
     @FXML
     protected void choosePath(ActionEvent event) {
+        // Initialize FileChooser
         FileChooser fileChooser = new FileChooser();
 
+        // Open FileChooser and wait for Input
         File file = fileChooser.showOpenDialog(stage);
 
         try {
+            // Check if input is an pom.xml file otherwise open an alert
             if (!file.getName().equals("pom.xml")) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "File has to be a pom.xml file!");
                 alert.show();
@@ -221,19 +231,24 @@ public class App extends Application implements RepairListener {
 
     @FXML
     protected void chooseLog(ActionEvent event) {
+        // Initialize FileChooser
         FileChooser fileChooser = new FileChooser();
+        // Open FileChooser
         File file = fileChooser.showOpenDialog(stage);
+        // Load Path to TextField
         logPath = file.getPath();
         textFieldLog.setText(logPath);
     }
 
     private static void saveProperties() {
+        // Initialize Properties
         Properties properties = new Properties();
         properties.setProperty("logPath", logPath);
         properties.setProperty("pomFile", pomFile);
         properties.setProperty("max_steps", maxSteps + "");
 
         try {
+            // write properties to C:\Users\%USERPROFILE%\.buildMedic\config.properties if non-existing Path will be created
             if (!Files.exists(Paths.get(savePath))) {
                 new File(savePath).mkdirs();
                 properties.store(new FileWriter(savePath + "\\config.properties"), "Properties");
@@ -249,6 +264,7 @@ public class App extends Application implements RepairListener {
     }
 
     protected void getRevision() {
+        // Load revision-String
         revision = textFieldRevision.getText();
     }
 

@@ -131,13 +131,13 @@ public class App extends Application implements RepairListener {
         Repair repair = new Repair();
         repair.addRepairListener(this);
 
-        try {
-            repair.repair(new File("C:\\Users\\jana\\gitplayground\\TestProjekt\\pom.xml"),null,5,null, null);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            repair.repair(new File("C:\\Users\\jana\\gitplayground\\TestProjekt\\pom.xml"),null,5,null, null);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
 
 
         getRevision();

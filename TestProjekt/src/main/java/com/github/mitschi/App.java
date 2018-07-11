@@ -178,7 +178,6 @@ public class App extends Application implements RepairListener {
 
         // Setting up TableView
         tableView.setEditable(true);
-        //tableView.getColumns().add("123");
         step.setCellValueFactory(new PropertyValueFactory<TableRow, Integer>("step"));
         strategies.setCellValueFactory(new PropertyValueFactory<TableRow, String>("strategie"));
         buildResult.setCellValueFactory(new PropertyValueFactory<TableRow, String>("buildResult"));

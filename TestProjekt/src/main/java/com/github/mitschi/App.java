@@ -26,7 +26,6 @@ import javafx.scene.control.Alert;
 
 import javax.swing.table.TableColumn;
 import java.io.*;
-
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.ParseException;
@@ -132,8 +131,11 @@ public class App extends Application implements RepairListener {
         Repair repair = new Repair();
         repair.addRepairListener(this);
 
+        File repoFile = new File(pomFile);
+
+
 //        try {
-//            repair.repair(new File("C:\\Users\\jana\\gitplayground\\TestProjekt\\pom.xml"),null,5,null, null);
+//            repair.repair(repoFile,revision,maxSteps,null, null);
 //        } catch (FileNotFoundException e) {
 //            e.printStackTrace();
 //        } catch (ParseException e) {

@@ -35,6 +35,7 @@ public class App extends Application {
     protected static String pomFile;
     protected static int maxSteps;
     protected Scene scene;
+    protected static String savePath;
 
     @FXML
     protected TextField textFieldPath;
@@ -70,11 +71,14 @@ public class App extends Application {
         primaryStage.setTitle("BuildMedic");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+
     }
 
 
     public static void main(String[] args) {
         launch(args);
+
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 
             public void run() {
@@ -118,6 +122,23 @@ public class App extends Application {
         choiceBox.setValue("1");
         String pick = choiceBox.getValue().toString();
         maxSteps = Integer.parseInt(pick);
+
+        try{
+            Properties startProperties = new Properties();
+            savePath = System.getProperty("user.home") + "\\.buildMedic";
+            startProperties.load(new FileReader(savePath+"\\config.properties"));
+            System.out.println(startProperties);
+            logPath = startProperties.getProperty("logPath");
+            pomFile = startProperties.getProperty("pomFile");
+            maxSteps = Integer.parseInt(startProperties.getProperty("max_steps"));
+
+            textFieldLog.setText(logPath);
+            textFieldPath.setText(pomFile);
+
+        }catch (Exception e){
+            e.printStackTrace();
+
+        }
     }
 
 
@@ -155,15 +176,15 @@ public class App extends Application {
         properties.setProperty("logPath", logPath);
         properties.setProperty("pomFile", pomFile);
         properties.setProperty("max_steps", maxSteps+"");
-        String savePath = System.getProperty("user.home") + "\\.buildMedic";
+
         try {
             if(!Files.exists(Paths.get(savePath))){
                 new File(savePath).mkdirs();
                 properties.store(new FileWriter(savePath+"\\config.properties"), "Properties");
-                System.out.println("Closed but with Creating!");
+
             }else {
                 properties.store(new FileWriter(savePath+"\\config.properties"), "Properties");
-                System.out.println("Succesfully closed!");
+
 
             }
         } catch (IOException e) {

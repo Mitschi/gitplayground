@@ -96,6 +96,7 @@ public class App extends Application implements RepairListener {
 
 
         primaryStage.setTitle("BuildMedic");
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
 

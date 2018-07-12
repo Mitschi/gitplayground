@@ -23,7 +23,6 @@ import javafx.stage.FileChooser;
 import javafx.scene.control.Alert;
 
 
-
 import javax.swing.table.TableColumn;
 import java.io.*;
 import java.nio.file.Files;
@@ -72,7 +71,6 @@ public class App extends Application implements RepairListener {
 
     @FXML
     protected javafx.scene.control.TableColumn buildResult;
-
 
 
     @FXML
@@ -156,8 +154,6 @@ public class App extends Application implements RepairListener {
 //        }
 
 
-
-
     }
 
     @FXML
@@ -182,7 +178,7 @@ public class App extends Application implements RepairListener {
         strategies.setCellValueFactory(new PropertyValueFactory<TableRow, String>("strategie"));
         buildResult.setCellValueFactory(new PropertyValueFactory<TableRow, String>("buildResult"));
 
-        ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1","success"),new TableRow(2, "strat2","failed"));
+        ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1", "success"), new TableRow(2, "strat2", "failed"));
 
         tableView.setItems(data);
 

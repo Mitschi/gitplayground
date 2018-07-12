@@ -79,6 +79,42 @@ public class App extends Application implements RepairListener {
     protected Label progressLbl;
 
 
+    public void initialize() {
+        // Set detailsTab to non-visible in the beginning
+        tapPane.getTabs().remove(detailsTab);
+
+        // Setting up ChoiceBox
+        choiceBox.setItems(FXCollections.observableArrayList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "15", "16", "17", "18", "19", "20"));
+        choiceBox.setValue("1");
+        String pick = choiceBox.getValue().toString();
+        maxSteps = Integer.parseInt(pick);
+        // Setting up TableView
+        tableView.setEditable(true);
+        step.setCellValueFactory(new PropertyValueFactory<TableRow, Integer>("step"));
+        strategies.setCellValueFactory(new PropertyValueFactory<TableRow, String>("strategie"));
+        buildResult.setCellValueFactory(new PropertyValueFactory<TableRow, String>("buildResult"));
+
+        ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1", "success"), new TableRow(2, "strat2", "failed"));
+
+        tableView.setItems(data);
+
+        // Load existing Properties
+        try {
+            Properties startProperties = new Properties();
+            savePath = System.getProperty("user.home") + "\\.buildMedic"; // initializing savePath
+            startProperties.load(new FileReader(savePath + "\\config.properties"));
+            logPath = startProperties.getProperty("logPath");
+            pomFile = startProperties.getProperty("pomFile");
+            maxSteps = Integer.parseInt(startProperties.getProperty("max_steps"));
+            choiceBox.setValue(maxSteps+"");
+            textFieldLog.setText(logPath);
+            textFieldPath.setText(pomFile);
+
+        } catch (Exception e) {
+
+        }
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -96,7 +132,6 @@ public class App extends Application implements RepairListener {
         primaryStage.show(); // Showing Stage
 
     }
-
 
     public static void main(String[] args) {
         launch(args); // Launch the Application
@@ -162,41 +197,7 @@ public class App extends Application implements RepairListener {
         progressBar.setProgress(0.0);
     }
 
-    public void initialize() {
-        // Set detailsTab to non-visible in the beginning
-        tapPane.getTabs().remove(detailsTab);
 
-        // Setting up ChoiceBox
-        choiceBox.setItems(FXCollections.observableArrayList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "15", "16", "17", "18", "19", "20"));
-        choiceBox.setValue("1");
-        String pick = choiceBox.getValue().toString();
-        maxSteps = Integer.parseInt(pick);
-        // Setting up TableView
-        tableView.setEditable(true);
-        step.setCellValueFactory(new PropertyValueFactory<TableRow, Integer>("step"));
-        strategies.setCellValueFactory(new PropertyValueFactory<TableRow, String>("strategie"));
-        buildResult.setCellValueFactory(new PropertyValueFactory<TableRow, String>("buildResult"));
-
-        ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1", "success"), new TableRow(2, "strat2", "failed"));
-
-        tableView.setItems(data);
-
-        // Load existing Properties
-        try {
-            Properties startProperties = new Properties();
-            savePath = System.getProperty("user.home") + "\\.buildMedic"; // initializing savePath
-            startProperties.load(new FileReader(savePath + "\\config.properties"));
-            logPath = startProperties.getProperty("logPath");
-            pomFile = startProperties.getProperty("pomFile");
-            maxSteps = Integer.parseInt(startProperties.getProperty("max_steps"));
-            choiceBox.setValue(maxSteps+"");
-            textFieldLog.setText(logPath);
-            textFieldPath.setText(pomFile);
-
-        } catch (Exception e) {
-
-        }
-    }
 
     @FXML
     protected void choosePath(ActionEvent event) {

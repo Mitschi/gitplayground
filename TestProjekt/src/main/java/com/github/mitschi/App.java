@@ -76,6 +76,8 @@ public class App extends Application implements RepairListener {
     protected CheckBox version;
     @FXML
     protected ProgressBar progressBar;
+    @FXML
+    protected Label progressLbl;
 
 
     @Override
@@ -163,7 +165,6 @@ public class App extends Application implements RepairListener {
         choiceBox.setValue("1");
         String pick = choiceBox.getValue().toString();
         maxSteps = Integer.parseInt(pick);
-
         // Setting up TableView
         tableView.setEditable(true);
         step.setCellValueFactory(new PropertyValueFactory<TableRow, Integer>("step"));
@@ -200,7 +201,7 @@ public class App extends Application implements RepairListener {
         File file = fileChooser.showOpenDialog(stage);
 
         try {
-            // Check if input is an pom.xml file otherwise open an alert
+            // Check if input is a pom.xml file otherwise open an alert
             if (!file.getName().equals("pom.xml")) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "File has to be a pom.xml file!");
                 alert.show();
@@ -233,7 +234,7 @@ public class App extends Application implements RepairListener {
         properties.setProperty("max_steps", maxSteps + "");
 
         try {
-            // write properties to C:\Users\%USERPROFILE%\.buildMedic\config.properties if non-existing Path will be created
+            // write properties to C:\Users\%USERPROFILE%\.buildMedic\config.properties if non-existing, Path will be created
             if (!Files.exists(Paths.get(savePath))) {
                 new File(savePath).mkdirs();
                 properties.store(new FileWriter(savePath + "\\config.properties"), "Properties");
@@ -270,7 +271,10 @@ public class App extends Application implements RepairListener {
 
     @Override
     public void stepEnded(int i, int i1) {
-        progressBar.setProgress((double) i / (double) i1);
+        double progress = (double) i / (double) i1;
+        progressBar.setProgress(progress);
+        progress *= 100.0;
+        progressLbl.setText(String.format("%.2f", progress) + "%");
     }
 
     @Override

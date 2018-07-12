@@ -84,6 +84,7 @@
                         <Label layoutX="14.0" layoutY="256.0" prefHeight="17.0" prefWidth="240.0" text="Fields marked with * have to be selected" underline="true" />
                         <Label layoutX="20.0" layoutY="20.0" text="Revision:" />
                         <TextField fx:id="textFieldRevision" layoutX="80.0" layoutY="15.0" prefHeight="25.0" prefWidth="550.0" />
+                        <Label fx:id="progressLbl" alignment="CENTER" contentDisplay="TOP" layoutX="380.0" layoutY="219.0" style="-fx-font-weight: bold;" textAlignment="CENTER" textFill="#bfbfbf" />
                             </children>
                         </Pane>
                     </children>

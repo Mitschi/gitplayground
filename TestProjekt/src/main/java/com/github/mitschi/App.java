@@ -118,19 +118,18 @@ public class App extends Application implements RepairListener {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        stage = primaryStage; // make an global reference for primaryStage
+
         logPath = ""; // initializing logPath
         maxSteps = 1; // initializing maxSteps
         pomFile = ""; // initializing pomFile
 
         Parent root = FXMLLoader.load(getClass().getResource("Sample.fxml")); // loading fxml-File
         scene = new Scene(root, 800, 600); // initializing scene
-
         primaryStage.setTitle("BuildMedic"); // Setting Title of Application
         primaryStage.setResizable(false); // Set Stage to not resizeable
         primaryStage.setScene(scene); // Adding Scene to Stage
         primaryStage.show(); // Showing Stage
-
+        stage = primaryStage; // make a global reference for primaryStage
     }
 
     public static void main(String[] args) {
@@ -206,7 +205,7 @@ public class App extends Application implements RepairListener {
         fileChooser.setTitle("Choose pom.xml");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Extensible Markup Language", "*.xml"));
         // Open FileChooser and wait for Input
-        File file = fileChooser.showOpenDialog(stage);
+        File file = fileChooser.showOpenDialog(lblPath.getScene().getWindow());
 
         try {
             // Check if input is a pom.xml file otherwise open an alert
@@ -231,7 +230,7 @@ public class App extends Application implements RepairListener {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("LogFile", "*.log"));
         try{
             // Open FileChooser
-            File file = fileChooser.showOpenDialog(stage);
+            File file = fileChooser.showOpenDialog(lblPath.getScene().getWindow());
             // Load Path to TextField
             logPath = file.getPath();
             textFieldLog.setText(logPath);

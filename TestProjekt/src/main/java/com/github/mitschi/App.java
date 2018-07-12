@@ -115,29 +115,35 @@ public class App extends Application implements RepairListener {
         tapPane.getTabs().add(detailsTab);
 
         boolean isPom = testForPom();
-
+        boolean isSelected = true;
         // Marking missing parameters
-        if (pomFile.equals(""))
+        if (pomFile.equals("") || !isPom)
             lblPath.setTextFill(Color.web("#FF0000"));
         else
             lblPath.setTextFill(Color.web("#000000"));
 
 
-        if (!delete.isSelected() && !add.isSelected() && !insert.isSelected() && !version.isSelected())
+        if (!delete.isSelected() && !add.isSelected() && !insert.isSelected() && !version.isSelected()) {
             lblStrategy.setTextFill(Color.web("#FF0000"));
-        else
+            isSelected = false;
+        } else
             lblStrategy.setTextFill(Color.web("#000000"));
 
-        // Start the Repairtool
-        Repair repair = new Repair();
-        repair.addRepairListener(this);
+        if (!isPom || !isSelected) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Missing Fields!");
+            alert.show();
+        } else {
 
-        File repoFile = new File(pomFile); // Load File
-        getRevision(); // Load Revision-String
+            // Start the Repairtool
+            Repair repair = new Repair();
+            repair.addRepairListener(this);
 
-        //Load maxSteps from ChoiceBox
-        String pick = choiceBox.getValue().toString();
-        maxSteps = Integer.parseInt(pick);
+            File repoFile = new File(pomFile); // Load File
+            getRevision(); // Load Revision-String
+
+            //Load maxSteps from ChoiceBox
+            String pick = choiceBox.getValue().toString();
+            maxSteps = Integer.parseInt(pick);
 
 //        try {
 //            repair.repair(repoFile,revision,maxSteps,null, null);
@@ -146,7 +152,7 @@ public class App extends Application implements RepairListener {
 //        } catch (ParseException e) {
 //            e.printStackTrace();
 //        }
-
+        }
 
     }
 
@@ -290,21 +296,24 @@ public class App extends Application implements RepairListener {
 
     }
 
-    protected boolean testForPom(){
+    protected boolean testForPom() {
         String s = textFieldPath.getText();
-        try{
+        try {
             File file = new File(s);
 
-            if(!file.getName().equals("pom.xml")){
+            if (!file.getName().equals("pom.xml")) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "File has to be a pom.xml file!");
                 alert.show();
                 return false;
             }
 
             return true;
-        } catch (Exception e){
+        } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "This is not a file!");
             alert.show();
+
+            return false;
         }
     }
 }
+

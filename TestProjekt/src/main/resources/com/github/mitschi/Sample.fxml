@@ -23,7 +23,7 @@
                         <Pane prefHeight="50.0" prefWidth="800.0">
                             <children>
                                 <Label fx:id="lblPath" layoutX="20.0" layoutY="20.0" prefHeight="17.0" prefWidth="60.0" text="Path*:" />
-                                <TextField fx:id="textFieldPath" layoutX="80.0" layoutY="15.0" onAction="#testForPom" prefHeight="25.0" prefWidth="550.0" />
+                                <TextField fx:id="textFieldPath" layoutX="80.0" layoutY="15.0" prefHeight="25.0" prefWidth="550.0" />
                                 <Button fx:id="pathChoose" layoutX="650.0" layoutY="15.0" mnemonicParsing="false" onAction="#choosePath" prefHeight="25.0" prefWidth="110.0" text="Choose" />
                             </children>
                         </Pane>

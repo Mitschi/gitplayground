@@ -43,11 +43,14 @@ public class TestApplication extends ApplicationTest {
 
     @Test
     public void testStartButton(){
-
         clickOn("#textFieldRevision");
         write("ab2134ef45d");
         clickOn("Start");
         clickOn("#detailsTab");
         clickOn("BuildMedic");
+        clickOn("Insert Dependency");
+        doubleClickOn("#textFieldPath");
+        write("Test");
+        clickOn("Start");
     }
 }

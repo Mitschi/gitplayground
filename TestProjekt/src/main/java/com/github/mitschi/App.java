@@ -20,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Alert;
+import scala.util.parsing.combinator.testing.Str;
 
 import javax.swing.table.TableColumn;
 import java.io.*;
@@ -112,6 +113,8 @@ public class App extends Application implements RepairListener {
     protected void startProgram(ActionEvent event) {
         // show detailsTab when the Startbutton is pressed
         tapPane.getTabs().add(detailsTab);
+
+        testForPom();
 
         // Marking missing parameters
         if (pomFile.equals(""))
@@ -285,5 +288,22 @@ public class App extends Application implements RepairListener {
     @Override
     public void printText(String s) {
 
+    }
+
+    @FXML
+    protected void testForPom(){
+        String s = textFieldPath.getText();
+        try{
+            File file = new File(s);
+
+            if(!file.getName().equals("pom.xml")){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "File has to be a pom.xml file!");
+                alert.show();
+            }
+
+        } catch (Exception e){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "This is not a file!");
+            alert.show();
+        }
     }
 }

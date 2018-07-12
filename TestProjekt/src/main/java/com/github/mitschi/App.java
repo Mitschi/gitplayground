@@ -39,7 +39,6 @@ public class App extends Application implements RepairListener {
     protected static int maxSteps;
     protected Scene scene;
     protected static String savePath;
-
     protected String revision;
 
 
@@ -55,24 +54,18 @@ public class App extends Application implements RepairListener {
     protected Label lblStrategy;
     @FXML
     protected TextField textFieldRevision;
-
     @FXML
     protected Tab detailsTab;
-
     @FXML
     protected TabPane tapPane;
-
     @FXML
     protected TableView<TableRow> tableView;
     @FXML
     protected javafx.scene.control.TableColumn step;
     @FXML
     protected javafx.scene.control.TableColumn strategies;
-
     @FXML
     protected javafx.scene.control.TableColumn buildResult;
-
-
     @FXML
     protected CheckBox delete;
     @FXML
@@ -81,6 +74,8 @@ public class App extends Application implements RepairListener {
     protected CheckBox insert;
     @FXML
     protected CheckBox version;
+    @FXML
+    protected ProgressBar progressBar;
 
 
     @Override
@@ -99,7 +94,6 @@ public class App extends Application implements RepairListener {
         primaryStage.setScene(scene); // Adding Scene to Stage
         primaryStage.show(); // Showing Stage
 
-
     }
 
 
@@ -113,7 +107,6 @@ public class App extends Application implements RepairListener {
             }
         }));
     }
-
 
     @FXML
     protected void startProgram(ActionEvent event) {
@@ -161,7 +154,6 @@ public class App extends Application implements RepairListener {
 
     }
 
-
     public void initialize() {
         // Set detailsTab to non-visible in the beginning
         tapPane.getTabs().remove(detailsTab);
@@ -199,7 +191,6 @@ public class App extends Application implements RepairListener {
         }
     }
 
-
     @FXML
     protected void choosePath(ActionEvent event) {
         // Initialize FileChooser
@@ -220,7 +211,6 @@ public class App extends Application implements RepairListener {
         } catch (RuntimeException e) {
 
         }
-
 
     }
 
@@ -280,7 +270,7 @@ public class App extends Application implements RepairListener {
 
     @Override
     public void stepEnded(int i, int i1) {
-
+        progressBar.setProgress((double) i / (double) i1);
     }
 
     @Override

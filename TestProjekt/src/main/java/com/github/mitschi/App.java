@@ -114,8 +114,6 @@ public class App extends Application implements RepairListener {
     protected void startProgram(ActionEvent event) {
         // show detailsTab when the Startbutton is pressed
         tapPane.getTabs().add(detailsTab);
-        SingleSelectionModel<Tab> selectionModel = tapPane.getSelectionModel();
-        selectionModel.select(detailsTab);
 
         // Marking missing parameters
         if (pomFile.equals(""))
@@ -261,6 +259,9 @@ public class App extends Application implements RepairListener {
 
     @Override
     public void repairEnded() {
+        // Select detailsTab
+        SingleSelectionModel<Tab> selectionModel = tapPane.getSelectionModel();
+        selectionModel.select(detailsTab);
 
     }
 
@@ -271,6 +272,7 @@ public class App extends Application implements RepairListener {
 
     @Override
     public void stepEnded(int i, int i1) {
+        // Update progressBar and progressLbl
         double progress = (double) i / (double) i1;
         progressBar.setProgress(progress);
         progress *= 100.0;

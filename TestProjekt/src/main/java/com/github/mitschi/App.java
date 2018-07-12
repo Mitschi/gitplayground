@@ -114,7 +114,7 @@ public class App extends Application implements RepairListener {
         // show detailsTab when the Startbutton is pressed
         tapPane.getTabs().add(detailsTab);
 
-        testForPom();
+        boolean isPom = testForPom();
 
         // Marking missing parameters
         if (pomFile.equals(""))
@@ -290,8 +290,7 @@ public class App extends Application implements RepairListener {
 
     }
 
-    @FXML
-    protected void testForPom(){
+    protected boolean testForPom(){
         String s = textFieldPath.getText();
         try{
             File file = new File(s);
@@ -299,8 +298,10 @@ public class App extends Application implements RepairListener {
             if(!file.getName().equals("pom.xml")){
                 Alert alert = new Alert(Alert.AlertType.ERROR, "File has to be a pom.xml file!");
                 alert.show();
+                return false;
             }
 
+            return true;
         } catch (Exception e){
             Alert alert = new Alert(Alert.AlertType.ERROR, "This is not a file!");
             alert.show();

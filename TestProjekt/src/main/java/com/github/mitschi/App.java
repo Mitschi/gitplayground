@@ -227,7 +227,7 @@ public class App extends Application implements RepairListener {
         // Initialize FileChooser
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Logfile");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("LogFile", "*.log"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Textfile", "*.txt"));
         try{
             // Open FileChooser
             File file = fileChooser.showOpenDialog(lblPath.getScene().getWindow());

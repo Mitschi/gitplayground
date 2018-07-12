@@ -9,6 +9,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import org.junit.After;
+import org.loadui.testfx.GuiTest;
 import org.testfx.service.query.NodeQuery;
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,12 +24,15 @@ import java.util.regex.Matcher;
 
 public class TestApplication extends ApplicationTest {
 
+    private Stage stage;
+
     @Override
     public void start(Stage stage) throws Exception {
         Parent sceneRoot = FXMLLoader.load(App.class.getResource("Sample.fxml"));
         stage.setScene(new Scene(sceneRoot));
         stage.show();
         stage.toFront();
+        this.stage=stage;
     }
 
     @Before
@@ -46,12 +50,16 @@ public class TestApplication extends ApplicationTest {
     public void testStartButton(){
         clickOn("#textFieldRevision");
         write("ab2134ef45d");
-        clickOn("Insert Dependency");
+//        assertThat(lookup("lblStrategy").queryAs(Label));
+        //clickOn("Insert Dependency");
         clickOn("Start");
+        Label label = (Label) stage.getScene().lookup("#lblStrategy");
+        assertEquals("0xff0000ff", label.getTextFill().toString());
         clickOn("#detailsTab");
         clickOn("BuildMedic");
         doubleClickOn("#textFieldPath");
         write("Test");
         clickOn("Start");
+
     }
 }

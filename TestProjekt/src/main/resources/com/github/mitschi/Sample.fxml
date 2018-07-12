@@ -73,7 +73,7 @@
                             <children>
                                 <Label layoutX="20.0" layoutY="20.0" prefWidth="60.0" text="Logfile:" />
                                 <TextField fx:id="textFieldLog" layoutX="80.0" layoutY="15.0" prefHeight="25.0" prefWidth="550.0" />
-                                <Button layoutX="650.0" layoutY="15.0" mnemonicParsing="false" onAction="#chooseLog" prefHeight="25.0" prefWidth="110.0" text="Choose" />
+                                <Button fx:id="buttonLog" layoutX="650.0" layoutY="15.0" mnemonicParsing="false" onAction="#chooseLog" prefHeight="25.0" prefWidth="110.0" text="Choose" />
                             </children>
                         </Pane>
                         <Pane layoutY="285.0" prefHeight="287.0" prefWidth="800.0">

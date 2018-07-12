@@ -17,11 +17,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
-
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Alert;
-
 
 import javax.swing.table.TableColumn;
 import java.io.*;

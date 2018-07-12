@@ -158,7 +158,8 @@ public class App extends Application implements RepairListener {
 
     @FXML
     protected void cancelProgram(ActionEvent event) {
-
+        progressLbl.setText("");
+        progressBar.setProgress(0.0);
     }
 
     public void initialize() {
@@ -188,7 +189,7 @@ public class App extends Application implements RepairListener {
             logPath = startProperties.getProperty("logPath");
             pomFile = startProperties.getProperty("pomFile");
             maxSteps = Integer.parseInt(startProperties.getProperty("max_steps"));
-
+            choiceBox.setValue(maxSteps+"");
             textFieldLog.setText(logPath);
             textFieldPath.setText(pomFile);
 

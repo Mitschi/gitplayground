@@ -9,6 +9,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import org.junit.After;
+import org.testfx.service.query.NodeQuery;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,11 +46,10 @@ public class TestApplication extends ApplicationTest {
     public void testStartButton(){
         clickOn("#textFieldRevision");
         write("ab2134ef45d");
+        clickOn("Insert Dependency");
         clickOn("Start");
-
         clickOn("#detailsTab");
         clickOn("BuildMedic");
-        clickOn("Insert Dependency");
         doubleClickOn("#textFieldPath");
         write("Test");
         clickOn("Start");

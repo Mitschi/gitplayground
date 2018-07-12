@@ -20,20 +20,20 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <Pane prefHeight="45.0" prefWidth="800.0">
+                        <Pane prefHeight="50.0" prefWidth="800.0">
                             <children>
-                                <Label fx:id="lblPath" layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="76.0" text="Path*:" />
-                                <TextField fx:id="textFieldPath" layoutX="52.0" layoutY="10.0" prefHeight="25.0" prefWidth="540.0" />
-                                <Button fx:id="pathChoose" layoutX="614.0" layoutY="10.0" mnemonicParsing="false" onAction="#choosePath" prefHeight="25.0" prefWidth="112.0" text="Choose" />
+                                <Label fx:id="lblPath" layoutX="20.0" layoutY="20.0" prefHeight="17.0" prefWidth="60.0" text="Path*:" />
+                                <TextField fx:id="textFieldPath" layoutX="80.0" layoutY="15.0" prefHeight="25.0" prefWidth="550.0" />
+                                <Button fx:id="pathChoose" layoutX="650.0" layoutY="15.0" mnemonicParsing="false" onAction="#choosePath" prefHeight="25.0" prefWidth="110.0" text="Choose" />
                             </children>
                         </Pane>
-                        <Pane layoutY="45.0" prefHeight="52.0" prefWidth="800.0">
+                        <Pane layoutY="45.0" prefHeight="50.0" prefWidth="800.0">
 
 
 
                             <children>
-                                <Label layoutX="14.0" layoutY="18.0" prefHeight="17.0" prefWidth="46.0" text="Step:" />
-                                <ChoiceBox fx:id="choiceBox" layoutX="74.0" layoutY="14.0" prefWidth="150.0" />
+                                <Label layoutX="20.0" layoutY="20.0" prefHeight="17.0" prefWidth="60.0" text="Step:" />
+                                <ChoiceBox fx:id="choiceBox" layoutX="80.0" layoutY="15.0" prefWidth="110.0" />
 
 
                             </children>
@@ -41,25 +41,25 @@
 
 
                         </Pane>
-                        <Pane layoutY="97.0" prefHeight="240.0" prefWidth="800.0">
+                        <Pane layoutY="97.0" prefHeight="150.0" prefWidth="800.0">
                             <children>
-                                <Label fx:id="lblStrategy" layoutX="14.0" layoutY="14.0" text="Strategy*:" />
-                                <CheckBox fx:id="delete" layoutX="70.0" layoutY="50.0" mnemonicParsing="false" text="Delete Depandancy">
+                                <Label fx:id="lblStrategy" layoutX="20.0" layoutY="20.0" prefWidth="60.0" text="Strategy*:" />
+                                <CheckBox fx:id="delete" layoutX="80.0" layoutY="20.0" mnemonicParsing="false" text="Delete Depandancy">
                                     <tooltip>
                                         <Tooltip text="Test S1" />
                                     </tooltip>
                                 </CheckBox>
-                                <CheckBox fx:id="add" layoutX="70.0" layoutY="100.0" mnemonicParsing="false" text="Add Depository">
+                                <CheckBox fx:id="add" layoutX="80.0" layoutY="50.0" mnemonicParsing="false" text="Add Depository">
                                     <tooltip>
                                         <Tooltip text="Test S2" />
                                     </tooltip>
                                 </CheckBox>
-                                <CheckBox fx:id="insert" layoutX="70.0" layoutY="150.0" mnemonicParsing="false" text="Insert Dependency">
+                                <CheckBox fx:id="insert" layoutX="80.0" layoutY="80.0" mnemonicParsing="false" text="Insert Dependency">
                                     <tooltip>
                                         <Tooltip text="Test S3" />
                                     </tooltip>
                                 </CheckBox>
-                                <CheckBox fx:id="version" layoutX="70.0" layoutY="200.0" mnemonicParsing="false" text="Version Update">
+                                <CheckBox fx:id="version" layoutX="80.0" layoutY="110.0" mnemonicParsing="false" text="Version Update">
                                     <tooltip>
                                         <Tooltip text="Test S4" />
                                     </tooltip>
@@ -69,21 +69,21 @@
 
                             </children>
                         </Pane>
-                        <Pane layoutY="337.0" prefHeight="42.0" prefWidth="800.0">
+                        <Pane layoutY="234.0" prefHeight="50.0" prefWidth="800.0">
                             <children>
-                                <Label layoutX="14.0" layoutY="13.0" text="Logfile:" />
-                                <TextField fx:id="textFieldLog" layoutX="59.0" layoutY="9.0" prefHeight="25.0" prefWidth="343.0" />
-                                <Button layoutX="428.0" layoutY="9.0" mnemonicParsing="false" onAction="#chooseLog" prefHeight="25.0" prefWidth="112.0" text="Choose" />
+                                <Label layoutX="20.0" layoutY="20.0" prefWidth="60.0" text="Logfile:" />
+                                <TextField fx:id="textFieldLog" layoutX="80.0" layoutY="15.0" prefHeight="25.0" prefWidth="550.0" />
+                                <Button layoutX="650.0" layoutY="15.0" mnemonicParsing="false" onAction="#chooseLog" prefHeight="25.0" prefWidth="110.0" text="Choose" />
                             </children>
                         </Pane>
-                        <Pane layoutY="379.0" prefHeight="193.0" prefWidth="800.0">
+                        <Pane layoutY="285.0" prefHeight="287.0" prefWidth="800.0">
                             <children>
-                                <ProgressBar layoutX="14.0" layoutY="81.0" prefHeight="18.0" prefWidth="393.0" progress="0.0" />
-                                <Button layoutX="14.0" layoutY="119.0" mnemonicParsing="false" onAction="#startProgram" text="Start" />
-                                <Button layoutX="66.0" layoutY="119.0" mnemonicParsing="false" onAction="#cancelProgram" text="Cancel" />
-                        <Label layoutX="14.0" layoutY="153.0" prefHeight="17.0" prefWidth="240.0" text="Fields marked with * have to be selected" underline="true" />
-                        <Label layoutX="14.0" layoutY="38.0" text="Revision:" />
-                        <TextField fx:id="textFieldRevision" layoutX="66.0" layoutY="34.0" prefHeight="25.0" prefWidth="476.0" />
+                                <ProgressBar layoutX="14.0" layoutY="218.0" prefHeight="18.0" prefWidth="760.0" progress="0.0" />
+                                <Button layoutX="20.0" layoutY="180.0" mnemonicParsing="false" onAction="#startProgram" prefHeight="25.0" prefWidth="110.0" text="Start" />
+                                <Button layoutX="150.0" layoutY="180.0" mnemonicParsing="false" onAction="#cancelProgram" prefHeight="25.0" prefWidth="110.0" text="Cancel" />
+                        <Label layoutX="14.0" layoutY="256.0" prefHeight="17.0" prefWidth="240.0" text="Fields marked with * have to be selected" underline="true" />
+                        <Label layoutX="20.0" layoutY="20.0" text="Revision:" />
+                        <TextField fx:id="textFieldRevision" layoutX="80.0" layoutY="15.0" prefHeight="25.0" prefWidth="550.0" />
                             </children>
                         </Pane>
                     </children>

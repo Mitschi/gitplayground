@@ -201,7 +201,8 @@ public class App extends Application implements RepairListener {
     protected void choosePath(ActionEvent event) {
         // Initialize FileChooser
         FileChooser fileChooser = new FileChooser();
-
+        fileChooser.setTitle("Choose pom.xml");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Extensible Markup Language", "*.xml"));
         // Open FileChooser and wait for Input
         File file = fileChooser.showOpenDialog(stage);
 
@@ -224,11 +225,18 @@ public class App extends Application implements RepairListener {
     protected void chooseLog(ActionEvent event) {
         // Initialize FileChooser
         FileChooser fileChooser = new FileChooser();
-        // Open FileChooser
-        File file = fileChooser.showOpenDialog(stage);
-        // Load Path to TextField
-        logPath = file.getPath();
-        textFieldLog.setText(logPath);
+        fileChooser.setTitle("Choose Logfile");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("LogFile", "*.log"));
+        try{
+            // Open FileChooser
+            File file = fileChooser.showOpenDialog(stage);
+            // Load Path to TextField
+            logPath = file.getPath();
+            textFieldLog.setText(logPath);
+        }catch (Exception e){
+
+        }
+
     }
 
     private static void saveProperties() {

@@ -129,7 +129,7 @@ public class App extends Application implements RepairListener {
         } else
             lblStrategy.setTextFill(Color.web("#000000"));
 
-        if (!isPom || !isSelected) {
+        if (pomFile.isEmpty() || !isSelected) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Missing Fields!");
             alert.show();
         } else {

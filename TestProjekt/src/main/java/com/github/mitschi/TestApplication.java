@@ -46,6 +46,7 @@ public class TestApplication extends ApplicationTest {
         clickOn("#textFieldRevision");
         write("ab2134ef45d");
         clickOn("Start");
+
         clickOn("#detailsTab");
         clickOn("BuildMedic");
         clickOn("Insert Dependency");

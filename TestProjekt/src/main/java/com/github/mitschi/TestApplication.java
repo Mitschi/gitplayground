@@ -51,10 +51,9 @@ public class TestApplication extends ApplicationTest {
         clickOn("#textFieldRevision");
         write("ab2134ef45d");
 //        assertThat(lookup("lblStrategy").queryAs(Label));
-        //clickOn("Insert Dependency");
+        clickOn("Insert Dependency");
         clickOn("Start");
-        Label label = (Label) stage.getScene().lookup("#lblStrategy");
-        assertEquals("0xff0000ff", label.getTextFill().toString());
+//        Label label = (Label) stage.getScene().lookup("#lblStrategy");
         clickOn("#detailsTab");
         clickOn("BuildMedic");
         doubleClickOn("#textFieldPath");

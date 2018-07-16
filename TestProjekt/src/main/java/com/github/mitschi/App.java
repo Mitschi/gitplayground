@@ -27,6 +27,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -39,6 +40,8 @@ public class App extends Application implements RepairListener {
     protected Scene scene;
     protected static String savePath;
     protected String revision;
+    protected ArrayList<Process> processList;
+    protected int processCounter;
 
 
     @FXML
@@ -84,6 +87,10 @@ public class App extends Application implements RepairListener {
     public void initialize() {
         // Set detailsTab to non-visible in the beginning
         tapPane.getTabs().remove(detailsTab);
+        processList = new ArrayList<Process>();
+        //processList.add(new Process(null, detailsTab));
+        processList.add(new Process("hello"));
+        processCounter = 1;
 
         // Setting up ChoiceBox
         choiceBox.setItems(FXCollections.observableArrayList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "15", "16", "17", "18", "19", "20"));
@@ -97,7 +104,7 @@ public class App extends Application implements RepairListener {
         buildResult.setCellValueFactory(new PropertyValueFactory<TableRow, String>("buildResult"));
 
         ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1", "success"), new TableRow(2, "strat2", "failed"));
-
+        processList.get(0).addData(data);
         tableView.setItems(data);
 
         // Load existing Properties
@@ -148,7 +155,7 @@ public class App extends Application implements RepairListener {
     @FXML
     protected void startProgram(ActionEvent event) {
         // show detailsTab when the Startbutton is pressed
-        tapPane.getTabs().add(detailsTab);
+
 
         boolean isPom = testForPom();
         boolean isSelected = true;
@@ -176,6 +183,17 @@ public class App extends Application implements RepairListener {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Missing Fields!");
             alert.show();
         } else {
+            Process process = new Process(pomFile);
+            boolean isAlreadyRunning = false;
+            for(Process p : processList){
+                if(p.equals(process))
+                    isAlreadyRunning = true;
+            }
+            if(!isAlreadyRunning){
+                processList.add(process);
+                processCounter ++;
+                tapPane.getTabs().add(processList.get(processCounter-1).getProcessTab());
+            }
 
             // Start the Repairtool
             Repair repair = new Repair();
@@ -285,7 +303,7 @@ public class App extends Application implements RepairListener {
     public void repairEnded() {
         // Select detailsTab
         SingleSelectionModel<Tab> selectionModel = tapPane.getSelectionModel();
-        selectionModel.select(detailsTab);
+        selectionModel.select(processList.get(0).getProcessTab());
 
     }
 
@@ -353,4 +371,3 @@ public class App extends Application implements RepairListener {
         }
     }
 }
-

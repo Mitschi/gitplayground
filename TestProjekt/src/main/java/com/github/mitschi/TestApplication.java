@@ -102,7 +102,7 @@ public class TestApplication extends ApplicationTest {
     public void testPathNoPath() {
 
 
-        clickOn("#textFieldPath"); //Click in the textField "textFieldPath"
+       // clickOn("#textFieldPath"); //Click in the textField "textFieldPath"
         TextField text = (TextField) stage.getScene().lookup("#textFieldPath"); //Get component textFieldPath to know how long the text is (get int)
         eraseText(text.getLength()); //Delete the hole text
 

@@ -52,6 +52,8 @@ public class App extends Application implements RepairListener {
     @FXML
     protected Label lblStrategy;
     @FXML
+    protected Label lblLog;
+    @FXML
     protected TextField textFieldRevision;
     @FXML
     protected Tab detailsTab;
@@ -106,7 +108,7 @@ public class App extends Application implements RepairListener {
             logPath = startProperties.getProperty("logPath");
             pomFile = startProperties.getProperty("pomFile");
             maxSteps = Integer.parseInt(startProperties.getProperty("max_steps"));
-            choiceBox.setValue(maxSteps+"");
+            choiceBox.setValue(maxSteps + "");
             textFieldLog.setText(logPath);
             textFieldPath.setText(pomFile);
 
@@ -150,11 +152,18 @@ public class App extends Application implements RepairListener {
 
         boolean isPom = testForPom();
         boolean isSelected = true;
+        boolean isTxt = testForTxt();
+
         // Marking missing parameters
         if (pomFile.equals("") || !isPom)
             lblPath.setTextFill(Color.web("#FF0000"));
         else
             lblPath.setTextFill(Color.web("#000000"));
+
+        if (!isTxt)
+            lblLog.setTextFill(Color.web("#FF0000"));
+        else
+            lblLog.setTextFill(Color.web("#000000"));
 
 
         if (!delete.isSelected() && !add.isSelected() && !insert.isSelected() && !version.isSelected()) {
@@ -197,7 +206,6 @@ public class App extends Application implements RepairListener {
     }
 
 
-
     @FXML
     protected void choosePath(ActionEvent event) {
         // Initialize FileChooser
@@ -228,13 +236,13 @@ public class App extends Application implements RepairListener {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Logfile");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Textfile", "*.txt"));
-        try{
+        try {
             // Open FileChooser
             File file = fileChooser.showOpenDialog(lblPath.getScene().getWindow());
             // Load Path to TextField
             logPath = file.getPath();
             textFieldLog.setText(logPath);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -311,7 +319,27 @@ public class App extends Application implements RepairListener {
             File file = new File(s);
 
             if (!file.getName().equals("pom.xml")) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "File has to be a pom.xml file!");
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Path has to be a pom.xml file!");
+                alert.show();
+                return false;
+            }
+
+            return true;
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "This is not a file!");
+            alert.show();
+
+            return false;
+        }
+    }
+
+    protected boolean testForTxt() {
+        String s = textFieldLog.getText();
+        try {
+            File file = new File(s);
+
+            if (!file.getName().contains(".txt")) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "LogFile has to be a .txt file!");
                 alert.show();
                 return false;
             }

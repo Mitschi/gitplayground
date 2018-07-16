@@ -87,6 +87,7 @@ public class App extends Application implements RepairListener {
     public void initialize() {
         // Set detailsTab to non-visible in the beginning
         tapPane.getTabs().remove(detailsTab);
+        tapPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
         processList = new ArrayList<Process>();
         //processList.add(new Process(null, detailsTab));
         processList.add(new Process("hello"));

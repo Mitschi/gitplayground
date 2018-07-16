@@ -16,7 +16,7 @@
 
 <TabPane fx:id="tapPane" prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.mitschi.App">
     <tabs>
-        <Tab text="BuildMedic">
+        <Tab closable="false" text="BuildMedic">
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
@@ -91,7 +91,7 @@
                 </AnchorPane>
             </content>
         </Tab>
-        <Tab text="BuildDiff">
+        <Tab closable="false" text="BuildDiff">
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>

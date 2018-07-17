@@ -1,0 +1,7 @@
+language: java
+jdk:
+  - oraclejdk10
+  - openjdk10
+script:
+  - cd TestProjekt
+  - mvn clean install -DskipTests=true

@@ -14,12 +14,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import org.hamcrest.CoreMatchers;
-import org.junit.After;
+import org.junit.*;
 import org.loadui.testfx.GuiTest;
 import org.testfx.service.query.NodeQuery;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 
 import static org.loadui.testfx.Assertions.*;
 
@@ -29,6 +26,7 @@ import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.service.query.NodeQuery;
 
 import static org.junit.Assert.*;
+import static org.testfx.api.FxToolkit.registerPrimaryStage;
 
 import java.util.regex.Matcher;
 
@@ -188,4 +186,16 @@ public class TestApplication extends ApplicationTest {
 
         //There should be an alert with a warning that in the logFile is no .txt data
     }
+
+//    @BeforeClass
+////    public static void setupSpec() throws Exception{
+////
+////            System.setProperty("testfx.robot", "glass");
+////            System.setProperty("testfx.headless", "true");
+////            System.setProperty("prism.order", "sw");
+////            System.setProperty("prism.text", "t2k");
+////            System.setProperty("java.awt.headless", "true");
+////
+////        registerPrimaryStage();
+////    }
 }

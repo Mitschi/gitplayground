@@ -2,6 +2,7 @@ package com.github.mitschi;
 
 
 import at.aau.FixAction;
+import at.aau.fixStrategies.*;
 import at.aau.Repair;
 import at.aau.RepairListener;
 import javafx.application.Application;
@@ -82,6 +83,8 @@ public class App extends Application implements RepairListener {
     protected ProgressBar progressBar;
     @FXML
     protected Label progressLbl;
+    @FXML
+    protected ListView<Process> listView;
 
 
     public void initialize() {
@@ -161,6 +164,19 @@ public class App extends Application implements RepairListener {
         boolean isPom = testForPom();
         boolean isSelected = true;
         boolean isTxt = testForTxt();
+        List<Class> allowedStrats = new ArrayList<Class>();
+
+        if (add.isSelected())
+            allowedStrats.add(AddRepositoryEntryAction.class);
+
+        if (delete.isSelected())
+            allowedStrats.add(DeleteDependencyAction.class);
+
+        if (insert.isSelected())
+            allowedStrats.add(InsertDependencyAction.class);
+
+        if (version.isSelected())
+            allowedStrats.add(VersionUpdateAction.class);
 
         // Marking missing parameters
         if (pomFile.equals("") || !isPom)
@@ -186,34 +202,33 @@ public class App extends Application implements RepairListener {
         } else {
             Process process = new Process(pomFile);
             boolean isAlreadyRunning = false;
-            for(Process p : processList){
-                if(p.equals(process))
+            for (Process p : processList) {
+                if (p.equals(process))
                     isAlreadyRunning = true;
             }
-            if(!isAlreadyRunning){
+            if (!isAlreadyRunning) {
                 processList.add(process);
-                processCounter ++;
-                tapPane.getTabs().add(processList.get(processCounter-1).getProcessTab());
+                processCounter++;
+                tapPane.getTabs().add(processList.get(processCounter - 1).getProcessTab());
+                listView.getItems().add(process);
+
+                File repoFile = new File(pomFile); // Load File
+                getRevision(); // Load Revision-String
+
+                //Load maxSteps from ChoiceBox
+                String pick = choiceBox.getValue().toString();
+                maxSteps = Integer.parseInt(pick);
+
+                try {
+                    process.getRepair().repair(repoFile, revision, maxSteps, null, allowedStrats);
+                } catch (Exception e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to start Repairtool!");
+                    alert.show();
+                }
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Process already running!");
+                alert.show();
             }
-
-            // Start the Repairtool
-            Repair repair = new Repair();
-            repair.addRepairListener(this);
-
-            File repoFile = new File(pomFile); // Load File
-            getRevision(); // Load Revision-String
-
-            //Load maxSteps from ChoiceBox
-            String pick = choiceBox.getValue().toString();
-            maxSteps = Integer.parseInt(pick);
-
-        try {
-            repair.repair(repoFile,revision,maxSteps,null, null);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
         }
 
     }

@@ -4,6 +4,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -85,6 +86,7 @@
                         <Label layoutX="20.0" layoutY="20.0" text="Revision:" />
                         <TextField fx:id="textFieldRevision" layoutX="80.0" layoutY="15.0" prefHeight="25.0" prefWidth="550.0" />
                         <Label fx:id="progressLbl" alignment="CENTER" contentDisplay="TOP" layoutX="380.0" layoutY="219.0" style="-fx-font-weight: bold;" textAlignment="CENTER" textFill="#bfbfbf" />
+                        <ListView fx:id="listView" layoutX="586.0" layoutY="44.0" prefHeight="170.0" prefWidth="200.0" />
                             </children>
                         </Pane>
                     </children>

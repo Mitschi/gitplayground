@@ -1,5 +1,8 @@
 package com.github.mitschi;
 
+import at.aau.FixAction;
+import at.aau.RepairListener;
+import at.aau.Repair;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,14 +13,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
-public class Process {
+public class Process implements RepairListener{
     private String filePath;
     private Tab processTab;
     private TableView<TableRow> table;
     private ProgressBar progressBar;
     private Label label;
+    private Repair repair;
 
     private javafx.scene.control.TableColumn step;
 
@@ -25,7 +31,12 @@ public class Process {
 
     private javafx.scene.control.TableColumn buildResult;
 
+    public Repair getRepair() {
+        return repair;
+    }
+
     public Process(String filePath){
+        repair = new Repair();
         this.filePath = filePath; // Set Filepath
         progressBar = new ProgressBar(); // initialize progressBar
         table = new TableView<TableRow>(); // initialize Table
@@ -49,10 +60,9 @@ public class Process {
         // Translate progressBar and label
         progressBar.setPrefWidth(800);
         progressBar.setTranslateY(547);
-        progressBar.setProgress(0.5);
+
         label.setTranslateY(547);
         label.setTranslateX(400);
-        label.setText("50%");
         processTab.setContent(pane); // add pane to tab
         pane.getChildren().addAll(progressBar, table, label); // add contents to pane
 
@@ -90,5 +100,44 @@ public class Process {
     public void addData(ObservableList list){
         // Add data to table
         table.setItems(list);
+    }
+
+    @Override
+    public void repairStarted(File file, String s, int i, List<Class> list) {
+
+    }
+
+    @Override
+    public void repairEnded() {
+
+    }
+
+    @Override
+    public void stepStarted(int i, int i1) {
+
+    }
+
+    @Override
+    public void stepEnded(int i, int i1) {
+        // Update progressBar and progressLbl
+        double progress = (double) i / (double) i1;
+        progressBar.setProgress(progress);
+        progress *= 100.0;
+        label.setText(String.format("%.2f", progress) + "%");
+    }
+
+    @Override
+    public void repairFound(List<FixAction> list) {
+
+    }
+
+    @Override
+    public void printText(String s) {
+
+    }
+
+    @Override
+    public String toString() {
+        return filePath;
     }
 }

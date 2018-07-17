@@ -30,6 +30,7 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 public class App extends Application implements RepairListener {
@@ -80,10 +81,7 @@ public class App extends Application implements RepairListener {
     @FXML
     protected CheckBox version;
     @FXML
-    protected ProgressBar progressBar;
-    @FXML
-    protected Label progressLbl;
-    @FXML
+
     protected ListView<Process> listView;
 
 
@@ -93,8 +91,7 @@ public class App extends Application implements RepairListener {
         tapPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
         processList = new ArrayList<Process>();
         //processList.add(new Process(null, detailsTab));
-        processList.add(new Process("hello"));
-        processCounter = 1;
+        processCounter = 0;
 
         // Setting up ChoiceBox
         choiceBox.setItems(FXCollections.observableArrayList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "15", "16", "17", "18", "19", "20"));
@@ -108,7 +105,7 @@ public class App extends Application implements RepairListener {
         buildResult.setCellValueFactory(new PropertyValueFactory<TableRow, String>("buildResult"));
 
         ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1", "success"), new TableRow(2, "strat2", "failed"));
-        processList.get(0).addData(data);
+
         tableView.setItems(data);
 
         // Load existing Properties
@@ -209,6 +206,7 @@ public class App extends Application implements RepairListener {
             if (!isAlreadyRunning) {
                 processList.add(process);
                 processCounter++;
+                process.getProcessTab().setClosable(false);
                 tapPane.getTabs().add(processList.get(processCounter - 1).getProcessTab());
                 listView.getItems().add(process);
 
@@ -220,7 +218,7 @@ public class App extends Application implements RepairListener {
                 maxSteps = Integer.parseInt(pick);
 
                 try {
-                    process.getRepair().repair(repoFile, revision, maxSteps, null, allowedStrats);
+                    //process.getRepair().repair(repoFile, revision, maxSteps, null, allowedStrats);
                 } catch (Exception e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to start Repairtool!");
                     alert.show();
@@ -235,8 +233,30 @@ public class App extends Application implements RepairListener {
 
     @FXML
     protected void cancelProgram(ActionEvent event) {
-        progressLbl.setText("");
-        progressBar.setProgress(0.0);
+        ObservableList<Process> selectedItems = listView.getSelectionModel().getSelectedItems();
+
+        Alert alert =
+                new Alert(Alert.AlertType.WARNING,
+                        "Do you want to cancel the process?",
+                        ButtonType.YES,
+                        ButtonType.NO);
+
+        Optional<ButtonType> decision = alert.showAndWait();
+        if(decision.get() == ButtonType.YES){
+            for(int j = 0; j < selectedItems.size(); j++){
+                Process selP = selectedItems.get(j);
+                for(int i = 0; i < processList.size(); i++){
+                    Process p = processList.get(i);
+                    if(p.equals(selP)){
+                        processList.remove(p);
+                        listView.getItems().remove(p);
+                        processCounter--;
+                        p.getProcessTab().setClosable(true);
+                    }
+                }
+            }
+        }
+
     }
 
 
@@ -330,11 +350,7 @@ public class App extends Application implements RepairListener {
 
     @Override
     public void stepEnded(int i, int i1) {
-        // Update progressBar and progressLbl
-        double progress = (double) i / (double) i1;
-        progressBar.setProgress(progress);
-        progress *= 100.0;
-        progressLbl.setText(String.format("%.2f", progress) + "%");
+
     }
 
     @Override

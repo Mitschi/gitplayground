@@ -5,7 +5,7 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -24,8 +24,8 @@
                         <Pane prefHeight="50.0" prefWidth="800.0">
                             <children>
                                 <Label fx:id="lblPath" layoutX="20.0" layoutY="20.0" prefHeight="17.0" prefWidth="60.0" text="Path*:" />
-                                <TextField fx:id="textFieldPath" layoutX="80.0" layoutY="15.0" prefHeight="25.0" prefWidth="550.0" />
-                                <Button fx:id="pathChoose" layoutX="650.0" layoutY="15.0" mnemonicParsing="false" onAction="#choosePath" prefHeight="25.0" prefWidth="110.0" text="Choose" />
+                                <TextField fx:id="textFieldPath" layoutX="80.0" layoutY="15.0" prefHeight="25.0" prefWidth="575.0" />
+                                <Button fx:id="pathChoose" layoutX="670.0" layoutY="15.0" mnemonicParsing="false" onAction="#choosePath" prefHeight="25.0" prefWidth="110.0" text="Choose" />
                             </children>
                         </Pane>
                         <Pane layoutY="45.0" prefHeight="50.0" prefWidth="800.0">
@@ -73,20 +73,19 @@
                         <Pane layoutY="234.0" prefHeight="50.0" prefWidth="800.0">
                             <children>
                                 <Label fx:id="lblLog" layoutX="20.0" layoutY="20.0" prefWidth="60.0" text="Logfile:" />
-                                <TextField fx:id="textFieldLog" layoutX="80.0" layoutY="15.0" prefHeight="25.0" prefWidth="550.0" />
-                                <Button fx:id="buttonLog" layoutX="650.0" layoutY="15.0" mnemonicParsing="false" onAction="#chooseLog" prefHeight="25.0" prefWidth="110.0" text="Choose" />
+                                <TextField fx:id="textFieldLog" layoutX="80.0" layoutY="15.0" prefHeight="25.0" prefWidth="575.0" />
+                                <Button fx:id="buttonLog" layoutX="670.0" layoutY="15.0" mnemonicParsing="false" onAction="#chooseLog" prefHeight="25.0" prefWidth="110.0" text="Choose" />
                             </children>
                         </Pane>
                         <Pane layoutY="285.0" prefHeight="287.0" prefWidth="800.0">
                             <children>
-                                <ProgressBar fx:id="progressBar" layoutX="20.0" layoutY="218.0" prefHeight="18.0" prefWidth="760.0" progress="0.0" />
-                                <Button layoutX="20.0" layoutY="180.0" mnemonicParsing="false" onAction="#startProgram" prefHeight="25.0" prefWidth="110.0" text="Start" />
-                                <Button layoutX="150.0" layoutY="180.0" mnemonicParsing="false" onAction="#cancelProgram" prefHeight="25.0" prefWidth="110.0" text="Cancel" />
+                                <Button layoutX="20.0" layoutY="75.0" mnemonicParsing="false" onAction="#startProgram" prefHeight="25.0" prefWidth="110.0" text="Start" />
+                                <Button layoutX="20.0" layoutY="115.0" mnemonicParsing="false" onAction="#cancelProgram" prefHeight="25.0" prefWidth="110.0" text="Cancel" />
                         <Label layoutX="20.0" layoutY="256.0" prefHeight="17.0" prefWidth="240.0" text="Fields marked with * have to be selected" underline="true" />
                         <Label layoutX="20.0" layoutY="20.0" text="Revision:" />
-                        <TextField fx:id="textFieldRevision" layoutX="80.0" layoutY="15.0" prefHeight="25.0" prefWidth="550.0" />
-                        <Label fx:id="progressLbl" alignment="CENTER" contentDisplay="TOP" layoutX="380.0" layoutY="219.0" style="-fx-font-weight: bold;" textAlignment="CENTER" textFill="#bfbfbf" />
-                        <ListView fx:id="listView" layoutX="586.0" layoutY="44.0" prefHeight="170.0" prefWidth="200.0" />
+                        <TextField fx:id="textFieldRevision" layoutX="80.0" layoutY="15.0" prefHeight="25.0" prefWidth="575.0" />
+                        <ListView fx:id="listView" layoutX="150.0" layoutY="75.0" prefHeight="163.0" prefWidth="630.0" />
+                        <Separator layoutX="20.0" layoutY="55.0" prefHeight="6.0" prefWidth="760.0" />
                             </children>
                         </Pane>
                     </children>

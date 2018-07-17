@@ -37,6 +37,7 @@ public class Process implements RepairListener{
 
     public Process(String filePath){
         repair = new Repair();
+        repair.addRepairListener(this);
         this.filePath = filePath; // Set Filepath
         progressBar = new ProgressBar(); // initialize progressBar
         table = new TableView<TableRow>(); // initialize Table

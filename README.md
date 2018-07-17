@@ -1,0 +1,1 @@
+#Git Playground [![Build Status](https://travis-ci.org/Mitschi/gitplayground.svg?branch=master)](https://travis-ci.org/Mitschi/gitplayground)

@@ -46,22 +46,22 @@
                                 <Label fx:id="lblStrategy" layoutX="20.0" layoutY="20.0" prefWidth="60.0" text="Strategy*:" />
                                 <CheckBox fx:id="delete" layoutX="80.0" layoutY="20.0" mnemonicParsing="false" text="Delete Depandancy">
                                     <tooltip>
-                                        <Tooltip text="Test S1" />
+                                        <Tooltip text="Deletes missing dependencies as they might not be needed anymore" />
                                     </tooltip>
                                 </CheckBox>
                                 <CheckBox fx:id="add" layoutX="80.0" layoutY="50.0" mnemonicParsing="false" text="Add Depository">
                                     <tooltip>
-                                        <Tooltip text="Test S2" />
+                                        <Tooltip text="Adds other external repositories to be included in the build configuration" />
                                     </tooltip>
                                 </CheckBox>
                                 <CheckBox fx:id="insert" layoutX="80.0" layoutY="80.0" mnemonicParsing="false" text="Insert Dependency">
                                     <tooltip>
-                                        <Tooltip text="Test S3" />
+                                        <Tooltip text="Searches suitable dependencies in the Maven Central repository and includes them in the build configuration" />
                                     </tooltip>
                                 </CheckBox>
                                 <CheckBox fx:id="version" layoutX="80.0" layoutY="110.0" mnemonicParsing="false" text="Version Update">
                                     <tooltip>
-                                        <Tooltip text="Test S4" />
+                                        <Tooltip text="Updates version declarations to avoid missing dependencies" />
                                     </tooltip>
                                 </CheckBox>
 

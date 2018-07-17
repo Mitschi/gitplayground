@@ -207,13 +207,13 @@ public class App extends Application implements RepairListener {
             String pick = choiceBox.getValue().toString();
             maxSteps = Integer.parseInt(pick);
 
-//        try {
-//            repair.repair(repoFile,revision,maxSteps,null, null);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            repair.repair(repoFile,revision,maxSteps,null, null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         }
 
     }

@@ -9,14 +9,17 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
@@ -24,6 +27,7 @@ import javafx.scene.control.Alert;
 import scala.util.parsing.combinator.testing.Str;
 
 import javax.swing.table.TableColumn;
+import java.awt.event.MouseEvent;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -401,5 +405,16 @@ public class App extends Application implements RepairListener {
 
             return false;
         }
+    }
+
+    @FXML
+    protected void contextMenuListView(ActionEvent event){
+        if(listView.getItems().size() != 0){
+            MultipleSelectionModel<Process> sel = listView.getSelectionModel();
+            Process p = sel.getSelectedItem();
+            SingleSelectionModel<Tab> selectionModel = tapPane.getSelectionModel();
+            selectionModel.select(p.getProcessTab());
+        }
+
     }
 }

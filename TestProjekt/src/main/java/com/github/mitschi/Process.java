@@ -3,8 +3,10 @@ package com.github.mitschi;
 import at.aau.FixAction;
 import at.aau.RepairListener;
 import at.aau.Repair;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,6 +18,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,6 +30,7 @@ public class Process implements RepairListener{
     private ProgressBar progressBar;
     private Label label;
     private Repair repair;
+    private double progress;
 
     private javafx.scene.control.TableColumn step;
 
@@ -33,11 +38,39 @@ public class Process implements RepairListener{
 
     private javafx.scene.control.TableColumn buildResult;
 
+    private javafx.scene.control.TableColumn button;
+
+
     public Repair getRepair() {
         return repair;
     }
 
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
+    public void setProgressBar(ProgressBar progressBar) {
+        this.progressBar = progressBar;
+    }
+
+    public Label getLabel() {
+        return label;
+    }
+
+    public void setLabel(Label label) {
+        this.label = label;
+    }
+
+    public double getProgress() {
+        return progress;
+    }
+
+    public void setProgress(double progress) {
+        this.progress = progress;
+    }
+
     public Process(String filePath){
+
         repair = new Repair();
         repair.addRepairListener(this);
         this.filePath = filePath; // Set Filepath
@@ -56,12 +89,17 @@ public class Process implements RepairListener{
         step = new TableColumn();
         strategies = new TableColumn();
         buildResult = new TableColumn();
+        button = new TableColumn();
         step.setText("Steps");
         strategies.setText("Strategies");
         buildResult.setText("Build Result");
-        step.setCellValueFactory(new PropertyValueFactory<TableRow, Integer>("step"));
-        strategies.setCellValueFactory(new PropertyValueFactory<TableRow, String>("strategie"));
-        buildResult.setCellValueFactory(new PropertyValueFactory<TableRow, String>("buildResult"));
+        // add table columns
+        table.getColumns().addAll(step, strategies, buildResult, button);
+
+        step.setCellValueFactory(new PropertyValueFactory<>("step"));
+        strategies.setCellValueFactory(new PropertyValueFactory<>("strategie"));
+        buildResult.setCellValueFactory(new PropertyValueFactory<>("buildResult"));
+        button.setCellValueFactory(new PropertyValueFactory<>("showLog"));
 
         label = new Label("");// Add progressLabel
         Pane pane = new Pane(); // Add pane as container
@@ -75,8 +113,7 @@ public class Process implements RepairListener{
         processTab.setContent(pane); // add pane to tab
         pane.getChildren().addAll(progressBar, table, label); // add contents to pane
 
-        // add table columns
-        table.getColumns().addAll(step, strategies, buildResult);
+
 
     }
 
@@ -118,21 +155,23 @@ public class Process implements RepairListener{
 
     @Override
     public void repairEnded() {
-
+//        App.progressListener.progressFinished(this);
     }
 
     @Override
     public void stepStarted(int i, int i1) {
+//        // Update progressBar and progressLbl
+//        double progress = (double) i / (double) i1;
+//        progressBar.setProgress(progress);
+//        progress *= 100.0;
+//        label.setText(String.format("%.2f", progress) + "%");
 
     }
 
     @Override
     public void stepEnded(int i, int i1) {
-        // Update progressBar and progressLbl
-        double progress = (double) i / (double) i1;
-        progressBar.setProgress(progress);
-        progress *= 100.0;
-        label.setText(String.format("%.2f", progress) + "%");
+
+
     }
 
     @Override
@@ -148,5 +187,21 @@ public class Process implements RepairListener{
     @Override
     public String toString() {
         return filePath;
+    }
+
+
+    public void start(File repoFolder, String revision, int max_steps, List<Class> allowedStrategies){
+
+//repair.repair(repoFolder, revision, max_steps,"statistic", allowedStrategies);
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    repair.repair(repoFolder, revision, max_steps, "statistic", allowedStrategies);
+                } catch (FileNotFoundException | ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
     }
 }

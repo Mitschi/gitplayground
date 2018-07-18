@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-public class App extends Application implements RepairListener {
+public class App extends Application{
 
     protected Stage stage;
     protected static String logPath;
@@ -49,6 +49,7 @@ public class App extends Application implements RepairListener {
     protected ArrayList<Process> processList;
     protected int processCounter;
     protected static TabOnCloseListener tabListener;
+    protected static ProgressListener progressListener;
 
 
     @FXML
@@ -105,6 +106,18 @@ public class App extends Application implements RepairListener {
                 }
             }
         };
+//        progressListener = new ProgressListener() {
+//            @Override
+//            public void changeProgress(Process process) {
+//                  process.getProgressBar().setProgress(process.getProgress());
+//                  process.getLabel().setText(process.getProgress()*100 + "");
+//            }
+//
+//            @Override
+//            public void progressFinished(Process process) {
+//                listView.getItems().remove(process);
+//            }
+//        };
         processList = new ArrayList<Process>();
         //processList.add(new Process(null, detailsTab));
         processCounter = 0;
@@ -132,9 +145,11 @@ public class App extends Application implements RepairListener {
             logPath = startProperties.getProperty("logPath");
             pomFile = startProperties.getProperty("pomFile");
             maxSteps = Integer.parseInt(startProperties.getProperty("max_steps"));
+            revision = startProperties.getProperty("revision");
             choiceBox.setValue(maxSteps + "");
             textFieldLog.setText(logPath);
             textFieldPath.setText(pomFile);
+            textFieldRevision.setText(revision);
 
         } catch (Exception e) {
 
@@ -233,10 +248,11 @@ public class App extends Application implements RepairListener {
                 String pick = choiceBox.getValue().toString();
                 maxSteps = Integer.parseInt(pick);
 
+
                 try {
-                    //process.getRepair().repair(repoFile, revision, maxSteps, null, allowedStrats);
+                    process.start(repoFile.getParentFile(), revision, maxSteps, allowedStrats);
                 } catch (Exception e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to start Repairtool!");
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to start Repairtool!"+e.getClass()+" "+e.getMessage());
                     alert.show();
                 }
             } else {
@@ -327,6 +343,7 @@ public class App extends Application implements RepairListener {
         properties.setProperty("logPath", logPath);
         properties.setProperty("pomFile", pomFile);
         properties.setProperty("max_steps", maxSteps + "");
+        properties.setProperty("revision", revision);
 
         try {
             // write properties to C:\Users\%USERPROFILE%\.buildMedic\config.properties if non-existing, Path will be created
@@ -349,38 +366,7 @@ public class App extends Application implements RepairListener {
         revision = textFieldRevision.getText();
     }
 
-    @Override
-    public void repairStarted(File file, String s, int i, List<Class> list) {
 
-    }
-
-    @Override
-    public void repairEnded() {
-        // Select detailsTab
-        SingleSelectionModel<Tab> selectionModel = tapPane.getSelectionModel();
-        selectionModel.select(processList.get(0).getProcessTab());
-
-    }
-
-    @Override
-    public void stepStarted(int i, int i1) {
-
-    }
-
-    @Override
-    public void stepEnded(int i, int i1) {
-
-    }
-
-    @Override
-    public void repairFound(List<FixAction> list) {
-
-    }
-
-    @Override
-    public void printText(String s) {
-
-    }
 
     protected boolean testForPom() {
         String s = textFieldPath.getText();
@@ -432,5 +418,6 @@ public class App extends Application implements RepairListener {
                 selectionModel.select(p.getProcessTab());
         }
     }
+
 
 }

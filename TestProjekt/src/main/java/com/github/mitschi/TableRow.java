@@ -1,16 +1,25 @@
 package com.github.mitschi;
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
+
 import java.util.Objects;
 
 public class TableRow {
     private int step;
     private String strategie;
     private String buildResult;
+    private Button showLog;
 
     public TableRow(int step, String strategie, String buildResult) {
         this.step = step;
         this.strategie = strategie;
         this.buildResult = buildResult;
+        this.showLog = new Button("Show Log");
+        this.showLog.setOnAction(
+                event -> new LogWindow(null).showDialog("", step+"")
+        );
     }
 
     public TableRow(){}
@@ -53,5 +62,13 @@ public class TableRow {
 
     public void setBuildResult(String buildResult) {
         this.buildResult = buildResult;
+    }
+
+    public Button getShowLog() {
+        return showLog;
+    }
+
+    public void setShowLog(Button showLog) {
+        this.showLog = showLog;
     }
 }

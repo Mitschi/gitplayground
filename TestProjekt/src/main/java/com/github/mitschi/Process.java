@@ -5,6 +5,8 @@ import at.aau.RepairListener;
 import at.aau.Repair;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -44,6 +46,7 @@ public class Process implements RepairListener{
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         this.processTab = new Tab();// initialize Tab
         processTab.setText(filePath); // set Title to Filepath
+
         // Set Table Columns
         step = new TableColumn();
         strategies = new TableColumn();

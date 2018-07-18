@@ -48,6 +48,7 @@ public class App extends Application implements RepairListener {
     protected static String revision;
     protected ArrayList<Process> processList;
     protected int processCounter;
+    protected static TabOnCloseListener tabListener;
 
 
     @FXML
@@ -93,6 +94,17 @@ public class App extends Application implements RepairListener {
         // Set detailsTab to non-visible in the beginning
         tapPane.getTabs().remove(detailsTab);
         tapPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
+        tabListener = new TabOnCloseListener() {
+            @Override
+            public void tabOnClose() {
+                Tab t = tapPane.getSelectionModel().getSelectedItem();
+                for(int i = 0; i < listView.getItems().size(); i++){
+                    if(listView.getItems().get(i).getProcessTab().equals(t)){
+                        listView.getItems().remove(i);
+                    }
+                }
+            }
+        };
         processList = new ArrayList<Process>();
         //processList.add(new Process(null, detailsTab));
         processCounter = 0;
@@ -417,6 +429,5 @@ public class App extends Application implements RepairListener {
                 selectionModel.select(p.getProcessTab());
         }
     }
-
 
 }

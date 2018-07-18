@@ -46,7 +46,12 @@ public class Process implements RepairListener{
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         this.processTab = new Tab();// initialize Tab
         processTab.setText(filePath); // set Title to Filepath
-
+        processTab.setOnClosed(new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) {
+                App.tabListener.tabOnClose();
+            }
+        });
         // Set Table Columns
         step = new TableColumn();
         strategies = new TableColumn();

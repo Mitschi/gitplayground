@@ -1,36 +1,24 @@
 package com.github.mitschi;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import org.hamcrest.CoreMatchers;
 import org.junit.*;
-import org.loadui.testfx.GuiTest;
-import org.testfx.service.query.NodeQuery;
-
-import static org.loadui.testfx.Assertions.*;
 
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 
-import org.testfx.service.query.NodeQuery;
-
 import static org.junit.Assert.*;
 import static org.testfx.api.FxToolkit.registerPrimaryStage;
 
-import java.util.regex.Matcher;
-
-public class TestApplication extends ApplicationTest {
+public class ApplicationGuiTest extends ApplicationTest {
     //Warning: These tests only work when in the path a pom.xml data stands
 
     private Stage stage;

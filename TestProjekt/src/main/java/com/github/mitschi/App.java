@@ -45,7 +45,7 @@ public class App extends Application implements RepairListener {
     protected static int maxSteps;
     protected Scene scene;
     protected static String savePath;
-    protected String revision;
+    protected static String revision;
     protected ArrayList<Process> processList;
     protected int processCounter;
 
@@ -85,7 +85,6 @@ public class App extends Application implements RepairListener {
     @FXML
     protected CheckBox version;
     @FXML
-
     protected ListView<Process> listView;
 
 

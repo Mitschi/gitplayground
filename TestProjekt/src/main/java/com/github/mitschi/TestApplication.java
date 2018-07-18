@@ -31,6 +31,7 @@ import static org.testfx.api.FxToolkit.registerPrimaryStage;
 import java.util.regex.Matcher;
 
 public class TestApplication extends ApplicationTest {
+    //Warning: These tests only work when in the path a pom.xml data stands
 
     private Stage stage;
     int randomNumber;
@@ -54,6 +55,7 @@ public class TestApplication extends ApplicationTest {
         FxToolkit.hideStage();
         release(new MouseButton[]{});
     }
+
 
     //Test different things together
     //WARNING: Not CORRECT or more specifically not WORKING because of changes in "App"!
@@ -187,15 +189,50 @@ public class TestApplication extends ApplicationTest {
         //There should be an alert with a warning that in the logFile is no .txt data
     }
 
+    @Test
+    public void testRevision(){
+
+        clickOn("#insert"); //Choose "insert" as a strategy because there would be an alert
+        //Write in revision "Hello World
+        clickOn("#textFieldRevision");
+        write("Hello World");
+
+        clickOn("Start"); //Start the program
+
+        assertEquals("Hello World", App.revision); //Check if the class "App" gets the right text
+    }
+
+    @Test
+    public void testListViewAddAndDeletePath(){
+
+        clickOn("#delete"); //Choose "delete" as a strategy because there would be an alert
+        clickOn("Start"); //Start the program
+
+        clickOn("#listView"); //Select path in listView
+        //Cancel the program
+        clickOn("Cancel");
+        clickOn("Yes");
+    }
+
+//    @Test
+//    public void testListViewGetToTheDeatilTab(){
+//        clickOn("#add"); //Choose "add" as a strategy because there would be an alert
+//        clickOn("Start"); //Start the program
+//
+//        clickOn("#listView",MouseButton.SECONDARY);
+//        clickOn("show Details");
+//
+//    }
+
 //    @BeforeClass
-////    public static void setupSpec() throws Exception{
-////
-////            System.setProperty("testfx.robot", "glass");
-////            System.setProperty("testfx.headless", "true");
-////            System.setProperty("prism.order", "sw");
-////            System.setProperty("prism.text", "t2k");
-////            System.setProperty("java.awt.headless", "true");
-////
-////        registerPrimaryStage();
-////    }
+//    public static void setupSpec() throws Exception{
+//
+//            System.setProperty("testfx.robot", "glass");
+//            System.setProperty("testfx.headless", "true");
+//            System.setProperty("prism.order", "sw");
+//            System.setProperty("prism.text", "t2k");
+//            System.setProperty("java.awt.headless", "true");
+//
+//        registerPrimaryStage();
+//    }
 }

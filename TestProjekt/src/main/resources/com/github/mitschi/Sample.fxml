@@ -44,7 +44,7 @@
 
 
                         </Pane>
-                        <Pane layoutY="97.0" prefHeight="150.0" prefWidth="800.0">
+                        <Pane layoutY="88.0" prefHeight="137.0" prefWidth="800.0">
                             <children>
                                 <Label fx:id="lblStrategy" layoutX="20.0" layoutY="20.0" prefWidth="60.0" text="Strategy*:" />
                                 <CheckBox fx:id="delete" layoutX="80.0" layoutY="20.0" mnemonicParsing="false" text="Delete Depandancy">
@@ -72,21 +72,21 @@
 
                             </children>
                         </Pane>
-                        <Pane layoutY="234.0" prefHeight="50.0" prefWidth="800.0">
+                        <Pane layoutY="217.0" prefHeight="67.0" prefWidth="800.0">
                             <children>
                                 <Label fx:id="lblLog" layoutX="20.0" layoutY="20.0" prefWidth="60.0" text="Logfile:" />
                                 <TextField fx:id="textFieldLog" layoutX="80.0" layoutY="15.0" prefHeight="25.0" prefWidth="575.0" />
                                 <Button fx:id="buttonLog" layoutX="670.0" layoutY="15.0" mnemonicParsing="false" onAction="#chooseLog" prefHeight="25.0" prefWidth="110.0" text="Choose" />
                             </children>
                         </Pane>
-                        <Pane layoutY="285.0" prefHeight="287.0" prefWidth="800.0">
+                        <Pane layoutY="262.0" prefHeight="310.0" prefWidth="800.0">
                             <children>
-                                <Button layoutX="20.0" layoutY="75.0" mnemonicParsing="false" onAction="#startProgram" prefHeight="25.0" prefWidth="110.0" text="Start" />
-                                <Button layoutX="20.0" layoutY="115.0" mnemonicParsing="false" onAction="#cancelProgram" prefHeight="25.0" prefWidth="110.0" text="Cancel" />
-                        <Label layoutX="20.0" layoutY="256.0" prefHeight="17.0" prefWidth="240.0" text="Fields marked with * have to be selected" underline="true" />
+                                <Button layoutX="20.0" layoutY="236.0" mnemonicParsing="false" onAction="#startProgram" prefHeight="25.0" prefWidth="110.0" text="Start" />
+                                <Button layoutX="140.0" layoutY="236.0" mnemonicParsing="false" onAction="#cancelProgram" prefHeight="25.0" prefWidth="110.0" text="Cancel" />
+                        <Label layoutX="20.0" layoutY="288.0" prefHeight="17.0" prefWidth="240.0" text="Fields marked with * have to be selected" underline="true" />
                         <Label layoutX="20.0" layoutY="20.0" text="Revision:" />
                         <TextField fx:id="textFieldRevision" layoutX="80.0" layoutY="15.0" prefHeight="25.0" prefWidth="575.0" />
-                        <ListView fx:id="listView" layoutX="150.0" layoutY="75.0" prefHeight="163.0" prefWidth="630.0">
+                        <ListView fx:id="listView" layoutX="20.0" layoutY="80.0" prefHeight="134.0" prefWidth="760.0">
                            <contextMenu>
                               <ContextMenu>
                                 <items>
@@ -94,7 +94,8 @@
                                 </items>
                               </ContextMenu>
                            </contextMenu></ListView>
-                        <Separator layoutX="20.0" layoutY="55.0" prefHeight="6.0" prefWidth="760.0" />
+                        <Separator layoutX="20.0" layoutY="47.0" prefHeight="6.0" prefWidth="760.0" />
+                        <Label layoutX="20.0" layoutY="60.0" text="Running Processes:" />
                             </children>
                         </Pane>
                     </children>

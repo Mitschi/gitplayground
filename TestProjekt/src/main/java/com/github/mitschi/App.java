@@ -249,6 +249,9 @@ public class App extends Application implements RepairListener {
 
     @FXML
     protected void cancelProgram(ActionEvent event) {
+        LogWindow lw = new LogWindow(stage);
+        lw.showDialog("pom.xml","20");
+
         ObservableList<Process> selectedItems = listView.getSelectionModel().getSelectedItems();
 
         Alert alert =

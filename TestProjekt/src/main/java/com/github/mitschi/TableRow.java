@@ -19,6 +19,7 @@ public class TableRow {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         TableRow tableRow = (TableRow) o;
         return step == tableRow.step &&
                 Objects.equals(strategie, tableRow.strategie) &&
@@ -27,7 +28,6 @@ public class TableRow {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(step, strategie, buildResult);
     }
 

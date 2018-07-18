@@ -4,10 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
@@ -214,15 +211,6 @@ public class TestApplication extends ApplicationTest {
         clickOn("Yes");
     }
 
-//    @Test
-//    public void testListViewGetToTheDeatilTab(){
-//        clickOn("#add"); //Choose "add" as a strategy because there would be an alert
-//        clickOn("Start"); //Start the program
-//
-//        clickOn("#listView",MouseButton.SECONDARY);
-//        clickOn("show Details");
-//
-//    }
 
     @BeforeClass
     public static void setupSpec() throws Exception{

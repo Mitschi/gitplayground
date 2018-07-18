@@ -418,15 +418,5 @@ public class App extends Application implements RepairListener {
         }
     }
 
-    @FXML
-    protected void removeTab(ActionEvent event){
-         Tab t = tapPane.getSelectionModel().getSelectedItem();
-
-         for(int i = 0; i < listView.getItems().size(); i++){
-             if(listView.getItems().get(i).getProcessTab().equals(t)){
-                 listView.getItems().remove(i);
-             }
-         }
-    }
 
 }

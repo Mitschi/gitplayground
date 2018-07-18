@@ -28,4 +28,4 @@ install: true
     
 script:
   - cd TestProjekt
-  - mvn clean install -DskipTests=true
+  - mvn clean install

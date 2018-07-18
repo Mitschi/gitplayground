@@ -1,7 +1,14 @@
 language: java
 jdk:
+  - oraclejdk8
+  - openjdk8
+  - oraclejdk9
+  - openjdk9
   - oraclejdk10
   - openjdk10
+before_install:
+    - mvn install:install-file -Dfile=TestProjekt/tmpBin/common-1.0-SNAPSHOT.jar -DgroupId=com.github.mitschi -DartifactId=common -Dversion=1.0-SNAPSHOT -Dpackaging=jar
+    - mvn install:install-file -Dfile=TestProjekt/tmpBin/maven-buildfix-1.0-SNAPSHOT.jar -DgroupId=com.github.mitschi -DartifactId=maven-buildfix -Dversion=1.0-SNAPSHOT -Dpackaging=jar
 script:
   - cd TestProjekt
   - mvn clean install -DskipTests=true

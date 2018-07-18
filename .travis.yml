@@ -29,3 +29,6 @@ install: true
 script:
   - cd TestProjekt
   - mvn clean install -DskipTests=true
+  
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

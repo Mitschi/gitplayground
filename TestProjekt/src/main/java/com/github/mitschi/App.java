@@ -259,13 +259,8 @@ public class App extends Application{
                 process.addData(data);
 
                 try {
-//                    process.start(repoFile.getParentFile(), revision, maxSteps, allowedStrats);
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            lblStrategy.setText("ASDFASDFASDFASDF");
-                        }
-                    });
+                    process.start(repoFile.getParentFile(), revision, maxSteps, allowedStrats);
+
                 } catch (Exception e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to start Repairtool!"+e.getClass()+" "+e.getMessage());
                     alert.show();

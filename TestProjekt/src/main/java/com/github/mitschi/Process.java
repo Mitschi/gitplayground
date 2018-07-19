@@ -164,17 +164,20 @@ public class Process implements RepairListener{
 
     @Override
     public void stepStarted(int i, int i1) {
-//        // Update progressBar and progressLbl
-//        double progress = (double) i / (double) i1;
-//        progressBar.setProgress(progress);
-//        progress *= 100.0;
-//        label.setText(String.format("%.2f", progress) + "%");
-
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                // Update progressBar and progressLbl
+                double progress = (double) i / (double) i1;
+                progressBar.setProgress(progress);
+                progress *= 100.0;
+                label.setText(String.format("%.2f", progress) + "%");
+            }
+        });
     }
 
     @Override
     public void stepEnded(int i, int i1) {
-
 
     }
 
@@ -208,6 +211,8 @@ public class Process implements RepairListener{
                 }
             }
         }.start();
+
+
 
     }
 }

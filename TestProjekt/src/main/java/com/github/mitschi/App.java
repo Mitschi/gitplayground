@@ -6,6 +6,7 @@ import at.aau.fixStrategies.*;
 import at.aau.Repair;
 import at.aau.RepairListener;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -258,7 +259,13 @@ public class App extends Application{
                 process.addData(data);
 
                 try {
-                    process.start(repoFile.getParentFile(), revision, maxSteps, allowedStrats);
+//                    process.start(repoFile.getParentFile(), revision, maxSteps, allowedStrats);
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            lblStrategy.setText("ASDFASDFASDFASDF");
+                        }
+                    });
                 } catch (Exception e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to start Repairtool!"+e.getClass()+" "+e.getMessage());
                     alert.show();

@@ -108,18 +108,22 @@ public class App extends Application{
                 }
             }
         };
-//        progressListener = new ProgressListener() {
-//            @Override
-//            public void changeProgress(Process process) {
-//                  process.getProgressBar().setProgress(process.getProgress());
-//                  process.getLabel().setText(process.getProgress()*100 + "");
-//            }
-//
-//            @Override
-//            public void progressFinished(Process process) {
-//                listView.getItems().remove(process);
-//            }
-//        };
+        progressListener = new ProgressListener() {
+            @Override
+            public void changeProgress(Process process) {
+                  process.getProgressBar().setProgress(process.getProgress());
+                  process.getLabel().setText(process.getProgress()*100 + "");
+            }
+
+            @Override
+            public void progressFinished(Process process) {
+                listView.getItems().remove(process);
+                process.getProgressBar().setProgress(1);
+                process.getLabel().setText("100%");
+                processList.remove(process);
+                processCounter--;
+            }
+        };
         processList = new ArrayList<Process>();
         //processList.add(new Process(null, detailsTab));
         processCounter = 0;

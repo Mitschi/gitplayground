@@ -159,7 +159,14 @@ public class Process implements RepairListener{
 
     @Override
     public void repairEnded() {
-//        App.progressListener.progressFinished(this);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                App.progressListener.progressFinished(Process.this);
+                processTab.setClosable(true);
+            }
+        });
     }
 
     @Override

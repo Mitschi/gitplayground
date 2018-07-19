@@ -4,6 +4,8 @@ import at.aau.FixAction;
 import at.aau.RepairListener;
 import at.aau.Repair;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -31,7 +33,7 @@ public class Process implements RepairListener{
     private Label label;
     private Repair repair;
     private double progress;
-    protected Thread thread;
+    private BooleanProperty isRunning;
 
     private javafx.scene.control.TableColumn step;
 
@@ -71,7 +73,7 @@ public class Process implements RepairListener{
     }
 
     public Process(String filePath){
-
+        isRunning = new SimpleBooleanProperty(false);
         repair = new Repair();
         repair.addRepairListener(this);
         this.filePath = filePath; // Set Filepath
@@ -94,6 +96,7 @@ public class Process implements RepairListener{
         step.setText("Steps");
         strategies.setText("Strategies");
         buildResult.setText("Build Result");
+        button.setText("Log Windows");
         // add table columns
         table.getColumns().addAll(step, strategies, buildResult, button);
 
@@ -194,17 +197,17 @@ public class Process implements RepairListener{
     public void start(File repoFolder, String revision, int max_steps, List<Class> allowedStrategies){
 
 //repair.repair(repoFolder, revision, max_steps,"statistic", allowedStrategies);
-        thread = new Thread(){
+        new Thread(){
             @Override
             public void run() {
                 try {
+                    isRunning.setValue(true);
                     repair.repair(repoFolder, revision, max_steps,"statistic", allowedStrategies);
                 } catch (FileNotFoundException | ParseException e) {
                     e.printStackTrace();
                 }
             }
-        };
-        thread.start();
+        }.start();
 
     }
 }

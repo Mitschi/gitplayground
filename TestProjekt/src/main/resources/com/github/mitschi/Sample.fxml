@@ -7,11 +7,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -102,9 +104,19 @@
                 </AnchorPane>
             </content>
         </Tab>
-        <Tab closable="false" disable="true" text="BuildDiff">
+        <Tab fx:id="tabBuildDiff" closable="false" disable="false" text="BuildDiff">
             <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Pane layoutX="27.0" layoutY="29.0" prefHeight="512.0" prefWidth="732.0">
+                     <children>
+                        <Button layoutX="29.0" layoutY="32.0" mnemonicParsing="false" onAction="#setTextArea" text="Button" />
+                        <TextArea layoutX="29.0" layoutY="127.0" prefHeight="200.0" prefWidth="200.0" />
+                        <Label layoutX="150.0" layoutY="36.0" text="Label" />
+                        <ScrollPane fx:id="textPane" layoutX="240.0" layoutY="14.0" prefHeight="335.0" prefWidth="481.0" />
+                     </children>
+                  </Pane>
+               </children></AnchorPane>
             </content>
         </Tab>
       <Tab fx:id="detailsTab" text="BuildMedic Details">

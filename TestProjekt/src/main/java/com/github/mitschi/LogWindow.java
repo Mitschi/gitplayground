@@ -44,11 +44,14 @@ public class LogWindow {
 
         lblPath = new Label("Path:");
         lblStep= new Label("Step:");
+
         textArea= new TextFlow();
         Text text1 = new Text("Hello There!");
+
         text1.setFill(Color.BLUE);
         textArea.setStyle("-fx-border-color: lightgray");
         textArea.getChildren().add(text1);
+
         txtPath = new TextField(filePath);
         txtStep= new TextField(step);
 

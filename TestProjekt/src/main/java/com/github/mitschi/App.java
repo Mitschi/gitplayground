@@ -1,43 +1,44 @@
 package com.github.mitschi;
 
 
-import at.aau.FixAction;
 import at.aau.fixStrategies.*;
-import at.aau.Repair;
-import at.aau.RepairListener;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Alert;
-import org.hibernate.cfg.Environment;
-import scala.util.parsing.combinator.testing.Str;
+import org.fxmisc.richtext.GenericStyledArea;
+import org.fxmisc.richtext.StyledTextArea;
+import org.fxmisc.richtext.TextExt;
+import org.fxmisc.richtext.demo.richtext.LinkedImage;
+import org.fxmisc.richtext.demo.richtext.LinkedImageOps;
+import org.fxmisc.richtext.demo.richtext.ParStyle;
+import org.fxmisc.richtext.demo.richtext.TextStyle;
+import org.fxmisc.richtext.model.*;
+import org.jboss.jandex.Index;
+import org.reactfx.util.Either;
 
-import javax.swing.table.TableColumn;
-import java.awt.event.MouseEvent;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 public class App extends Application{
 
@@ -92,8 +93,50 @@ public class App extends Application{
     @FXML
     protected ListView<Process> listView;
 
+    @FXML
+    protected Tab tabBuildDiff;
+
+    @FXML
+    protected ScrollPane textPane;
+
+    //kein FXML
+    protected GenericStyledArea<ParStyle, Either<String, LinkedImage>, TextStyle> area;
+
+    @FXML
+    public void setTextArea(){
+        IndexRange selection = IndexRange.normalize(4, 6);
+        updateStyleInSelection(spans -> TextStyle.bold(!spans.styleStream().allMatch(style -> style.bold.orElse(false))), selection);
+        updateStyleInSelection(TextStyle.textColor(Color.web("#ff0000")), selection);
+        updateStyleInSelection(TextStyle.backgroundColor(Color.web("#0000ff")), selection);
+    }
+    private void updateStyleInSelection(Function<StyleSpans<TextStyle>, TextStyle> mixinGetter, IndexRange selection) {
+        if(selection.getLength() != 0) {
+            StyleSpans<TextStyle> styles = area.getStyleSpans(selection);
+            TextStyle mixin = mixinGetter.apply(styles);
+            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
+            area.setStyleSpans(selection.getStart(), newStyles);
+        }
+    }
+    private void updateStyleInSelection(TextStyle mixin, IndexRange selection) {
+        if (selection.getLength() != 0) {
+            StyleSpans<TextStyle> styles = area.getStyleSpans(selection);
+            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
+            area.setStyleSpans(selection.getStart(), newStyles);
+        }
+    }
+    private final TextOps<String, TextStyle> styledTextOps = SegmentOps.styledTextOps();
+    private final LinkedImageOps<TextStyle> linkedImageOps = new LinkedImageOps<>();
+
+    private Node createNode(StyledSegment<Either<String, LinkedImage>, TextStyle> seg,
+                            BiConsumer<? super TextExt, TextStyle> applyStyle) {
+        return seg.getSegment().unify(
+                text -> StyledTextArea.createStyledTextNode(text, seg.getStyle(), applyStyle),
+                LinkedImage::createNode
+        );
+    }
 
     public void initialize() {
+        addRichTextFX();
         // Set detailsTab to non-visible in the beginning
         tapPane.getTabs().remove(detailsTab);
         tapPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
@@ -160,6 +203,24 @@ public class App extends Application{
         } catch (Exception e) {
 
         }
+    }
+
+    private void addRichTextFX() {
+        area=new GenericStyledArea<>(
+                        ParStyle.EMPTY,                                                 // default paragraph style
+                        (paragraph, style) -> paragraph.setStyle(style.toCss()),        // paragraph style setter
+
+                        TextStyle.EMPTY.updateFontSize(10).updateFontFamily("Courier New").updateTextColor(Color.BLACK),  // default segment style
+                        styledTextOps._or(linkedImageOps, (s1, s2) -> Optional.empty()),                            // segment operations
+                        seg -> createNode(seg, (text, style) -> text.setStyle(style.toCss())));                     // Node creator and segment style setter
+        area.setWrapText(true);
+        area.setStyleCodecs(
+                ParStyle.CODEC,
+                Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
+        area.appendText("ASDFADSFADSDSAF");
+        area.setPrefSize(500,500);
+//        this.textPane.getChildren().add(area);
+        this.textPane.setContent(area);
     }
 
     @Override

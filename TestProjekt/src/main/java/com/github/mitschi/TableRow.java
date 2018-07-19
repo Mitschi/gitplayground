@@ -3,6 +3,7 @@ package com.github.mitschi;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
+import javafx.stage.Stage;
 
 import java.util.Objects;
 
@@ -11,14 +12,18 @@ public class TableRow {
     private String strategie;
     private String buildResult;
     private Button showLog;
+    private Stage stage;
+    private String filePath;
 
-    public TableRow(int step, String strategie, String buildResult) {
+    public TableRow(int step, String strategie, String buildResult, Stage stage, String filePath) {
         this.step = step;
         this.strategie = strategie;
         this.buildResult = buildResult;
         this.showLog = new Button("Show Log");
+        this.stage = stage;
+        this.filePath = filePath;
         this.showLog.setOnAction(
-                event -> new LogWindow(null).showDialog("", step+"")
+                event -> new LogWindow(stage).showDialog(filePath, step+"")
         );
     }
 

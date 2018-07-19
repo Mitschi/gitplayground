@@ -179,7 +179,12 @@ public class App extends Application{
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 
             public void run() {
-                saveProperties();
+                try{
+                    saveProperties();
+                }catch(NullPointerException ignored){
+
+                }
+
             }
         }));
     }
@@ -267,28 +272,32 @@ public class App extends Application{
 
     @FXML
     protected void cancelProgram(ActionEvent event) {
-        LogWindow lw = new LogWindow(stage);
-        lw.showDialog("pom.xml","20");
-
         ObservableList<Process> selectedItems = listView.getSelectionModel().getSelectedItems();
 
-        Alert alert =
-                new Alert(Alert.AlertType.WARNING,
-                        "Do you want to cancel the process?",
-                        ButtonType.YES,
-                        ButtonType.NO);
+        if(listView.getItems().isEmpty()){
+            Alert alert= new Alert(Alert.AlertType.ERROR, "No process chosen");
+            alert.show();
 
-        Optional<ButtonType> decision = alert.showAndWait();
-        if(decision.get() == ButtonType.YES){
-            for(int j = 0; j < selectedItems.size(); j++){
-                Process selP = selectedItems.get(j);
-                for(int i = 0; i < processList.size(); i++){
-                    Process p = processList.get(i);
-                    if(p.equals(selP)){
-                        processList.remove(p);
-                        listView.getItems().remove(p);
-                        processCounter--;
-                        p.getProcessTab().setClosable(true);
+        }else {
+
+            Alert alert =
+                    new Alert(Alert.AlertType.WARNING,
+                            "Do you want to cancel the process?",
+                            ButtonType.YES,
+                            ButtonType.NO);
+
+            Optional<ButtonType> decision = alert.showAndWait();
+            if (decision.get() == ButtonType.YES) {
+                for (int j = 0; j < selectedItems.size(); j++) {
+                    Process selP = selectedItems.get(j);
+                    for (int i = 0; i < processList.size(); i++) {
+                        Process p = processList.get(i);
+                        if (p.equals(selP)) {
+                            processList.remove(p);
+                            listView.getItems().remove(p);
+                            processCounter--;
+                            p.getProcessTab().setClosable(true);
+                        }
                     }
                 }
             }

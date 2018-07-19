@@ -192,7 +192,7 @@ public class Process implements RepairListener{
 
     public void start(File repoFolder, String revision, int max_steps, List<Class> allowedStrategies){
 
-//repair.repair(repoFolder, revision, max_steps,"statistic", allowedStrategies);
+    //repair.repair(repoFolder, revision, max_steps,"statistic", allowedStrategies);
         new Thread() {
             @Override
             public void run() {

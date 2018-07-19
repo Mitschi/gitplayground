@@ -31,6 +31,7 @@ public class Process implements RepairListener{
     private Label label;
     private Repair repair;
     private double progress;
+    protected Thread thread;
 
     private javafx.scene.control.TableColumn step;
 
@@ -193,15 +194,17 @@ public class Process implements RepairListener{
     public void start(File repoFolder, String revision, int max_steps, List<Class> allowedStrategies){
 
 //repair.repair(repoFolder, revision, max_steps,"statistic", allowedStrategies);
-        new Thread() {
+        thread = new Thread(){
             @Override
             public void run() {
                 try {
-                    repair.repair(repoFolder, revision, max_steps, "statistic", allowedStrategies);
+                    repair.repair(repoFolder, revision, max_steps,"statistic", allowedStrategies);
                 } catch (FileNotFoundException | ParseException e) {
                     e.printStackTrace();
                 }
             }
-        }.start();
+        };
+        thread.start();
+
     }
 }

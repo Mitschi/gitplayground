@@ -24,6 +24,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Alert;
+import org.hibernate.cfg.Environment;
 import scala.util.parsing.combinator.testing.Str;
 
 import javax.swing.table.TableColumn;
@@ -46,7 +47,7 @@ public class App extends Application{
     protected Scene scene;
     protected static String savePath;
     protected static String revision;
-    protected ArrayList<Process> processList;
+    protected static ArrayList<Process> processList;
     protected int processCounter;
     protected static TabOnCloseListener tabListener;
     protected static ProgressListener progressListener;
@@ -395,7 +396,7 @@ public class App extends Application{
         try {
             File file = new File(s);
 
-            if (!file.getName().contains(".txt")) {
+            if (!file.getName().contains(".txt") && !file.getName().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "LogFile has to be a .txt file!");
                 alert.show();
                 return false;

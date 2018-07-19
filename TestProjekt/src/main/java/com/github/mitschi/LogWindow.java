@@ -6,6 +6,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -13,7 +16,7 @@ import javafx.stage.Stage;
 public class LogWindow {
 
     private Stage dialog;
-    private TextArea textArea;
+    private TextFlow textArea;
     private Label lblPath;
     private Label lblStep;
     private TextField txtPath;
@@ -41,7 +44,11 @@ public class LogWindow {
 
         lblPath = new Label("Path:");
         lblStep= new Label("Step:");
-        textArea= new TextArea();
+        textArea= new TextFlow();
+        Text text1 = new Text("Hello There!");
+        text1.setFill(Color.BLUE);
+        textArea.setStyle("-fx-border-color: lightgray");
+        textArea.getChildren().add(text1);
         txtPath = new TextField(filePath);
         txtStep= new TextField(step);
 

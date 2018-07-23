@@ -20,8 +20,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Objects;
@@ -210,7 +209,14 @@ public class Process implements RepairListener{
             @Override
             public void run() {
 
-                table.getItems().get(currentStep).getLogWindow().area.appendText(line+"\n");
+
+
+
+
+
+
+                // table.getItems().get(currentStep).getLogWindow().area.appendText(line+"\n");
+
             }
         });
     }

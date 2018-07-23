@@ -95,7 +95,7 @@
                     <version>2.20.1</version>
                     <configuration>
                         <excludes>
-                            <exclude>**/ApplicationGuiTest.java</exclude>
+                            <!--<exclude>**/ApplicationGuiTest.java</exclude>-->
                         </excludes>
                     </configuration>
                 </plugin>

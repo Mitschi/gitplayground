@@ -3,6 +3,7 @@ package com.github.mitschi;
 import at.aau.FixAction;
 import at.aau.RepairListener;
 import at.aau.Repair;
+import at.aau.building.BuildLog;
 import at.aau.entity.BuildResult;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -175,12 +176,13 @@ public class Process implements RepairListener{
     }
 
     @Override
-    public void stepStarted(int i, int i1, BuildResult buildResult) {
+    public void stepStarted(int i, int i1, BuildLog buildLog) {
 
     }
 
     @Override
-    public void stepEnded(int i, int i1, BuildResult buildResult) {
+    public void stepEnded(int i, int i1, BuildLog buildLog) {
+       // buildLog.getBuildDuration().getMinutes()
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -196,9 +198,8 @@ public class Process implements RepairListener{
                 addData(data);
             }
         });
-
-
     }
+
 
     @Override
     public void repairFound(List<FixAction> list) {

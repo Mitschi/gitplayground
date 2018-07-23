@@ -41,6 +41,11 @@ public class LogWindow {
     private Pane pane;
     private Scene scene;
     private Separator separator;
+    private Label lblBuildDuration;
+    private Label getlblBuildDurationMin;
+    private Label getlblBuildDurationSec;
+    private Label lblBuildResult;
+    private Label getlblBuildResult;
 
     protected GenericStyledArea<ParStyle, Either<String, LinkedImage>, TextStyle> area;
     private final TextOps<String, TextStyle> styledTextOps = SegmentOps.styledTextOps();
@@ -61,10 +66,8 @@ public class LogWindow {
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setTitle("Log");
 
-        dialog.setMinHeight(600);
-        dialog.setMaxHeight(600);
-        dialog.setMinWidth(800);
-        dialog.setMaxWidth(800);
+        dialog.setMinHeight(800);
+        dialog.setMinWidth(900);
 
         dialog.setResizable(false);
         dialog.setMaximized(false);
@@ -76,6 +79,44 @@ public class LogWindow {
         txtPath = new TextField();
         txtStep = new TextField();
         separator= new Separator();
+        scene = new Scene(pane);
+
+        lblBuildDuration = new Label("BuildDuration:");
+        lblBuildResult= new Label("BuildResult:");
+        getlblBuildDurationMin= new Label();
+        getlblBuildDurationSec=new Label();
+        getlblBuildResult=new Label();
+
+        dialog.setScene(scene);
+
+        pane.setMinSize(900, 800);
+
+        lblPath.setPrefSize(30, 20);
+        lblPath.setTranslateX(20);
+        lblPath.setTranslateY(10);
+        txtPath.setPrefSize(300, 20);
+        txtPath.setTranslateX(70);
+        txtPath.setTranslateY(10);
+        txtPath.setDisable(true);
+
+        lblStep.setPrefSize(30, 20);
+        lblStep.setTranslateX(530);
+        lblStep.setTranslateY(10);
+        txtStep.setPrefSize(300, 20);
+        txtStep.setTranslateX(580);
+        txtStep.setTranslateY(10);
+        txtStep.setDisable(true);
+
+        separator.setPrefWidth(20);
+        separator.setRotate(90);
+        separator.setTranslateX(450);
+        separator.setTranslateY(10);
+
+        lblBuildDuration.setPrefSize(40,20);
+        lblBuildDuration.setTranslateX(20);
+        lblBuildDuration.setTranslateY(50);
+
+
 
         area = new GenericStyledArea<>(
                 ParStyle.EMPTY,                                                 // default paragraph style
@@ -88,7 +129,7 @@ public class LogWindow {
         area.setStyleCodecs(
                 ParStyle.CODEC,
                 Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
-        area.setPrefSize(760, 490);
+        area.setPrefSize(860, 490);
 
 
         String text = "";
@@ -118,38 +159,11 @@ public class LogWindow {
         }
 
         this.textPane.setContent(area);
-
-        scene = new Scene(pane);
-        dialog.setScene(scene);
-
-        pane.setMinSize(900, 800);
-
-        lblPath.setPrefSize(30, 20);
-        lblPath.setTranslateX(20);
-        lblPath.setTranslateY(10);
-        txtPath.setPrefSize(300, 20);
-        txtPath.setTranslateX(70);
-        txtPath.setTranslateY(10);
-        txtPath.setDisable(true);
-
-        lblStep.setPrefSize(30, 20);
-        lblStep.setTranslateX(400);
-        lblStep.setTranslateY(10);
-        txtStep.setPrefSize(300, 20);
-        txtStep.setTranslateX(450);
-        txtStep.setTranslateY(10);
-        txtStep.setDisable(true);
-
-        separator.setPrefWidth(30);
-        separator.setRotate(90);
-        separator.setTranslateX(375);
-        separator.setTranslateY(10);
-
         textPane.setTranslateX(20);
-        textPane.setTranslateY(90);
+        textPane.setTranslateY(200);
 
 
-        pane.getChildren().addAll(lblPath, txtPath, lblStep, txtStep, textPane);
+        pane.getChildren().addAll(lblPath, txtPath, lblStep, txtStep, textPane,separator,lblBuildDuration,getlblBuildDurationMin,getlblBuildDurationSec,lblBuildResult,getlblBuildResult);
     }
 
     private void updateStyleInSelection(TextStyle mixin, IndexRange selection) {
@@ -160,9 +174,6 @@ public class LogWindow {
 
         }
     }
-
-
-
 
 
     public void showDialog(String filePath, String step){

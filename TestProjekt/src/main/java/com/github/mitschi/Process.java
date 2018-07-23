@@ -38,6 +38,7 @@ public class Process implements RepairListener{
     private double progress;
     private BooleanProperty isRunning;
     private Stage stage;
+    private String logBuffer;
 
     private javafx.scene.control.TableColumn step;
 
@@ -182,7 +183,6 @@ public class Process implements RepairListener{
 
     @Override
     public void stepEnded(int i, int i1, BuildLog buildLog) {
-       // buildLog.getBuildDuration().getMinutes()
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -194,8 +194,11 @@ public class Process implements RepairListener{
 
                 //TableRow(int step, String strategie, String buildResult, Stage stage, String filePath)
 
-                ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(i, null, buildResult.toString(), stage, filePath));
+                ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(i, null, buildLog.toString(), stage, filePath));
                 addData(data);
+
+                table.getItems().get(0).getLogWindow().area.appendText(logBuffer+"\n");
+                logBuffer = "";
             }
         });
     }
@@ -213,14 +216,14 @@ public class Process implements RepairListener{
 
     @Override
     public void newBuildLine(String line) {
-
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-
-//                table.getItems().get(currentStep).getLogWindow().area.appendText(line+"\n");
-            }
-        });
+        logBuffer += line + "\n";
+//        Platform.runLater(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                table.getItems().get(0).getLogWindow().area.appendText(line+"\n");
+//            }
+//        });
     }
 
     @Override

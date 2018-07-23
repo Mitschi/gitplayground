@@ -133,19 +133,19 @@ public class LogWindow {
 
 
         String text = "";
-        try {
-            BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\jana\\gitplayground\\TestProjekt\\blub.log"));
-            String s = "";
-            while ((s = br.readLine()) != null) {
-                text += s + "\n";
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\jana\\gitplayground\\TestProjekt\\blub.log"));
+//            String s = "";
+//            while ((s = br.readLine()) != null) {
+//                text += s + "\n";
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         area.appendText(text);
 
-        String [] patternArray = {"\\[INFO\\]","\\[ERROR\\]","\\[WARNING\\]","BUILD FAILURE","BUILD SUCCES",};
+        String [] patternArray = {"\\[INFO\\]","\\[ERROR\\]","\\[WARNING\\]","BUILD FAILURE","BUILD SUCCESS",};
         String [] patternColor = {"#006edb","#ff0000","#ff9090","#db0000","#00FF00"};
 
         for(int i = 0; i < patternArray.length; i++){

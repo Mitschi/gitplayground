@@ -14,6 +14,15 @@ public class TableRow {
     private Button showLog;
     private Stage stage;
     private String filePath;
+    private LogWindow logWindow;
+
+    public LogWindow getLogWindow() {
+        return logWindow;
+    }
+
+    public void setLogWindow(LogWindow logWindow) {
+        this.logWindow = logWindow;
+    }
 
     public TableRow(int step, String strategie, String buildResult, Stage stage, String filePath) {
         this.step = step;
@@ -22,8 +31,13 @@ public class TableRow {
         this.showLog = new Button("Show Log");
         this.stage = stage;
         this.filePath = filePath;
+        this.logWindow = new LogWindow(stage);
         this.showLog.setOnAction(
-                event -> new LogWindow(stage).showDialog(filePath, step+"")
+                event -> {
+
+                    logWindow.showDialog(filePath, step+"");
+                }
+
         );
     }
 

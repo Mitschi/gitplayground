@@ -35,6 +35,7 @@ public class Process implements RepairListener{
     private Repair repair;
     private double progress;
     private BooleanProperty isRunning;
+    private int currentStep;
 
     private javafx.scene.control.TableColumn step;
 
@@ -43,6 +44,7 @@ public class Process implements RepairListener{
     private javafx.scene.control.TableColumn buildResult;
 
     private javafx.scene.control.TableColumn button;
+
 
 
     public Repair getRepair() {
@@ -74,6 +76,7 @@ public class Process implements RepairListener{
     }
 
     public Process(String filePath){
+        currentStep = 0;
         isRunning = new SimpleBooleanProperty(false);
         repair = new Repair();
         repair.addRepairListener(this);
@@ -172,6 +175,12 @@ public class Process implements RepairListener{
 
     @Override
     public void stepStarted(int i, int i1, BuildResult buildResult) {
+
+    }
+
+    @Override
+    public void stepEnded(int i, int i1,BuildResult buildResult) {
+//        currentStep++;
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -182,11 +191,6 @@ public class Process implements RepairListener{
                 label.setText(String.format("%.2f", progress) + "%");
             }
         });
-    }
-
-    @Override
-    public void stepEnded(int i, int i1,BuildResult buildResult) {
-        System.out.println("STEP ENDED");
     }
 
     @Override
@@ -201,7 +205,14 @@ public class Process implements RepairListener{
 
     @Override
     public void newBuildLine(String line) {
-        System.out.println("ASDFDSAFDSAF"+line);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+
+                table.getItems().get(currentStep).getLogWindow().area.appendText(line+"\n");
+            }
+        });
     }
 
     @Override

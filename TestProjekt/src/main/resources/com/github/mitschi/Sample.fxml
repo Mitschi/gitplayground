@@ -110,7 +110,7 @@
                <children>
                   <Pane layoutX="27.0" layoutY="29.0" prefHeight="512.0" prefWidth="732.0">
                      <children>
-                        <Button layoutX="29.0" layoutY="32.0" mnemonicParsing="false" onAction="#setTextArea" text="Button" />
+                        <Button layoutX="29.0" layoutY="32.0" mnemonicParsing="false"  text="Button" />
                         <TextArea layoutX="29.0" layoutY="127.0" prefHeight="200.0" prefWidth="200.0" />
                         <Label layoutX="150.0" layoutY="36.0" text="Label" />
                         <ScrollPane fx:id="textPane" layoutX="240.0" layoutY="14.0" prefHeight="335.0" prefWidth="481.0" />

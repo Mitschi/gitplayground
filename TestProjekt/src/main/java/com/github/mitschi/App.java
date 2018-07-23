@@ -40,7 +40,7 @@ import java.util.Properties;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public class App extends Application{
+public class App extends Application {
 
     protected Stage stage;
     protected static String logPath;
@@ -53,6 +53,7 @@ public class App extends Application{
     protected int processCounter;
     protected static TabOnCloseListener tabListener;
     protected static ProgressListener progressListener;
+
 
 
     @FXML
@@ -99,44 +100,38 @@ public class App extends Application{
     @FXML
     protected ScrollPane textPane;
 
-    //kein FXML
-    protected GenericStyledArea<ParStyle, Either<String, LinkedImage>, TextStyle> area;
 
-    @FXML
-    public void setTextArea(){
-        IndexRange selection = IndexRange.normalize(4, 6);
-        updateStyleInSelection(spans -> TextStyle.bold(!spans.styleStream().allMatch(style -> style.bold.orElse(false))), selection);
-        updateStyleInSelection(TextStyle.textColor(Color.web("#ff0000")), selection);
-        updateStyleInSelection(TextStyle.backgroundColor(Color.web("#0000ff")), selection);
-    }
-    private void updateStyleInSelection(Function<StyleSpans<TextStyle>, TextStyle> mixinGetter, IndexRange selection) {
-        if(selection.getLength() != 0) {
-            StyleSpans<TextStyle> styles = area.getStyleSpans(selection);
-            TextStyle mixin = mixinGetter.apply(styles);
-            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
-            area.setStyleSpans(selection.getStart(), newStyles);
-        }
-    }
-    private void updateStyleInSelection(TextStyle mixin, IndexRange selection) {
-        if (selection.getLength() != 0) {
-            StyleSpans<TextStyle> styles = area.getStyleSpans(selection);
-            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
-            area.setStyleSpans(selection.getStart(), newStyles);
-        }
-    }
-    private final TextOps<String, TextStyle> styledTextOps = SegmentOps.styledTextOps();
-    private final LinkedImageOps<TextStyle> linkedImageOps = new LinkedImageOps<>();
+//    @FXML
+//    public void setTextArea() {
+//        IndexRange selection = IndexRange.normalize(2, 6);
+//        updateStyleInSelection(spans -> TextStyle.bold(!spans.styleStream().allMatch(style -> style.bold.orElse(false))), selection);
+//        updateStyleInSelection(TextStyle.textColor(Color.web("#ff0000")), selection);
+//        updateStyleInSelection(TextStyle.backgroundColor(Color.web("#0000ff")), selection);
+//    }
+//
+//    private void updateStyleInSelection(Function<StyleSpans<TextStyle>, TextStyle> mixinGetter, IndexRange selection) {
+//        if (selection.getLength() != 0) {
+//            StyleSpans<TextStyle> styles = area.getStyleSpans(selection);
+//            TextStyle mixin = mixinGetter.apply(styles);
+//            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
+//            area.setStyleSpans(selection.getStart(), newStyles);
+//        }
+//    }
+//
+//    private void updateStyleInSelection(TextStyle mixin, IndexRange selection) {
+//        if (selection.getLength() != 0) {
+//            StyleSpans<TextStyle> styles = area.getStyleSpans(selection);
+//            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
+//            area.setStyleSpans(selection.getStart(), newStyles);
+//        }
+//    }
 
-    private Node createNode(StyledSegment<Either<String, LinkedImage>, TextStyle> seg,
-                            BiConsumer<? super TextExt, TextStyle> applyStyle) {
-        return seg.getSegment().unify(
-                text -> StyledTextArea.createStyledTextNode(text, seg.getStyle(), applyStyle),
-                LinkedImage::createNode
-        );
-    }
+
+
 
     public void initialize() {
-        addRichTextFX();
+
+
         // Set detailsTab to non-visible in the beginning
         tapPane.getTabs().remove(detailsTab);
         tapPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
@@ -144,8 +139,8 @@ public class App extends Application{
             @Override
             public void tabOnClose() {
                 Tab t = tapPane.getSelectionModel().getSelectedItem();
-                for(int i = 0; i < listView.getItems().size(); i++){
-                    if(listView.getItems().get(i).getProcessTab().equals(t)){
+                for (int i = 0; i < listView.getItems().size(); i++) {
+                    if (listView.getItems().get(i).getProcessTab().equals(t)) {
                         listView.getItems().remove(i);
                     }
                 }
@@ -154,8 +149,8 @@ public class App extends Application{
         progressListener = new ProgressListener() {
             @Override
             public void changeProgress(Process process) {
-                  process.getProgressBar().setProgress(process.getProgress());
-                  process.getLabel().setText(process.getProgress()*100 + "");
+                process.getProgressBar().setProgress(process.getProgress());
+                process.getLabel().setText(process.getProgress() * 100 + "");
             }
 
             @Override
@@ -167,6 +162,8 @@ public class App extends Application{
                 processCounter--;
             }
         };
+
+
         processList = new ArrayList<Process>();
         //processList.add(new Process(null, detailsTab));
         processCounter = 0;
@@ -182,7 +179,7 @@ public class App extends Application{
         strategies.setCellValueFactory(new PropertyValueFactory<TableRow, String>("strategie"));
         buildResult.setCellValueFactory(new PropertyValueFactory<TableRow, String>("buildResult"));
 
-        ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1", "success", stage, pomFile), new TableRow(2, "strat2", "failed",stage, pomFile));
+        ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1", "success", stage, pomFile), new TableRow(2, "strat2", "failed", stage, pomFile));
 
         tableView.setItems(data);
 
@@ -205,23 +202,6 @@ public class App extends Application{
         }
     }
 
-    private void addRichTextFX() {
-        area=new GenericStyledArea<>(
-                        ParStyle.EMPTY,                                                 // default paragraph style
-                        (paragraph, style) -> paragraph.setStyle(style.toCss()),        // paragraph style setter
-
-                        TextStyle.EMPTY.updateFontSize(10).updateFontFamily("Courier New").updateTextColor(Color.BLACK),  // default segment style
-                        styledTextOps._or(linkedImageOps, (s1, s2) -> Optional.empty()),                            // segment operations
-                        seg -> createNode(seg, (text, style) -> text.setStyle(style.toCss())));                     // Node creator and segment style setter
-        area.setWrapText(true);
-        area.setStyleCodecs(
-                ParStyle.CODEC,
-                Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
-        area.appendText("ASDFADSFADSDSAF");
-        area.setPrefSize(500,500);
-//        this.textPane.getChildren().add(area);
-        this.textPane.setContent(area);
-    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -246,9 +226,9 @@ public class App extends Application{
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 
             public void run() {
-                try{
+                try {
                     saveProperties();
-                }catch(NullPointerException ignored){
+                } catch (NullPointerException ignored) {
 
                 }
 
@@ -320,14 +300,14 @@ public class App extends Application{
                 String pick = choiceBox.getValue().toString();
                 maxSteps = Integer.parseInt(pick);
 
-                ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1", "success", stage, pomFile), new TableRow(2, "strat2", "failed",stage, pomFile));
+                ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1", "success", stage, pomFile), new TableRow(2, "strat2", "failed", stage, pomFile));
                 process.addData(data);
 
                 try {
                     process.start(repoFile.getParentFile(), revision, maxSteps, allowedStrats);
 
                 } catch (Exception e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to start Repairtool!"+e.getClass()+" "+e.getMessage());
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to start Repairtool!" + e.getClass() + " " + e.getMessage());
                     alert.show();
                 }
             } else {
@@ -342,11 +322,11 @@ public class App extends Application{
     protected void cancelProgram(ActionEvent event) {
         ObservableList<Process> selectedItems = listView.getSelectionModel().getSelectedItems();
 
-        if(listView.getItems().isEmpty()){
-            Alert alert= new Alert(Alert.AlertType.ERROR, "No process chosen");
+        if (listView.getItems().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "No process chosen");
             alert.show();
 
-        }else {
+        } else {
 
             Alert alert =
                     new Alert(Alert.AlertType.WARNING,
@@ -446,7 +426,6 @@ public class App extends Application{
     }
 
 
-
     protected boolean testForPom() {
         String s = textFieldPath.getText();
         try {
@@ -488,12 +467,12 @@ public class App extends Application{
     }
 
     @FXML
-    protected void contextMenuListView(ActionEvent event){
-        if(listView.getItems().size() != 0){
+    protected void contextMenuListView(ActionEvent event) {
+        if (listView.getItems().size() != 0) {
             MultipleSelectionModel<Process> sel = listView.getSelectionModel();
             Process p = sel.getSelectedItem();
             SingleSelectionModel<Tab> selectionModel = tapPane.getSelectionModel();
-            if(!sel.isEmpty())
+            if (!sel.isEmpty())
                 selectionModel.select(p.getProcessTab());
         }
     }

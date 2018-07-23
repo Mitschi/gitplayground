@@ -280,7 +280,7 @@ public class App extends Application {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Missing Fields!");
             alert.show();
         } else {
-            Process process = new Process(pomFile);
+            Process process = new Process(pomFile, stage);
             boolean isAlreadyRunning = false;
             for (Process p : processList) {
                 if (p.equals(process))
@@ -300,8 +300,8 @@ public class App extends Application {
                 String pick = choiceBox.getValue().toString();
                 maxSteps = Integer.parseInt(pick);
 
-                ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1", "success", stage, pomFile), new TableRow(2, "strat2", "failed", stage, pomFile));
-                process.addData(data);
+//                ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1", "success", stage, pomFile), new TableRow(2, "strat2", "failed", stage, pomFile));
+//                process.addData(data);
 
                 try {
                     process.start(repoFile.getParentFile(), revision, maxSteps, allowedStrats);

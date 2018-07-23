@@ -34,8 +34,8 @@ public class TableRow {
         this.logWindow = new LogWindow(stage);
         this.showLog.setOnAction(
                 event -> {
-
                     logWindow.showDialog(filePath, step+"");
+
                 }
 
         );

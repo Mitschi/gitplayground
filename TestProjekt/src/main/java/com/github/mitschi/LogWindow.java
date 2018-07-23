@@ -122,18 +122,6 @@ public class LogWindow {
         scene = new Scene(pane);
         dialog.setScene(scene);
 
-    }
-
-    private void updateStyleInSelection(TextStyle mixin, IndexRange selection) {
-        if (selection.getLength() != 0) {
-            StyleSpans<TextStyle> styles = area.getStyleSpans(selection);
-            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
-            area.setStyleSpans(selection.getStart(), newStyles);
-
-        }
-    }
-
-    public void showDialog(String filePath, String step) {
         pane.setMinSize(900, 800);
 
         lblPath.setPrefSize(30, 20);
@@ -161,11 +149,27 @@ public class LogWindow {
         textPane.setTranslateY(90);
 
 
+        pane.getChildren().addAll(lblPath, txtPath, lblStep, txtStep, textPane);
+    }
+
+    private void updateStyleInSelection(TextStyle mixin, IndexRange selection) {
+        if (selection.getLength() != 0) {
+            StyleSpans<TextStyle> styles = area.getStyleSpans(selection);
+            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
+            area.setStyleSpans(selection.getStart(), newStyles);
+
+        }
+    }
+
+
+
+
+
+    public void showDialog(String filePath, String step){
         txtPath.setText(filePath);
         txtStep.setText(step);
-        pane.getChildren().addAll(lblPath, txtPath, lblStep, txtStep, textPane,separator);
 
         dialog.show();
-
     }
 }
+

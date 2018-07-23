@@ -19,6 +19,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import org.reactfx.util.FxTimer;
 
 import java.io.*;
 import java.text.ParseException;
@@ -34,7 +36,7 @@ public class Process implements RepairListener{
     private Repair repair;
     private double progress;
     private BooleanProperty isRunning;
-    private int currentStep;
+    private Stage stage;
 
     private javafx.scene.control.TableColumn step;
 
@@ -74,9 +76,9 @@ public class Process implements RepairListener{
         this.progress = progress;
     }
 
-    public Process(String filePath){
-        currentStep = 0;
+    public Process(String filePath, Stage stage){
         isRunning = new SimpleBooleanProperty(false);
+        this.stage = stage;
         repair = new Repair();
         repair.addRepairListener(this);
         this.filePath = filePath; // Set Filepath
@@ -178,8 +180,7 @@ public class Process implements RepairListener{
     }
 
     @Override
-    public void stepEnded(int i, int i1,BuildResult buildResult) {
-//        currentStep++;
+    public void stepEnded(int i, int i1, BuildResult buildResult) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -188,8 +189,15 @@ public class Process implements RepairListener{
                 progressBar.setProgress(progress);
                 progress *= 100.0;
                 label.setText(String.format("%.2f", progress) + "%");
+
+                //TableRow(int step, String strategie, String buildResult, Stage stage, String filePath)
+
+                ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(i, null, buildResult.toString(), stage, filePath));
+                addData(data);
             }
         });
+
+
     }
 
     @Override
@@ -209,14 +217,7 @@ public class Process implements RepairListener{
             @Override
             public void run() {
 
-
-
-
-
-
-
-                // table.getItems().get(currentStep).getLogWindow().area.appendText(line+"\n");
-
+//                table.getItems().get(currentStep).getLogWindow().area.appendText(line+"\n");
             }
         });
     }
@@ -235,7 +236,10 @@ public class Process implements RepairListener{
             public void run() {
                 try {
                     isRunning.setValue(true);
-                    repair.repair(repoFolder, revision, max_steps,"statistic", allowedStrategies);
+                    if(repair == null){
+
+                    }else
+                        repair.repair(repoFolder, revision, max_steps,"statistic", allowedStrategies);
                 } catch (FileNotFoundException | ParseException e) {
                     e.printStackTrace();
                 }

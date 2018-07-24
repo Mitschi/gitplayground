@@ -13,7 +13,6 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -108,12 +107,17 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <Pane layoutX="27.0" layoutY="29.0" prefHeight="512.0" prefWidth="732.0">
+                  <Pane layoutX="-1.0" prefHeight="572.0" prefWidth="800.0">
                      <children>
-                        <Button layoutX="29.0" layoutY="32.0" mnemonicParsing="false" text="Button" />
-                        <TextArea layoutX="29.0" layoutY="127.0" prefHeight="200.0" prefWidth="200.0" />
-                        <Label layoutX="150.0" layoutY="36.0" text="Label" />
-                        <ScrollPane fx:id="textPane" layoutX="240.0" layoutY="14.0" prefHeight="335.0" prefWidth="481.0" />
+                        <TextField layoutX="20.0" layoutY="40.0" prefHeight="25.0" prefWidth="300.0" />
+                        <TextField layoutX="410.0" layoutY="40.0" prefHeight="25.0" prefWidth="300.0" />
+                        <Label layoutX="20.0" layoutY="20.0" text="Source:" />
+                        <Label layoutX="410.0" layoutY="20.0" text="Target:" />
+                        <ScrollPane layoutX="20.0" layoutY="80.0" prefHeight="440.0" prefWidth="370.0" />
+                        <ScrollPane layoutX="410.0" layoutY="80.0" prefHeight="440.0" prefWidth="370.0" />
+                        <Button layoutX="330.0" layoutY="40.0" mnemonicParsing="false" prefWidth="60.0" text="Choose" />
+                        <Button layoutX="720.0" layoutY="40.0" mnemonicParsing="false" prefWidth="60.0" text="Choose" />
+                        <Button layoutX="350.0" layoutY="535.0" mnemonicParsing="false" prefWidth="100.0" text="Start" />
                      </children>
                   </Pane>
                </children></AnchorPane>

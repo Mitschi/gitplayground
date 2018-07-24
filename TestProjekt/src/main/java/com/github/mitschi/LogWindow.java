@@ -128,11 +128,11 @@ public class LogWindow {
 
         lblBuildResult.setPrefSize(70,20);
         lblBuildResult.setTranslateX(20);
-        lblBuildResult.setTranslateY(85);
+        lblBuildResult.setTranslateY(80);
 
         getlblBuildResult.setPrefSize(200,20);
         getlblBuildResult.setTranslateX(110);
-        getlblBuildResult.setTranslateY(85);
+        getlblBuildResult.setTranslateY(80);
 
         area = new GenericStyledArea<>(
                 ParStyle.EMPTY,                                                 // default paragraph style
@@ -145,7 +145,7 @@ public class LogWindow {
         area.setStyleCodecs(
                 ParStyle.CODEC,
                 Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
-        area.setPrefSize(860, 620);
+        area.setPrefSize(860, 630);
 
         VirtualizedScrollPane<GenericStyledArea> vsPane = new VirtualizedScrollPane(area);
 
@@ -160,20 +160,8 @@ public class LogWindow {
 //            e.printStackTrace();
 //        }
 
-        area.appendText(text);
 
-        String [] patternArray = {"\\[INFO\\]","\\[ERROR\\]","\\[WARNING\\]","BUILD FAILURE","BUILD SUCCESS",};
-        String [] patternColor = {"#006edb","#ff0000","#ff9090","#db0000","#00FF00"};
 
-        for(int i = 0; i < patternArray.length; i++){
-            Pattern pattern = Pattern.compile(patternArray[i]);
-            Matcher matcher = pattern.matcher(text);
-
-            while (matcher.find()) {
-                IndexRange selection = IndexRange.normalize(matcher.start(), matcher.end());
-                updateStyleInSelection(TextStyle.textColor(Color.web(patternColor[i])), selection);
-            }
-        }
 
         this.textPane.setContent(vsPane);
         textPane.setTranslateX(20);
@@ -201,13 +189,25 @@ public class LogWindow {
 
 
         if (buildLog.getBuildResult().toString().equals("SUCCESS")){
-            getlblBuildResult.setTextFill(Color.web("#00FF00"));
+            getlblBuildResult.setTextFill(Color.web("#009900"));
         }else {
-            getlblBuildResult.setTextFill(Color.web("#FF0000"));
+            getlblBuildResult.setTextFill(Color.web("#db0000"));
         }
 
         getlblBuildResult.setText(buildLog.getBuildResult()+"");
 
+        String [] patternArray = {"\\[INFO\\]","\\[ERROR\\]","\\[WARNING\\]","BUILD FAILURE","BUILD SUCCESS",};
+        String [] patternColor = {"#006edb","#db0000","#ff9090","#db0000","#009900"};
+
+        for(int i = 0; i < patternArray.length; i++){
+            Pattern pattern = Pattern.compile(patternArray[i]);
+            Matcher matcher = pattern.matcher(area.getText());
+
+            while (matcher.find()) {
+                IndexRange selection = IndexRange.normalize(matcher.start(), matcher.end());
+                updateStyleInSelection(TextStyle.textColor(Color.web(patternColor[i])), selection);
+            }
+        }
         dialog.show();
     }
 

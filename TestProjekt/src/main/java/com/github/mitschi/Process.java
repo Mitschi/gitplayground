@@ -3,6 +3,7 @@ package com.github.mitschi;
 import at.aau.FixAction;
 import at.aau.RepairListener;
 import at.aau.Repair;
+import at.aau.building.BuildDuration;
 import at.aau.building.BuildLog;
 import at.aau.entity.BuildResult;
 import javafx.application.Platform;
@@ -39,6 +40,7 @@ public class Process implements RepairListener{
     private BooleanProperty isRunning;
     private Stage stage;
     private String logBuffer;
+    private int currentStep;
 
     private javafx.scene.control.TableColumn step;
 
@@ -80,6 +82,7 @@ public class Process implements RepairListener{
 
     public Process(String filePath, Stage stage){
         isRunning = new SimpleBooleanProperty(false);
+        currentStep = 0;
         this.stage = stage;
         repair = new Repair();
         repair.addRepairListener(this);
@@ -156,7 +159,7 @@ public class Process implements RepairListener{
 
     public void addData(ObservableList list){
         // Add data to table
-        table.setItems(list);
+        table.getItems().addAll(list);
     }
 
     @Override
@@ -182,6 +185,14 @@ public class Process implements RepairListener{
     @Override
     public void stepStarted(int i, int i1, BuildLog buildLog) {
 
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(i, null, buildLog, stage, filePath));
+                addData(data);
+                currentStep++;
+            }
+        });
     }
 
     @Override
@@ -197,11 +208,6 @@ public class Process implements RepairListener{
 
                 //TableRow(int step, String strategie, String buildResult, Stage stage, String filePath)
 
-                ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(i, null, buildLog, stage, filePath));
-                addData(data);
-
-                table.getItems().get(0).getLogWindow().area.appendText(logBuffer+"\n");
-                logBuffer = "";
             }
         });
     }
@@ -219,14 +225,20 @@ public class Process implements RepairListener{
 
     @Override
     public void newBuildLine(String line) {
-        logBuffer += line + "\n";
-//        Platform.runLater(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                table.getItems().get(0).getLogWindow().area.appendText(line+"\n");
-//            }
-//        });
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                table.getItems().get(currentStep).getLogWindow().area.appendText(line+"\n");
+                table.getItems().get(currentStep).getLogWindow().area.requestFollowCaret();
+
+            }
+        });
+    }
+
+    @Override
+    public void repairAborted() {
+
     }
 
     @Override
@@ -236,6 +248,16 @@ public class Process implements RepairListener{
 
 
     public void start(File repoFolder, String revision, int max_steps, List<Class> allowedStrategies){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                BuildLog startLog = new BuildLog();
+                startLog.setBuildDuration(new BuildDuration(0,0,0));
+
+                ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(currentStep, null, startLog, stage, filePath));
+                addData(data);
+            }
+        });
 
 //repair.repair(repoFolder, revision, max_steps,"statistic", allowedStrategies);
         new Thread(){
@@ -247,6 +269,7 @@ public class Process implements RepairListener{
 
                     }else
                         repair.repair(repoFolder, revision, max_steps,"statistic", allowedStrategies);
+
                 } catch (FileNotFoundException | ParseException e) {
                     e.printStackTrace();
                 }

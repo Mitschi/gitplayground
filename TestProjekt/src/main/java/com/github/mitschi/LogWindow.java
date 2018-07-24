@@ -6,8 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -23,9 +21,6 @@ import org.fxmisc.richtext.model.*;
 
 import org.reactfx.util.Either;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
@@ -48,6 +43,14 @@ public class LogWindow {
     private Label getlblBuildDurationSec;
     private Label lblBuildResult;
     private Label getlblBuildResult;
+    private Label lblFailingModuleName;
+    private Label getLblFailingModuleName;
+    private Label lblMissingDependencies;
+    private ListView getMissingDependencies;
+    private Label lblMissingTypes;
+    private ListView getMissingTypes;
+    private Label lblFailingPlugins;
+    private ListView getFailingPlugins;
 
     protected GenericStyledArea<ParStyle, Either<String, LinkedImage>, TextStyle> area;
     private final TextOps<String, TextStyle> styledTextOps = SegmentOps.styledTextOps();
@@ -80,14 +83,24 @@ public class LogWindow {
         lblStep = new Label("Step:");
         txtPath = new TextField();
         txtStep = new TextField();
-        separator= new Separator();
+        separator = new Separator();
         scene = new Scene(pane);
 
         lblBuildDuration = new Label("BuildDuration:");
-        lblBuildResult= new Label("BuildResult:");
-        getlblBuildDurationMin= new Label();
-        getlblBuildDurationSec=new Label();
-        getlblBuildResult=new Label();
+        lblBuildResult = new Label("BuildResult:");
+        getlblBuildDurationMin = new Label();
+        getlblBuildDurationSec = new Label();
+        getlblBuildResult = new Label();
+
+        lblFailingModuleName = new Label("Failing Module Name:");
+        lblMissingDependencies = new Label("Missing Dependencies:");
+        lblMissingTypes = new Label("Missing Types:");
+        lblFailingPlugins = new Label("Failing Plugins:");
+
+        getLblFailingModuleName = new Label();
+        getFailingPlugins = new ListView();
+        getMissingDependencies = new ListView();
+        getMissingTypes = new ListView();
 
         dialog.setScene(scene);
 
@@ -113,25 +126,49 @@ public class LogWindow {
         separator.setTranslateX(20);
         separator.setTranslateY(40);
 
-        lblBuildDuration.setPrefSize(80,20);
+        lblBuildDuration.setPrefSize(80, 20);
         lblBuildDuration.setTranslateX(20);
         lblBuildDuration.setTranslateY(50);
 
-        getlblBuildDurationMin.setPrefSize(30,20);
+        getlblBuildDurationMin.setPrefSize(30, 20);
         getlblBuildDurationMin.setTranslateX(110);
         getlblBuildDurationMin.setTranslateY(50);
 
-        getlblBuildDurationSec.setPrefSize(35,20);
+        getlblBuildDurationSec.setPrefSize(35, 20);
         getlblBuildDurationSec.setTranslateX(140);
         getlblBuildDurationSec.setTranslateY(50);
 
-        lblBuildResult.setPrefSize(70,20);
+        lblBuildResult.setPrefSize(70, 20);
         lblBuildResult.setTranslateX(20);
         lblBuildResult.setTranslateY(80);
 
-        getlblBuildResult.setPrefSize(200,20);
+        getlblBuildResult.setPrefSize(200, 20);
         getlblBuildResult.setTranslateX(110);
         getlblBuildResult.setTranslateY(80);
+
+
+
+        lblFailingModuleName.setPrefSize(100, 20);
+        lblFailingModuleName.setTranslateX(20);
+        lblFailingModuleName.setTranslateY(110);
+
+        getLblFailingModuleName.setPrefSize(100, 20);
+        getLblFailingModuleName.setTranslateX(120);
+        getLblFailingModuleName.setTranslateX(110);
+
+        lblMissingDependencies.setPrefSize(100,20);
+        lblMissingDependencies.setTranslateX(190);
+        lblMissingDependencies.setTranslateY(50);
+
+        getMissingDependencies.setPrefSize(200,50);
+        getMissingDependencies.setTranslateX(190);
+        getMissingDependencies.setTranslateY(80);
+
+        lblMissingTypes.setPrefSize(100,20);
+       // lblMissingTypes.setTranslateX();
+        lblMissingTypes.setTranslateY(50);
+
+
 
         area = new GenericStyledArea<>(
                 ParStyle.EMPTY,                                                 // default paragraph style
@@ -153,7 +190,7 @@ public class LogWindow {
         textPane.setTranslateX(20);
         textPane.setTranslateY(150);
 
-        pane.getChildren().addAll(lblPath, txtPath, lblStep, txtStep, textPane,separator,lblBuildDuration,getlblBuildDurationMin,getlblBuildDurationSec,lblBuildResult,getlblBuildResult);
+        pane.getChildren().addAll(lblPath, txtPath, lblStep, txtStep, textPane, separator, lblBuildDuration, getlblBuildDurationMin, getlblBuildDurationSec, lblBuildResult, getlblBuildResult, lblFailingModuleName, lblFailingPlugins, lblMissingDependencies, lblMissingTypes, getFailingPlugins, getLblFailingModuleName, getMissingDependencies, getMissingTypes);
     }
 
     private void updateStyleInSelection(TextStyle mixin, IndexRange selection) {
@@ -166,26 +203,26 @@ public class LogWindow {
     }
 
 
-    public void showDialog(String filePath, String step, BuildLog buildLog){
+    public void showDialog(String filePath, String step, BuildLog buildLog) {
         txtPath.setText(filePath);
         txtStep.setText(step);
 
-        getlblBuildDurationMin.setText(buildLog.getBuildDuration().getMinutes()+" min");
-        getlblBuildDurationSec.setText( buildLog.getBuildDuration().getSeconds() +" sec");
+        getlblBuildDurationMin.setText(buildLog.getBuildDuration().getMinutes() + " min");
+        getlblBuildDurationSec.setText(buildLog.getBuildDuration().getSeconds() + " sec");
 
 
-        if (buildLog.getBuildResult().toString().equals("SUCCESS")){
+        if (buildLog.getBuildResult().toString().equals("SUCCESS")) {
             getlblBuildResult.setTextFill(Color.web("#009900"));
-        }else {
+        } else {
             getlblBuildResult.setTextFill(Color.web("#db0000"));
         }
 
-        getlblBuildResult.setText(buildLog.getBuildResult()+"");
+        getlblBuildResult.setText(buildLog.getBuildResult() + "");
 
-        String [] patternArray = {"\\[INFO\\]","\\[ERROR\\]","\\[WARNING\\]","BUILD FAILURE","ERROR","BUILD SUCCESS", "SUCCESS","\\@.*\\---"};
-        String [] patternColor = {"#006edb","#db0000","#e6b800","#db0000","#db0000","#009900","#009900","#ff9090"};
+        String[] patternArray = {"\\[INFO\\]", "\\[ERROR\\]", "\\[WARNING\\]", "BUILD FAILURE", "ERROR", "BUILD SUCCESS", "SUCCESS", "\\@.*\\---", "FAILURE"};
+        String[] patternColor = {"#006edb", "#db0000", "#e6b800", "#db0000", "#db0000", "#009900", "#009900", "#ff9090", "#db0000"};
 
-        for(int i = 0; i < patternArray.length; i++){
+        for (int i = 0; i < patternArray.length; i++) {
             Pattern pattern = Pattern.compile(patternArray[i]);
             Matcher matcher = pattern.matcher(area.getText());
 

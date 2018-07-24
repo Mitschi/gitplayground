@@ -172,6 +172,9 @@ public class Process implements RepairListener{
             public void run() {
                 App.progressListener.progressFinished(Process.this);
                 processTab.setClosable(true);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Repair finished!");
+                alert.setTitle(filePath);
+                alert.show();
             }
         });
     }

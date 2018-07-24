@@ -99,7 +99,7 @@ public class LogWindow {
         txtPath.setPrefSize(300, 20);
         txtPath.setTranslateX(70);
         txtPath.setTranslateY(10);
-        txtPath.setDisable(true);
+        txtPath.setEditable(false);
 
         lblStep.setPrefSize(30, 20);
         lblStep.setTranslateX(530);
@@ -107,7 +107,7 @@ public class LogWindow {
         txtStep.setPrefSize(300, 20);
         txtStep.setTranslateX(580);
         txtStep.setTranslateY(10);
-        txtStep.setDisable(true);
+        txtStep.setEditable(false);
 
         separator.setPrefWidth(860);
         separator.setTranslateX(20);
@@ -141,6 +141,7 @@ public class LogWindow {
                 styledTextOps._or(linkedImageOps, (s1, s2) -> Optional.empty()),                            // segment operations
                 seg -> createNode(seg, (text, style) -> text.setStyle(style.toCss())));                     // Node creator and segment style setter
         area.setWrapText(true);
+        area.setEditable(false);
         area.setStyleCodecs(
                 ParStyle.CODEC,
                 Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));

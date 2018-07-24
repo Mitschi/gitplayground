@@ -1,6 +1,9 @@
 package com.github.mitschi;
 
 
+import at.aau.diff.common.Change;
+import at.aau.diff.maven.MavenBuildChange;
+import at.aau.diff.maven.MavenBuildFileDiffer;
 import at.aau.fixStrategies.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -53,9 +56,13 @@ public class App extends Application {
     protected int processCounter;
     protected static TabOnCloseListener tabListener;
     protected static ProgressListener progressListener;
+    protected static String sourcePath;
+    protected static String targetPath;
 
-
-
+    @FXML
+    protected TextField sourceField;
+    @FXML
+    protected TextField targetField;
     @FXML
     protected TextField textFieldPath;
     @FXML
@@ -477,5 +484,61 @@ public class App extends Application {
         }
     }
 
+    @FXML
+    protected void chooseSource(ActionEvent event){
+        // Initialize FileChooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose pom.xml");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Extensible Markup Language", "*.xml"));
+        // Open FileChooser and wait for Input
+        File file = fileChooser.showOpenDialog(lblPath.getScene().getWindow());
+
+        if(file.exists()){
+            sourceField.setText(file.getPath());
+            sourcePath = file.getPath();
+        }
+    }
+
+    @FXML
+    protected void chooseTarget(ActionEvent event){
+        // Initialize FileChooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose pom.xml");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Extensible Markup Language", "*.xml"));
+        // Open FileChooser and wait for Input
+        File file = fileChooser.showOpenDialog(lblPath.getScene().getWindow());
+
+        if(file.exists()){
+            targetField.setText(file.getPath());
+            targetPath = file.getPath();
+        }
+    }
+
+    @FXML
+    protected void startDiffer(ActionEvent event){
+        if(targetPath.equals(sourcePath)){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Source and Target cannot be the same!");
+            alert.show();
+        }else{
+            if(targetPath.isEmpty() ||sourcePath.isEmpty()){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Missing argument!");
+                alert.show();
+            }else{
+                if(!targetPath.endsWith("pom.xml") || !sourcePath.endsWith("pom.xml")){
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Source and Target have to be pom.xml files!");
+                    alert.show();
+                }else{
+                    // write code here
+                    MavenBuildFileDiffer differ = new MavenBuildFileDiffer();
+                    try {
+                        List<Change> changes = differ.extractChanges(new File(sourcePath), new File(targetPath));
+                        ((MavenBuildChange)changes.get(0)).getDstPositionInfo().getStartLineNumber();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
 
 }

@@ -112,13 +112,27 @@ public class LogWindow {
         separator.setPrefWidth(20);
         separator.setRotate(90);
         separator.setTranslateX(450);
-        separator.setTranslateY(10);
+        separator.setTranslateY(15);
 
-        lblBuildDuration.setPrefSize(40,20);
+        lblBuildDuration.setPrefSize(80,20);
         lblBuildDuration.setTranslateX(20);
         lblBuildDuration.setTranslateY(50);
 
+        getlblBuildDurationMin.setPrefSize(30,20);
+        getlblBuildDurationMin.setTranslateX(110);
+        getlblBuildDurationMin.setTranslateY(50);
 
+        getlblBuildDurationSec.setPrefSize(35,20);
+        getlblBuildDurationSec.setTranslateX(140);
+        getlblBuildDurationSec.setTranslateY(50);
+
+        lblBuildResult.setPrefSize(70,20);
+        lblBuildResult.setTranslateX(20);
+        lblBuildResult.setTranslateY(85);
+
+        getlblBuildResult.setPrefSize(200,20);
+        getlblBuildResult.setTranslateX(110);
+        getlblBuildResult.setTranslateY(85);
 
         area = new GenericStyledArea<>(
                 ParStyle.EMPTY,                                                 // default paragraph style
@@ -131,7 +145,7 @@ public class LogWindow {
         area.setStyleCodecs(
                 ParStyle.CODEC,
                 Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
-        area.setPrefSize(860, 490);
+        area.setPrefSize(860, 620);
 
         VirtualizedScrollPane<GenericStyledArea> vsPane = new VirtualizedScrollPane(area);
 
@@ -163,7 +177,7 @@ public class LogWindow {
 
         this.textPane.setContent(vsPane);
         textPane.setTranslateX(20);
-        textPane.setTranslateY(200);
+        textPane.setTranslateY(150);
 
         pane.getChildren().addAll(lblPath, txtPath, lblStep, txtStep, textPane,separator,lblBuildDuration,getlblBuildDurationMin,getlblBuildDurationSec,lblBuildResult,getlblBuildResult);
     }
@@ -182,7 +196,20 @@ public class LogWindow {
         txtPath.setText(filePath);
         txtStep.setText(step);
 
+        getlblBuildDurationMin.setText(buildLog.getBuildDuration().getMinutes()+" min");
+        getlblBuildDurationSec.setText( buildLog.getBuildDuration().getSeconds() +" sec");
+
+
+        if (buildLog.getBuildResult().toString().equals("SUCCESS")){
+            getlblBuildResult.setTextFill(Color.web("#00FF00"));
+        }else {
+            getlblBuildResult.setTextFill(Color.web("#FF0000"));
+        }
+
+        getlblBuildResult.setText(buildLog.getBuildResult()+"");
+
         dialog.show();
     }
+
 }
 

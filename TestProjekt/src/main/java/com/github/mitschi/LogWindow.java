@@ -1,5 +1,6 @@
 package com.github.mitschi;
 
+import at.aau.building.BuildLog;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -176,7 +177,7 @@ public class LogWindow {
     }
 
 
-    public void showDialog(String filePath, String step){
+    public void showDialog(String filePath, String step, BuildLog buildLog){
         txtPath.setText(filePath);
         txtStep.setText(step);
 

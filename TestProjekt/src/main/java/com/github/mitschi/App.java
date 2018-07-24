@@ -179,9 +179,9 @@ public class App extends Application {
         strategies.setCellValueFactory(new PropertyValueFactory<TableRow, String>("strategie"));
         buildResult.setCellValueFactory(new PropertyValueFactory<TableRow, String>("buildResult"));
 
-        ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1", "success", stage, pomFile), new TableRow(2, "strat2", "failed", stage, pomFile));
+        //ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1", "success", stage, pomFile), new TableRow(2, "strat2", "failed", stage, pomFile));
 
-        tableView.setItems(data);
+        //tableView.setItems(data);
 
         // Load existing Properties
         try {

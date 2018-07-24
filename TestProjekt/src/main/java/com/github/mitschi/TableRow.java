@@ -1,5 +1,6 @@
 package com.github.mitschi;
 
+import at.aau.building.BuildLog;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
@@ -10,7 +11,7 @@ import java.util.Objects;
 public class TableRow {
     private int step;
     private String strategie;
-    private String buildResult;
+    private BuildLog buildResult;
     private Button showLog;
     private Stage stage;
     private String filePath;
@@ -24,7 +25,7 @@ public class TableRow {
         this.logWindow = logWindow;
     }
 
-    public TableRow(int step, String strategie, String buildResult, Stage stage, String filePath) {
+    public TableRow(int step, String strategie, BuildLog buildResult, Stage stage, String filePath) {
         this.step = step;
         this.strategie = strategie;
         this.buildResult = buildResult;
@@ -34,7 +35,7 @@ public class TableRow {
         this.logWindow = new LogWindow(stage);
         this.showLog.setOnAction(
                 event -> {
-                    logWindow.showDialog(filePath, step+"");
+                    logWindow.showDialog(filePath, step+"", buildResult);
 
                 }
 
@@ -75,11 +76,11 @@ public class TableRow {
         this.strategie = strategie;
     }
 
-    public String getBuildResult() {
+    public BuildLog getBuildResult() {
         return buildResult;
     }
 
-    public void setBuildResult(String buildResult) {
+    public void setBuildResult(BuildLog buildResult) {
         this.buildResult = buildResult;
     }
 

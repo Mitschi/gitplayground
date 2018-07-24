@@ -194,7 +194,7 @@ public class Process implements RepairListener{
 
                 //TableRow(int step, String strategie, String buildResult, Stage stage, String filePath)
 
-                ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(i, null, buildLog.toString(), stage, filePath));
+                ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(i, null, buildLog, stage, filePath));
                 addData(data);
 
                 table.getItems().get(0).getLogWindow().area.appendText(logBuffer+"\n");

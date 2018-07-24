@@ -11,6 +11,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.GenericStyledArea;
 import org.fxmisc.richtext.StyledTextArea;
 import org.fxmisc.richtext.TextExt;
@@ -132,6 +133,7 @@ public class LogWindow {
                 Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
         area.setPrefSize(860, 490);
 
+        VirtualizedScrollPane<GenericStyledArea> vsPane = new VirtualizedScrollPane(area);
 
         String text = "";
 //        try {
@@ -159,10 +161,9 @@ public class LogWindow {
             }
         }
 
-        this.textPane.setContent(area);
+        this.textPane.setContent(vsPane);
         textPane.setTranslateX(20);
         textPane.setTranslateY(200);
-
 
         pane.getChildren().addAll(lblPath, txtPath, lblStep, txtStep, textPane,separator,lblBuildDuration,getlblBuildDurationMin,getlblBuildDurationSec,lblBuildResult,getlblBuildResult);
     }

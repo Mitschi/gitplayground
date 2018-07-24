@@ -109,7 +109,7 @@ public class Process implements RepairListener{
 
         step.setCellValueFactory(new PropertyValueFactory<>("step"));
         strategies.setCellValueFactory(new PropertyValueFactory<>("strategie"));
-        buildResult.setCellValueFactory(new PropertyValueFactory<>("buildResult"));
+        buildResult.setCellValueFactory(new PropertyValueFactory<>("result"));
         button.setCellValueFactory(new PropertyValueFactory<>("showLog"));
 
         label = new Label("");// Add progressLabel
@@ -249,8 +249,6 @@ public class Process implements RepairListener{
                 }
             }
         }.start();
-
-
 
     }
 }

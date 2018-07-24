@@ -12,6 +12,10 @@ public class TableRow {
     private int step;
     private String strategie;
     private BuildLog buildResult;
+
+
+
+    private String result;
     private Button showLog;
     private Stage stage;
     private String filePath;
@@ -30,6 +34,7 @@ public class TableRow {
         this.strategie = strategie;
         this.buildResult = buildResult;
         this.showLog = new Button("Show Log");
+        this.result = buildResult.getBuildResult().toString();
         this.stage = stage;
         this.filePath = filePath;
         this.logWindow = new LogWindow(stage);
@@ -90,5 +95,13 @@ public class TableRow {
 
     public void setShowLog(Button showLog) {
         this.showLog = showLog;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }

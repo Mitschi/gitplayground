@@ -109,10 +109,9 @@ public class LogWindow {
         txtStep.setTranslateY(10);
         txtStep.setDisable(true);
 
-        separator.setPrefWidth(20);
-        separator.setRotate(90);
-        separator.setTranslateX(450);
-        separator.setTranslateY(15);
+        separator.setPrefWidth(860);
+        separator.setTranslateX(20);
+        separator.setTranslateY(40);
 
         lblBuildDuration.setPrefSize(80,20);
         lblBuildDuration.setTranslateX(20);
@@ -149,20 +148,6 @@ public class LogWindow {
 
         VirtualizedScrollPane<GenericStyledArea> vsPane = new VirtualizedScrollPane(area);
 
-        String text = "";
-//        try {
-//            BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\jana\\gitplayground\\TestProjekt\\blub.log"));
-//            String s = "";
-//            while ((s = br.readLine()) != null) {
-//                text += s + "\n";
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-
-
-
         this.textPane.setContent(vsPane);
         textPane.setTranslateX(20);
         textPane.setTranslateY(150);
@@ -196,8 +181,8 @@ public class LogWindow {
 
         getlblBuildResult.setText(buildLog.getBuildResult()+"");
 
-        String [] patternArray = {"\\[INFO\\]","\\[ERROR\\]","\\[WARNING\\]","BUILD FAILURE","BUILD SUCCESS",};
-        String [] patternColor = {"#006edb","#db0000","#ff9090","#db0000","#009900"};
+        String [] patternArray = {"\\[INFO\\]","\\[ERROR\\]","\\[WARNING\\]","BUILD FAILURE","ERROR","BUILD SUCCESS", "SUCCESS","\\@.*\\---"};
+        String [] patternColor = {"#006edb","#db0000","#e6b800","#db0000","#db0000","#009900","#009900","#ff9090"};
 
         for(int i = 0; i < patternArray.length; i++){
             Pattern pattern = Pattern.compile(patternArray[i]);

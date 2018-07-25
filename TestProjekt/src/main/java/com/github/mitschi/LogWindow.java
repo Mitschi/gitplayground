@@ -1,5 +1,6 @@
 package com.github.mitschi;
 
+import at.aau.building.BuildDuration;
 import at.aau.building.BuildLog;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -54,6 +55,7 @@ public class LogWindow {
     private ListView getFailingPlugins;
     private int textEnd;
     private String result;
+    private int minutes, seconds;
 
     protected GenericStyledArea<ParStyle, Either<String, LinkedImage>, TextStyle> area;
     private final TextOps<String, TextStyle> styledTextOps = SegmentOps.styledTextOps();
@@ -138,7 +140,7 @@ public class LogWindow {
         getlblBuildDurationMin.setTranslateY(50);
 
         getlblBuildDurationSec.setPrefSize(35, 20);
-        getlblBuildDurationSec.setTranslateX(140);
+        getlblBuildDurationSec.setTranslateX(150);
         getlblBuildDurationSec.setTranslateY(50);
 
         lblBuildResult.setPrefSize(70, 20);
@@ -239,8 +241,12 @@ public class LogWindow {
         }
     }
 
-    public void updateResult(String result){
+    public void updateResult(String result, BuildDuration buildDuration){
         getlblBuildResult.setText(result);
+        seconds = buildDuration.getSeconds();
+        minutes = buildDuration.getMinutes();
+        getlblBuildDurationMin.setText(minutes + " min ");
+        getlblBuildDurationSec.setText(seconds + " sec");
         this.result = result;
         if (result.equals("SUCCESS")) {
             getlblBuildResult.setTextFill(Color.web("#009900"));
@@ -254,8 +260,8 @@ public class LogWindow {
         txtPath.setText(filePath);
         txtStep.setText(step);
 
-        getlblBuildDurationMin.setText(buildLog.getBuildDuration().getMinutes() + " min ");
-        getlblBuildDurationSec.setText(buildLog.getBuildDuration().getSeconds() + " sec");
+        getlblBuildDurationMin.setText(minutes + " min ");
+        getlblBuildDurationSec.setText(seconds + " sec");
 
 
         if (result.equals("SUCCESS")) {

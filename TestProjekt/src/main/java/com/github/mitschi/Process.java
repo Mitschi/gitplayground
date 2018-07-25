@@ -23,6 +23,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.reactfx.util.FxTimer;
+import scala.util.parsing.combinator.testing.Str;
 
 import java.io.*;
 import java.text.ParseException;
@@ -41,6 +42,9 @@ public class Process implements RepairListener{
     private Stage stage;
     private String logBuffer;
     private int currentStep;
+    private String logPath;
+    private BufferedWriter bw;
+    private boolean logExists;
 
     private javafx.scene.control.TableColumn step;
 
@@ -80,10 +84,18 @@ public class Process implements RepairListener{
         this.progress = progress;
     }
 
-    public Process(String filePath, Stage stage){
+    public Process(String filePath, Stage stage, String logPath){
+        logExists = true;
         isRunning = new SimpleBooleanProperty(false);
         currentStep = 0;
         this.stage = stage;
+        this.logPath = logPath;
+
+        try {
+            bw = new BufferedWriter(new FileWriter(logPath));
+        } catch (Exception e) {
+            logExists = false;
+        }
         repair = new Repair();
         repair.addRepairListener(this);
         this.filePath = filePath; // Set Filepath
@@ -178,6 +190,11 @@ public class Process implements RepairListener{
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Repair finished!");
                 alert.setTitle(filePath);
                 alert.show();
+                try {
+                    bw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -237,6 +254,14 @@ public class Process implements RepairListener{
                 table.getItems().get(currentStep-1).getLogWindow().area.appendText(line+"\n");
                 table.getItems().get(currentStep-1).getLogWindow().area.requestFollowCaret();
                 table.getItems().get(currentStep-1).getLogWindow().updateLogWindow();
+
+                if(logExists){
+                    try {
+                        bw.write(line+"\n");
+                        bw.flush();
+                    } catch (IOException e) {
+                    }
+                }
             }
         });
     }

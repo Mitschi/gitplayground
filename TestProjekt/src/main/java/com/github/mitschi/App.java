@@ -338,7 +338,7 @@ public class App extends Application {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Missing Fields!");
             alert.show();
         } else {
-            Process process = new Process(pomFile, stage);
+            Process process = new Process(pomFile, stage, logPath);
             boolean isAlreadyRunning = false;
             for (Process p : processList) {
                 if (p.equals(process))

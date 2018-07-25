@@ -72,19 +72,19 @@ public class ApplicationGuiTest extends ApplicationTest {
 //    }
 
     //Test what happens when in the path a false typ stands
-    @Test
-    public void testPathOtherDatatyp() {
-
-        doubleClickOn("#textFieldPath"); //Mark the last word
-        write("Other typ"); //Delete the marked word and write instead "Test"
-
-        clickOn("Start"); //Start the program
-
-        Label label = (Label) stage.getScene().lookup("#lblPath"); //Get component lblPath
-        assertThat(label.getTextFill().toString(), CoreMatchers.is("0xff0000ff")); //AssertThat the color of the label "lblPath" changes to red
-
-        //There should be an alert with a warning that in the path is no pom.xml data
-    }
+//    @Test
+//    public void testPathOtherDatatyp() {
+//
+//        doubleClickOn("#textFieldPath"); //Mark the last word
+//        write("Other typ"); //Delete the marked word and write instead "Test"
+//
+//        clickOn("Start"); //Start the program
+//
+//        Label label = (Label) stage.getScene().lookup("#lblPath"); //Get component lblPath
+//        assertThat(label.getTextFill().toString(), CoreMatchers.is("0xff0000ff")); //AssertThat the color of the label "lblPath" changes to red
+//
+//        //There should be an alert with a warning that in the path is no pom.xml data
+//    }
 
     //Test what happens when in the path is empty
     @Test
@@ -95,7 +95,7 @@ public class ApplicationGuiTest extends ApplicationTest {
         TextField text = (TextField) stage.getScene().lookup("#textFieldPath"); //Get component textFieldPath to know how long the text is (get int)
         eraseText(text.getLength()); //Delete the hole text
 
-        clickOn("Start");//Start the program
+        clickOn("#startButton");//Start the program
 
         Label label = (Label) stage.getScene().lookup("#lblPath"); //Get component lblPath
         assertThat(label.getTextFill().toString(), CoreMatchers.is("0xff0000ff")); //AssertThat the color of the label "lblPath" changes to red
@@ -120,7 +120,7 @@ public class ApplicationGuiTest extends ApplicationTest {
 
         clickOn("#delete"); //Choose "delete" as a strategy because there would be an alert
 
-        clickOn("Start"); //Start the program
+        clickOn("#startButton"); //Start the program
 
 
     }
@@ -148,7 +148,7 @@ public class ApplicationGuiTest extends ApplicationTest {
     @Test
     public void testStrategyNothingChosen() {
 
-        clickOn("Start"); //Start the program
+        clickOn("#startButton"); //Start the program
 
 
         Label label = (Label) stage.getScene().lookup("#lblStrategy"); //Get component "lblStrategy"
@@ -169,7 +169,7 @@ public class ApplicationGuiTest extends ApplicationTest {
         doubleClickOn("#textFieldLog"); //Mark the last word
         write("Other typ"); //Delete the mark word and write "Other typ"
 
-        clickOn("Start"); //Start the program
+        clickOn("#startButton"); //Start the program
 
         Label label = (Label) stage.getScene().lookup("#lblLog"); //Get component "lblLog"
         assertThat(label.getTextFill().toString(), CoreMatchers.is("0xff0000ff")); //AssertThat the color of the label "lblLog" changes to red
@@ -178,24 +178,24 @@ public class ApplicationGuiTest extends ApplicationTest {
         //There should be an alert with a warning that in the logFile is no .txt data
     }
 
-    @Test
-    public void testRevision(){
-
-        clickOn("#insert"); //Choose "insert" as a strategy because there would be an alert
-        //Write in revision "Hello World
-        clickOn("#textFieldRevision");
-        write("Hello World");
-
-        clickOn("Start"); //Start the program
-
-        assertEquals("Hello World", App.revision); //Check if the class "App" gets the right text
-    }
+//    @Test
+//    public void testRevision(){
+//
+//        clickOn("#insert"); //Choose "insert" as a strategy because there would be an alert
+//        //Write in revision "Hello World
+//        clickOn("#textFieldRevision");
+//        write("Hello World");
+//
+//        clickOn("#startButton"); //Start the program
+//
+//        assertEquals("Hello World", App.revision); //Check if the class "App" gets the right text
+//    }
 
     @Test
     public void testListViewAddAndDeletePath(){
 
         clickOn("#delete"); //Choose "delete" as a strategy because there would be an alert
-        clickOn("Start"); //Start the program
+        clickOn("#startButton"); //Start the program
 
         clickOn("#listView"); //Select path in listView
         //Cancel the program
@@ -204,15 +204,15 @@ public class ApplicationGuiTest extends ApplicationTest {
     }
 
 
-//    @BeforeClass
-//    public static void setupSpec() throws Exception{
-//
-//            System.setProperty("testfx.robot", "glass");
-//            System.setProperty("testfx.headless", "true");
-//            System.setProperty("prism.order", "sw");
-//            System.setProperty("prism.text", "t2k");
-//        System.setProperty("java.awt.headless", "true");
-//
-//        registerPrimaryStage();
-//        }
+    @BeforeClass
+    public static void setupSpec() throws Exception{
+
+            System.setProperty("testfx.robot", "glass");
+            System.setProperty("testfx.headless", "true");
+            System.setProperty("prism.order", "sw");
+            System.setProperty("prism.text", "t2k");
+        System.setProperty("java.awt.headless", "true");
+
+        registerPrimaryStage();
+        }
         }

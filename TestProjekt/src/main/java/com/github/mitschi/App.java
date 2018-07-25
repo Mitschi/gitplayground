@@ -22,6 +22,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Alert;
+import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.GenericStyledArea;
 import org.fxmisc.richtext.StyledTextArea;
 import org.fxmisc.richtext.TextExt;
@@ -58,6 +59,12 @@ public class App extends Application {
     protected static ProgressListener progressListener;
     protected static String sourcePath;
     protected static String targetPath;
+    protected GenericStyledArea<ParStyle, Either<String, LinkedImage>, TextStyle> areaSource;
+    private final TextOps<String, TextStyle> styledTextOps = SegmentOps.styledTextOps();
+    private final LinkedImageOps<TextStyle> linkedImageOps = new LinkedImageOps<>();
+
+    protected GenericStyledArea<ParStyle, Either<String, LinkedImage>, TextStyle> areaTarget;
+
 
     @FXML
     protected TextField sourceField;
@@ -105,7 +112,10 @@ public class App extends Application {
     protected Tab tabBuildDiff;
 
     @FXML
-    protected ScrollPane textPane;
+    protected ScrollPane scrollPaneSource;
+
+    @FXML
+    protected ScrollPane scrollPaneTarget;
 
 
 //    @FXML
@@ -133,11 +143,51 @@ public class App extends Application {
 //        }
 //    }
 
-
+    private Node createNode(StyledSegment<Either<String, LinkedImage>, TextStyle> seg,
+                            BiConsumer<? super TextExt, TextStyle> applyStyle) {
+        return seg.getSegment().unify(
+                text -> StyledTextArea.createStyledTextNode(text, seg.getStyle(), applyStyle),
+                LinkedImage::createNode
+        );
+    }
 
 
     public void initialize() {
+        areaSource = new GenericStyledArea<>(
+                ParStyle.EMPTY,                                                 // default paragraph style
+                (paragraph, style) -> paragraph.setStyle(style.toCss()),        // paragraph style setter
 
+                TextStyle.EMPTY.updateFontSize(10).updateFontFamily("Consolas").updateTextColor(Color.BLACK),  // default segment style
+                styledTextOps._or(linkedImageOps, (s1, s2) -> Optional.empty()),                            // segment operations
+                seg -> createNode(seg, (text, style) -> text.setStyle(style.toCss())));                     // Node creator and segment style setter
+        areaSource.setWrapText(true);
+        areaSource.setEditable(false);
+        areaSource.setStyleCodecs(
+                ParStyle.CODEC,
+                Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
+        areaSource.setPrefSize(scrollPaneSource.getPrefWidth(), scrollPaneSource.getPrefHeight());
+
+        VirtualizedScrollPane<GenericStyledArea> vsPaneS = new VirtualizedScrollPane(areaSource);
+
+        scrollPaneSource.setContent(vsPaneS);
+
+        areaTarget = new GenericStyledArea<>(
+                ParStyle.EMPTY,                                                 // default paragraph style
+                (paragraph, style) -> paragraph.setStyle(style.toCss()),        // paragraph style setter
+
+                TextStyle.EMPTY.updateFontSize(10).updateFontFamily("Consolas").updateTextColor(Color.BLACK),  // default segment style
+                styledTextOps._or(linkedImageOps, (s1, s2) -> Optional.empty()),                            // segment operations
+                seg -> createNode(seg, (text, style) -> text.setStyle(style.toCss())));                     // Node creator and segment style setter
+        areaTarget.setWrapText(true);
+        areaTarget.setEditable(false);
+        areaTarget.setStyleCodecs(
+                ParStyle.CODEC,
+                Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
+
+        areaTarget.setPrefSize(scrollPaneTarget.getPrefWidth(), scrollPaneTarget.getPrefHeight());
+        VirtualizedScrollPane<GenericStyledArea> vsPaneT = new VirtualizedScrollPane(areaTarget);
+
+        scrollPaneTarget.setContent(vsPaneT);
 
         // Set detailsTab to non-visible in the beginning
         tapPane.getTabs().remove(detailsTab);
@@ -516,12 +566,15 @@ public class App extends Application {
 
     @FXML
     protected void startDiffer(ActionEvent event){
-        if(targetPath.equals(sourcePath)){
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Source and Target cannot be the same!");
+        targetPath = targetField.getText();
+        sourcePath = sourceField.getText();
+
+        if(targetPath.isEmpty() ||sourcePath.isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Missing argument!");
             alert.show();
         }else{
-            if(targetPath.isEmpty() ||sourcePath.isEmpty()){
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Missing argument!");
+            if(targetPath.equals(sourcePath)){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Source and Target cannot be the same!");
                 alert.show();
             }else{
                 if(!targetPath.endsWith("pom.xml") || !sourcePath.endsWith("pom.xml")){
@@ -530,6 +583,7 @@ public class App extends Application {
                 }else{
                     // write code here
                     MavenBuildFileDiffer differ = new MavenBuildFileDiffer();
+
                     try {
                         List<Change> changes = differ.extractChanges(new File(sourcePath), new File(targetPath));
                         ((MavenBuildChange)changes.get(0)).getDstPositionInfo().getStartLineNumber();

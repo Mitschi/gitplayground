@@ -217,6 +217,22 @@ public class LogWindow {
         }
     }
 
+    private void updateLogWindow(){
+
+        String[] patternArray = {"\\[INFO\\]", "\\[ERROR\\]", "\\[WARNING\\]", "BUILD FAILURE", "ERROR", "BUILD SUCCESS", "SUCCESS", "\\@.*\\---", "FAILURE"};
+        String[] patternColor = {"#006edb", "#db0000", "#e6b800", "#db0000", "#db0000", "#009900", "#009900", "#ff9090", "#db0000"};
+
+        for (int i = 0; i < patternArray.length; i++) {
+            Pattern pattern = Pattern.compile(patternArray[i]);
+            Matcher matcher = pattern.matcher(area.getText());
+
+            while (matcher.find()) {
+                IndexRange selection = IndexRange.normalize(matcher.start(), matcher.end());
+                updateStyleInSelection(TextStyle.textColor(Color.web(patternColor[i])), selection);
+            }
+        }
+
+    }
 
     public void showDialog(String filePath, String step, BuildLog buildLog) {
         txtPath.setText(filePath);
@@ -239,18 +255,7 @@ public class LogWindow {
         getMissingTypes.getItems().addAll(buildLog.getMissingTypes());
         // getFailingPlugins.getItems().addAll(buildLog.getFailingPlugins());
 
-        String[] patternArray = {"\\[INFO\\]", "\\[ERROR\\]", "\\[WARNING\\]", "BUILD FAILURE", "ERROR", "BUILD SUCCESS", "SUCCESS", "\\@.*\\---", "FAILURE"};
-        String[] patternColor = {"#006edb", "#db0000", "#e6b800", "#db0000", "#db0000", "#009900", "#009900", "#ff9090", "#db0000"};
 
-        for (int i = 0; i < patternArray.length; i++) {
-            Pattern pattern = Pattern.compile(patternArray[i]);
-            Matcher matcher = pattern.matcher(area.getText());
-
-            while (matcher.find()) {
-                IndexRange selection = IndexRange.normalize(matcher.start(), matcher.end());
-                updateStyleInSelection(TextStyle.textColor(Color.web(patternColor[i])), selection);
-            }
-        }
         dialog.show();
     }
 

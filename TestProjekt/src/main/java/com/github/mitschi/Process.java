@@ -283,4 +283,8 @@ public class Process implements RepairListener{
         }.start();
 
     }
+
+    public void cancel(){
+        repair.abortRepair();
+    }
 }

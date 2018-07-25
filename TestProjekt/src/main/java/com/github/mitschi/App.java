@@ -399,6 +399,7 @@ public class App extends Application {
                     for (int i = 0; i < processList.size(); i++) {
                         Process p = processList.get(i);
                         if (p.equals(selP)) {
+                            p.getRepair().abortRepair();
                             processList.remove(p);
                             listView.getItems().remove(p);
                             processCounter--;

@@ -52,6 +52,7 @@ public class LogWindow {
     private ListView getMissingTypes;
     private Label lblFailingPlugins;
     private ListView getFailingPlugins;
+    private int textEnd;
 
     protected GenericStyledArea<ParStyle, Either<String, LinkedImage>, TextStyle> area;
     private final TextOps<String, TextStyle> styledTextOps = SegmentOps.styledTextOps();
@@ -71,7 +72,7 @@ public class LogWindow {
         dialog.initOwner(primaryStage);
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setTitle("Log");
-
+        textEnd = 0;
         dialog.setMinHeight(800);
         dialog.setMinWidth(920);
 
@@ -226,10 +227,14 @@ public class LogWindow {
             Pattern pattern = Pattern.compile(patternArray[i]);
             Matcher matcher = pattern.matcher(area.getText());
 
-            while (matcher.find()) {
+            while (matcher.find(textEnd)) {
                 IndexRange selection = IndexRange.normalize(matcher.start(), matcher.end());
                 updateStyleInSelection(TextStyle.textColor(Color.web(patternColor[i])), selection);
+                if(matcher.end() > textEnd){
+                    textEnd = matcher.end();
+                }
             }
+
         }
 
     }

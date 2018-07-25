@@ -184,12 +184,15 @@ public class Process implements RepairListener{
 
     @Override
     public void stepStarted(int i, int i1, BuildLog buildLog) {
-
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+
                 ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(i, null, buildLog, stage, filePath));
                 addData(data);
+                table.getItems().get(i-1).setResult(buildLog.getBuildResult().toString());
+                table.getItems().get(i).setResult("---");
+
                 currentStep++;
             }
         });
@@ -208,6 +211,8 @@ public class Process implements RepairListener{
 
                 //TableRow(int step, String strategie, String buildResult, Stage stage, String filePath)
 
+                table.getItems().get(i).setResult(buildLog.getBuildResult().toString());
+                table.refresh();
             }
         });
     }
@@ -229,9 +234,9 @@ public class Process implements RepairListener{
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                table.getItems().get(currentStep).getLogWindow().area.appendText(line+"\n");
-                table.getItems().get(currentStep).getLogWindow().area.requestFollowCaret();
-
+                table.getItems().get(currentStep-1).getLogWindow().area.appendText(line+"\n");
+                table.getItems().get(currentStep-1).getLogWindow().area.requestFollowCaret();
+                table.getItems().get(currentStep-1).getLogWindow().updateLogWindow();
             }
         });
     }
@@ -253,9 +258,10 @@ public class Process implements RepairListener{
             public void run() {
                 BuildLog startLog = new BuildLog();
                 startLog.setBuildDuration(new BuildDuration(0,0,0));
-
                 ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(currentStep, null, startLog, stage, filePath));
                 addData(data);
+                table.getItems().get(0).setResult("---");
+                currentStep++;
             }
         });
 

@@ -7,7 +7,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -113,11 +112,11 @@
                         <TextField fx:id="targetField" layoutX="410.0" layoutY="40.0" prefHeight="25.0" prefWidth="300.0" />
                         <Label layoutX="20.0" layoutY="20.0" text="Source:" />
                         <Label layoutX="410.0" layoutY="20.0" text="Target:" />
-                        <ScrollPane fx:id="scrollPaneSource" layoutX="20.0" layoutY="80.0" prefHeight="440.0" prefWidth="370.0" />
-                        <ScrollPane fx:id="scrollPaneTarget" layoutX="410.0" layoutY="80.0" prefHeight="440.0" prefWidth="370.0" />
                         <Button layoutX="330.0" layoutY="40.0" mnemonicParsing="false" onAction="#chooseSource" prefWidth="60.0" text="Choose" />
                         <Button layoutX="720.0" layoutY="40.0" mnemonicParsing="false" onAction="#chooseTarget" prefWidth="60.0" text="Choose" />
                         <Button layoutX="350.0" layoutY="535.0" mnemonicParsing="false" onAction="#startDiffer" prefWidth="100.0" text="Start" />
+                        <Pane fx:id="scrollPaneSource" layoutX="20.0" layoutY="80.0" prefHeight="440.0" prefWidth="370.0" />
+                        <Pane fx:id="scrollPaneTarget" layoutX="410.0" layoutY="80.0" prefHeight="440.0" prefWidth="370.0" />
                      </children>
                   </Pane>
                </children></AnchorPane>

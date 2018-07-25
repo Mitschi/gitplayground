@@ -18,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
@@ -112,10 +113,10 @@ public class App extends Application {
     protected Tab tabBuildDiff;
 
     @FXML
-    protected ScrollPane scrollPaneSource;
+    protected Pane scrollPaneSource;
 
     @FXML
-    protected ScrollPane scrollPaneTarget;
+    protected Pane scrollPaneTarget;
 
 
 //    @FXML
@@ -169,7 +170,7 @@ public class App extends Application {
 
         VirtualizedScrollPane<GenericStyledArea> vsPaneS = new VirtualizedScrollPane(areaSource);
 
-        scrollPaneSource.setContent(vsPaneS);
+        scrollPaneSource.getChildren().add(vsPaneS);
 
         areaTarget = new GenericStyledArea<>(
                 ParStyle.EMPTY,                                                 // default paragraph style
@@ -187,7 +188,7 @@ public class App extends Application {
         areaTarget.setPrefSize(scrollPaneTarget.getPrefWidth(), scrollPaneTarget.getPrefHeight());
         VirtualizedScrollPane<GenericStyledArea> vsPaneT = new VirtualizedScrollPane(areaTarget);
 
-        scrollPaneTarget.setContent(vsPaneT);
+        scrollPaneTarget.getChildren().add(vsPaneT);
 
         // Set detailsTab to non-visible in the beginning
         tapPane.getTabs().remove(detailsTab);
@@ -569,6 +570,8 @@ public class App extends Application {
         targetPath = targetField.getText();
         sourcePath = sourceField.getText();
 
+
+
         if(targetPath.isEmpty() ||sourcePath.isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR, "Missing argument!");
             alert.show();
@@ -581,9 +584,28 @@ public class App extends Application {
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Source and Target have to be pom.xml files!");
                     alert.show();
                 }else{
+                    areaTarget.clear();
+                    areaSource.clear();
                     // write code here
                     MavenBuildFileDiffer differ = new MavenBuildFileDiffer();
+                    try {
+                        BufferedReader brS = new BufferedReader(new FileReader(sourcePath));
+                        BufferedReader brT = new BufferedReader(new FileReader(targetPath));
 
+                        String s = "";
+
+                        while((s = brS.readLine()) != null){
+                            areaSource.appendText(s);
+                        }
+
+                        while((s = brT.readLine()) != null){
+                            areaTarget.appendText(s);
+                        }
+
+                    } catch (Exception e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR, "Unable to read files!");
+                        alert.show();
+                    }
                     try {
                         List<Change> changes = differ.extractChanges(new File(sourcePath), new File(targetPath));
                         ((MavenBuildChange)changes.get(0)).getDstPositionInfo().getStartLineNumber();

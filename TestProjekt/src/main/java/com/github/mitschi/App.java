@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,15 +19,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Alert;
 import org.fxmisc.flowless.VirtualizedScrollPane;
-import org.fxmisc.richtext.GenericStyledArea;
-import org.fxmisc.richtext.StyledTextArea;
-import org.fxmisc.richtext.TextExt;
+import org.fxmisc.richtext.*;
 import org.fxmisc.richtext.demo.richtext.LinkedImage;
 import org.fxmisc.richtext.demo.richtext.LinkedImageOps;
 import org.fxmisc.richtext.demo.richtext.ParStyle;
@@ -38,12 +38,10 @@ import scala.Int;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 
 public class App extends Application {
 
@@ -60,12 +58,14 @@ public class App extends Application {
     protected static ProgressListener progressListener;
     protected static String sourcePath;
     protected static String targetPath;
+
     protected GenericStyledArea<ParStyle, Either<String, LinkedImage>, TextStyle> areaSource;
     private final TextOps<String, TextStyle> styledTextOps = SegmentOps.styledTextOps();
     private final LinkedImageOps<TextStyle> linkedImageOps = new LinkedImageOps<>();
 
     protected GenericStyledArea<ParStyle, Either<String, LinkedImage>, TextStyle> areaTarget;
 
+    CodeArea codeArea;
 
     @FXML
     protected TextField sourceField;
@@ -119,7 +119,7 @@ public class App extends Application {
     protected Pane scrollPaneTarget;
 
 
-//    @FXML
+    //    @FXML
 //    public void setTextArea() {
 //        IndexRange selection = IndexRange.normalize(2, 6);
 //        updateStyleInSelection(spans -> TextStyle.bold(!spans.styleStream().allMatch(style -> style.bold.orElse(false))), selection);
@@ -148,8 +148,8 @@ public class App extends Application {
         if (selection.getLength() != 0) {
             StyleSpans<TextStyle> styles = areaTarget.getStyleSpans(selection);
             TextStyle mixin = mixinGetter.apply(styles);
-            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
-            areaTarget.setStyleSpans(selection.getStart(), newStyles);
+//            StyleSpans<TextStyle> newStyles = styles.mapStyles(new );
+//            areaTarget.setStyleSpans(selection.getStart(), newStyles);
         }
     }
 
@@ -186,9 +186,16 @@ public class App extends Application {
                 Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
         areaSource.setPrefSize(scrollPaneSource.getPrefWidth(), scrollPaneSource.getPrefHeight());
 
+        IntFunction<Node> numberFactoryS= LineNumberFactory.get(areaSource);
+        IntFunction<Node> graphicFactoryS = line -> {
+            HBox hbox = new HBox(numberFactoryS.apply(line));
+            hbox.setAlignment(Pos.CENTER_LEFT);
+            return hbox;
+        };
+        areaSource.setParagraphGraphicFactory(graphicFactoryS);
         VirtualizedScrollPane<GenericStyledArea> vsPaneS = new VirtualizedScrollPane(areaSource);
-
         scrollPaneSource.getChildren().add(vsPaneS);
+
 
         areaTarget = new GenericStyledArea<>(
                 ParStyle.EMPTY,                                                 // default paragraph style
@@ -204,6 +211,17 @@ public class App extends Application {
                 Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
 
         areaTarget.setPrefSize(scrollPaneTarget.getPrefWidth(), scrollPaneTarget.getPrefHeight());
+
+
+        IntFunction<Node> numberFactoryT = LineNumberFactory.get(areaTarget);
+        IntFunction<Node> graphicFactoryT = line -> {
+            HBox hbox = new HBox(numberFactoryT.apply(line));
+            hbox.setAlignment(Pos.CENTER_LEFT);
+            return hbox;
+        };
+        areaTarget.setParagraphGraphicFactory(graphicFactoryT);
+
+
         VirtualizedScrollPane<GenericStyledArea> vsPaneT = new VirtualizedScrollPane(areaTarget);
 
         scrollPaneTarget.getChildren().add(vsPaneT);
@@ -555,7 +573,7 @@ public class App extends Application {
     }
 
     @FXML
-    protected void chooseSource(ActionEvent event){
+    protected void chooseSource(ActionEvent event) {
         // Initialize FileChooser
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose pom.xml");
@@ -563,14 +581,14 @@ public class App extends Application {
         // Open FileChooser and wait for Input
         File file = fileChooser.showOpenDialog(lblPath.getScene().getWindow());
 
-        if(file.exists()){
+        if (file.exists()) {
             sourceField.setText(file.getPath());
             sourcePath = file.getPath();
         }
     }
 
     @FXML
-    protected void chooseTarget(ActionEvent event){
+    protected void chooseTarget(ActionEvent event) {
         // Initialize FileChooser
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose pom.xml");
@@ -578,34 +596,32 @@ public class App extends Application {
         // Open FileChooser and wait for Input
         File file = fileChooser.showOpenDialog(lblPath.getScene().getWindow());
 
-        if(file.exists()){
+        if (file.exists()) {
             targetField.setText(file.getPath());
             targetPath = file.getPath();
         }
     }
 
     @FXML
-    protected void startDiffer(ActionEvent event){
+    protected void startDiffer(ActionEvent event) {
         targetPath = targetField.getText();
         sourcePath = sourceField.getText();
 
-
-
-        if(targetPath.isEmpty() ||sourcePath.isEmpty()){
+        if (targetPath.isEmpty() || sourcePath.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Missing argument!");
             alert.show();
-        }else{
-            if(targetPath.equals(sourcePath)){
+        } else {
+            if (targetPath.equals(sourcePath)) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Source and Target cannot be the same!");
                 alert.show();
-            }else{
-                if(!targetPath.endsWith("pom.xml") || !sourcePath.endsWith("pom.xml")){
+            } else {
+                if (!targetPath.endsWith("pom.xml") || !sourcePath.endsWith("pom.xml")) {
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Source and Target have to be pom.xml files!");
                     alert.show();
-                }else{
+                } else {
                     areaTarget.clear();
                     areaSource.clear();
-                    // write code here
+
                     MavenBuildFileDiffer differ = new MavenBuildFileDiffer();
                     try {
                         BufferedReader brS = new BufferedReader(new FileReader(sourcePath));
@@ -613,12 +629,12 @@ public class App extends Application {
 
                         String s = "";
 
-                        while((s = brS.readLine()) != null){
-                            areaSource.appendText( s +"\n");
+                        while ((s = brS.readLine()) != null) {
+                            areaSource.appendText(s+"\n");
                         }
 
-                        while((s = brT.readLine()) != null){
-                            areaTarget.appendText(s +"\n");
+                        while ((s = brT.readLine()) != null) {
+                            areaTarget.appendText(s + "\n");
                         }
 
                     } catch (Exception e) {
@@ -629,21 +645,27 @@ public class App extends Application {
                         List<Change> changes = differ.extractChanges(new File(sourcePath), new File(targetPath));
                         //((MavenBuildChange)changes.get(0)).getDstPositionInfo().getStartLineNumber();
 
-                        for (int i = 0; i < changes.size(); i++){
+                        for (int i = 0; i < changes.size(); i++) {
 
                             int startLineNumberSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getStartLineNumber();
-                            int endLineNumberSource =((MavenBuildChange)changes.get(i)).getSrcPositionInfo().getEndLineNumber();
+                            int endLineNumberSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getEndLineNumber();
 
                             int startLineOffsetSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getStartLineOffset();
-                            int endLineOffsetSource =((MavenBuildChange)changes.get(i)).getSrcPositionInfo().getEndLineOffset();
+                            int endLineOffsetSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getEndLineOffset();
                             System.out.println(startLineOffsetSource);
                             System.out.println(endLineOffsetSource);
 
 
-                            IndexRange selectionSource = IndexRange.normalize(startLineOffsetSource,endLineOffsetSource);
+                            IndexRange selectionSource = IndexRange.normalize(startLineOffsetSource, endLineOffsetSource);
                             updateStyleInSelectionSource(TextStyle.textColor(Color.web("#ff0000")), selectionSource);
-                        }
 
+                            int startLineOffsetTarget = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getStartLineOffset();
+                            int endLineOffsetTarget = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getEndLineOffset();
+
+                            IndexRange selectionTarget = IndexRange.normalize(startLineOffsetTarget, endLineOffsetTarget);
+                            updateStyleInSelectionTarget(TextStyle.textColor(Color.web("#ff0000")), selectionTarget);
+
+                        }
 
 
                     } catch (Exception e) {

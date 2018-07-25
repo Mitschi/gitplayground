@@ -32,8 +32,8 @@ import org.fxmisc.richtext.demo.richtext.LinkedImageOps;
 import org.fxmisc.richtext.demo.richtext.ParStyle;
 import org.fxmisc.richtext.demo.richtext.TextStyle;
 import org.fxmisc.richtext.model.*;
-import org.jboss.jandex.Index;
 import org.reactfx.util.Either;
+import scala.Int;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -127,22 +127,40 @@ public class App extends Application {
 //        updateStyleInSelection(TextStyle.backgroundColor(Color.web("#0000ff")), selection);
 //    }
 //
-//    private void updateStyleInSelection(Function<StyleSpans<TextStyle>, TextStyle> mixinGetter, IndexRange selection) {
-//        if (selection.getLength() != 0) {
-//            StyleSpans<TextStyle> styles = area.getStyleSpans(selection);
-//            TextStyle mixin = mixinGetter.apply(styles);
-//            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
-//            area.setStyleSpans(selection.getStart(), newStyles);
-//        }
-//    }
-//
-//    private void updateStyleInSelection(TextStyle mixin, IndexRange selection) {
-//        if (selection.getLength() != 0) {
-//            StyleSpans<TextStyle> styles = area.getStyleSpans(selection);
-//            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
-//            area.setStyleSpans(selection.getStart(), newStyles);
-//        }
-//    }
+    private void updateStyleInSelectionSource(Function<StyleSpans<TextStyle>, TextStyle> mixinGetter, IndexRange selection) {
+        if (selection.getLength() != 0) {
+            StyleSpans<TextStyle> styles = areaSource.getStyleSpans(selection);
+            TextStyle mixin = mixinGetter.apply(styles);
+            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
+            areaSource.setStyleSpans(selection.getStart(), newStyles);
+        }
+    }
+
+    private void updateStyleInSelectionSource(TextStyle mixin, IndexRange selection) {
+        if (selection.getLength() != 0) {
+            StyleSpans<TextStyle> styles = areaSource.getStyleSpans(selection);
+            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
+            areaSource.setStyleSpans(selection.getStart(), newStyles);
+        }
+    }
+
+    private void updateStyleInSelectionTarget(Function<StyleSpans<TextStyle>, TextStyle> mixinGetter, IndexRange selection) {
+        if (selection.getLength() != 0) {
+            StyleSpans<TextStyle> styles = areaTarget.getStyleSpans(selection);
+            TextStyle mixin = mixinGetter.apply(styles);
+            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
+            areaTarget.setStyleSpans(selection.getStart(), newStyles);
+        }
+    }
+
+    private void updateStyleInSelectionTarget(TextStyle mixin, IndexRange selection) {
+        if (selection.getLength() != 0) {
+            StyleSpans<TextStyle> styles = areaTarget.getStyleSpans(selection);
+            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
+            areaTarget.setStyleSpans(selection.getStart(), newStyles);
+        }
+    }
+
 
     private Node createNode(StyledSegment<Either<String, LinkedImage>, TextStyle> seg,
                             BiConsumer<? super TextExt, TextStyle> applyStyle) {
@@ -596,11 +614,11 @@ public class App extends Application {
                         String s = "";
 
                         while((s = brS.readLine()) != null){
-                            areaSource.appendText(s);
+                            areaSource.appendText( s +"\n");
                         }
 
                         while((s = brT.readLine()) != null){
-                            areaTarget.appendText(s);
+                            areaTarget.appendText(s +"\n");
                         }
 
                     } catch (Exception e) {
@@ -609,7 +627,25 @@ public class App extends Application {
                     }
                     try {
                         List<Change> changes = differ.extractChanges(new File(sourcePath), new File(targetPath));
-                        ((MavenBuildChange)changes.get(0)).getDstPositionInfo().getStartLineNumber();
+                        //((MavenBuildChange)changes.get(0)).getDstPositionInfo().getStartLineNumber();
+
+                        for (int i = 0; i < changes.size(); i++){
+
+                            int startLineNumberSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getStartLineNumber();
+                            int endLineNumberSource =((MavenBuildChange)changes.get(i)).getSrcPositionInfo().getEndLineNumber();
+
+                            int startLineOffsetSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getStartLineOffset();
+                            int endLineOffsetSource =((MavenBuildChange)changes.get(i)).getSrcPositionInfo().getEndLineOffset();
+                            System.out.println(startLineOffsetSource);
+                            System.out.println(endLineOffsetSource);
+
+
+                            IndexRange selectionSource = IndexRange.normalize(startLineOffsetSource,endLineOffsetSource);
+                            updateStyleInSelectionSource(TextStyle.textColor(Color.web("#ff0000")), selectionSource);
+                        }
+
+
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

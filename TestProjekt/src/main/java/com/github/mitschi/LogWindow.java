@@ -269,6 +269,8 @@ public class LogWindow {
 
         getMissingDependencies.getItems().addAll(buildLog.getMissingDependencies());
         getMissingTypes.getItems().addAll(buildLog.getMissingTypes());
+
+        //There is nothing in buildLog.getFailingPlugins()
         // getFailingPlugins.getItems().addAll(buildLog.getFailingPlugins());
 
 

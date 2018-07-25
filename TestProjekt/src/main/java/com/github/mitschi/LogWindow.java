@@ -53,6 +53,7 @@ public class LogWindow {
     private Label lblFailingPlugins;
     private ListView getFailingPlugins;
     private int textEnd;
+    private String result;
 
     protected GenericStyledArea<ParStyle, Either<String, LinkedImage>, TextStyle> area;
     private final TextOps<String, TextStyle> styledTextOps = SegmentOps.styledTextOps();
@@ -236,6 +237,16 @@ public class LogWindow {
             }
 
         }
+    }
+
+    public void updateResult(String result){
+        getlblBuildResult.setText(result);
+        this.result = result;
+        if (result.equals("SUCCESS")) {
+            getlblBuildResult.setTextFill(Color.web("#009900"));
+        } else {
+            getlblBuildResult.setTextFill(Color.web("#db0000"));
+        }
 
     }
 
@@ -247,13 +258,13 @@ public class LogWindow {
         getlblBuildDurationSec.setText(buildLog.getBuildDuration().getSeconds() + " sec");
 
 
-        if (buildLog.getBuildResult().toString().equals("SUCCESS")) {
+        if (result.equals("SUCCESS")) {
             getlblBuildResult.setTextFill(Color.web("#009900"));
         } else {
             getlblBuildResult.setTextFill(Color.web("#db0000"));
         }
 
-        getlblBuildResult.setText(buildLog.getBuildResult() + "");
+        getlblBuildResult.setText(result);
         getLblFailingModuleName.setText(buildLog.getFailingModuleName());
 
         getMissingDependencies.getItems().addAll(buildLog.getMissingDependencies());

@@ -208,7 +208,9 @@ public class Process implements RepairListener{
                 ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(i, null, buildLog, stage, filePath));
                 addData(data);
                 table.getItems().get(i-1).setResult(buildLog.getBuildResult().toString());
+                table.getItems().get(i-1).getLogWindow().updateResult(buildLog.getBuildResult().toString());
                 table.getItems().get(i).setResult("---");
+                table.getItems().get(i).getLogWindow().updateResult("---");
 
                 currentStep++;
             }
@@ -229,6 +231,7 @@ public class Process implements RepairListener{
                 //TableRow(int step, String strategie, String buildResult, Stage stage, String filePath)
 
                 table.getItems().get(i).setResult(buildLog.getBuildResult().toString());
+                table.getItems().get(i).getLogWindow().updateResult(buildLog.getBuildResult().toString());
                 table.refresh();
             }
         });
@@ -286,6 +289,7 @@ public class Process implements RepairListener{
                 ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(currentStep, null, startLog, stage, filePath));
                 addData(data);
                 table.getItems().get(0).setResult("---");
+                table.getItems().get(0).getLogWindow().updateResult("---");
                 currentStep++;
             }
         });

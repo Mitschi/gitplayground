@@ -82,7 +82,7 @@
                         <Pane layoutY="262.0" prefHeight="310.0" prefWidth="800.0">
                             <children>
                                 <Button fx:id="startButton" layoutX="20.0" layoutY="236.0" mnemonicParsing="false" onAction="#startProgram" prefHeight="25.0" prefWidth="110.0" style="-fx-background-color: #5bb75b;" text="Start" textFill="WHITE" />
-                                <Button layoutX="140.0" layoutY="236.0" mnemonicParsing="false" onAction="#cancelProgram" prefHeight="25.0" prefWidth="110.0" text="Cancel" />
+                                <Button layoutX="140.0" layoutY="236.0" mnemonicParsing="false" onAction="#cancelProgram" prefHeight="25.0" prefWidth="110.0" style="-fx-background-color: #d83f4a;" text="Cancel" textFill="WHITE" />
                         <Label layoutX="20.0" layoutY="288.0" prefHeight="17.0" prefWidth="240.0" text="Fields marked with * have to be selected" underline="true" />
                         <Label layoutX="20.0" layoutY="20.0" text="Revision:" />
                         <TextField fx:id="textFieldRevision" layoutX="80.0" layoutY="15.0" prefHeight="25.0" prefWidth="575.0" />
@@ -114,7 +114,7 @@
                         <Label layoutX="410.0" layoutY="20.0" text="Target:" />
                         <Button layoutX="330.0" layoutY="40.0" mnemonicParsing="false" onAction="#chooseSource" prefWidth="60.0" text="Choose" />
                         <Button layoutX="720.0" layoutY="40.0" mnemonicParsing="false" onAction="#chooseTarget" prefWidth="60.0" text="Choose" />
-                        <Button layoutX="350.0" layoutY="535.0" mnemonicParsing="false" onAction="#startDiffer" prefWidth="100.0" text="Start" />
+                        <Button layoutX="350.0" layoutY="535.0" mnemonicParsing="false" onAction="#startDiffer" prefWidth="100.0" style="-fx-background-color: #5bb75b;" text="Start" textFill="WHITE" />
                         <Pane fx:id="scrollPaneSource" layoutX="20.0" layoutY="80.0" prefHeight="440.0" prefWidth="370.0" />
                         <Pane fx:id="scrollPaneTarget" layoutX="410.0" layoutY="80.0" prefHeight="440.0" prefWidth="370.0" />
                      </children>

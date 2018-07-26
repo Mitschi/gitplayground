@@ -33,7 +33,6 @@ import org.fxmisc.richtext.demo.richtext.ParStyle;
 import org.fxmisc.richtext.demo.richtext.TextStyle;
 import org.fxmisc.richtext.model.*;
 import org.reactfx.util.Either;
-import scala.Int;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -58,14 +57,16 @@ public class App extends Application {
     protected static ProgressListener progressListener;
     protected static String sourcePath;
     protected static String targetPath;
+    protected String backgroundColorBuildDiff = "#0000ff";
+    protected String textColorBuildDiff = "#000000";
+    protected String[] target;
+    protected String[] source;
 
     protected GenericStyledArea<ParStyle, Either<String, LinkedImage>, TextStyle> areaSource;
     private final TextOps<String, TextStyle> styledTextOps = SegmentOps.styledTextOps();
     private final LinkedImageOps<TextStyle> linkedImageOps = new LinkedImageOps<>();
-
     protected GenericStyledArea<ParStyle, Either<String, LinkedImage>, TextStyle> areaTarget;
 
-    CodeArea codeArea;
 
     @FXML
     protected TextField sourceField;
@@ -119,57 +120,6 @@ public class App extends Application {
     protected Pane scrollPaneTarget;
 
 
-    //    @FXML
-//    public void setTextArea() {
-//        IndexRange selection = IndexRange.normalize(2, 6);
-//        updateStyleInSelection(spans -> TextStyle.bold(!spans.styleStream().allMatch(style -> style.bold.orElse(false))), selection);
-//        updateStyleInSelection(TextStyle.textColor(Color.web("#ff0000")), selection);
-//        updateStyleInSelection(TextStyle.backgroundColor(Color.web("#0000ff")), selection);
-//    }
-//
-    private void updateStyleInSelectionSource(Function<StyleSpans<TextStyle>, TextStyle> mixinGetter, IndexRange selection) {
-        if (selection.getLength() != 0) {
-            StyleSpans<TextStyle> styles = areaSource.getStyleSpans(selection);
-            TextStyle mixin = mixinGetter.apply(styles);
-            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
-            areaSource.setStyleSpans(selection.getStart(), newStyles);
-        }
-    }
-
-    private void updateStyleInSelectionSource(TextStyle mixin, IndexRange selection) {
-        if (selection.getLength() != 0) {
-            StyleSpans<TextStyle> styles = areaSource.getStyleSpans(selection);
-            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
-            areaSource.setStyleSpans(selection.getStart(), newStyles);
-        }
-    }
-
-    private void updateStyleInSelectionTarget(Function<StyleSpans<TextStyle>, TextStyle> mixinGetter, IndexRange selection) {
-        if (selection.getLength() != 0) {
-            StyleSpans<TextStyle> styles = areaTarget.getStyleSpans(selection);
-            TextStyle mixin = mixinGetter.apply(styles);
-//            StyleSpans<TextStyle> newStyles = styles.mapStyles(new );
-//            areaTarget.setStyleSpans(selection.getStart(), newStyles);
-        }
-    }
-
-    private void updateStyleInSelectionTarget(TextStyle mixin, IndexRange selection) {
-        if (selection.getLength() != 0) {
-            StyleSpans<TextStyle> styles = areaTarget.getStyleSpans(selection);
-            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
-            areaTarget.setStyleSpans(selection.getStart(), newStyles);
-        }
-    }
-
-
-    private Node createNode(StyledSegment<Either<String, LinkedImage>, TextStyle> seg,
-                            BiConsumer<? super TextExt, TextStyle> applyStyle) {
-        return seg.getSegment().unify(
-                text -> StyledTextArea.createStyledTextNode(text, seg.getStyle(), applyStyle),
-                LinkedImage::createNode
-        );
-    }
-
 
     public void initialize() {
         areaSource = new GenericStyledArea<>(
@@ -186,7 +136,7 @@ public class App extends Application {
                 Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
         areaSource.setPrefSize(scrollPaneSource.getPrefWidth(), scrollPaneSource.getPrefHeight());
 
-        IntFunction<Node> numberFactoryS= LineNumberFactory.get(areaSource);
+        IntFunction<Node> numberFactoryS = LineNumberFactory.get(areaSource);
         IntFunction<Node> graphicFactoryS = line -> {
             HBox hbox = new HBox(numberFactoryS.apply(line));
             hbox.setAlignment(Pos.CENTER_LEFT);
@@ -591,11 +541,11 @@ public class App extends Application {
             if (file.exists()) {
                 sourceField.setText(file.getPath());
                 sourcePath = file.getPath();
-            }else{
+            } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "File could not be found");
                 alert.show();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -609,17 +559,17 @@ public class App extends Application {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Extensible Markup Language", "*.xml"));
         // Open FileChooser and wait for Input
 
-        try{
+        try {
             File file = fileChooser.showOpenDialog(lblPath.getScene().getWindow());
 
             if (file.exists()) {
                 targetField.setText(file.getPath());
                 targetPath = file.getPath();
-            }else{
+            } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "File could not be found");
                 alert.show();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -642,10 +592,10 @@ public class App extends Application {
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Source and Target have to be pom.xml files!");
                     alert.show();
                 } else {
-                    if(!new File(sourcePath).exists() || !new File(targetPath).exists()){
+                    if (!new File(sourcePath).exists() || !new File(targetPath).exists()) {
                         Alert alert = new Alert(Alert.AlertType.ERROR, "File could not be found!");
                         alert.show();
-                    }else{
+                    } else {
                         areaTarget.clear();
                         areaSource.clear();
 
@@ -657,12 +607,16 @@ public class App extends Application {
                             String s = "";
 
                             while ((s = brS.readLine()) != null) {
-                                areaSource.appendText(s+"\n");
+                                areaSource.appendText(s + "\n");
                             }
+
 
                             while ((s = brT.readLine()) != null) {
                                 areaTarget.appendText(s + "\n");
                             }
+
+                            target = areaTarget.getText().split("\n");
+                            source = areaSource.getText().split("\n");
 
                         } catch (Exception e) {
                             Alert alert = new Alert(Alert.AlertType.ERROR, "Unable to read files!");
@@ -673,23 +627,64 @@ public class App extends Application {
                             //((MavenBuildChange)changes.get(0)).getDstPositionInfo().getStartLineNumber();
 
                             for (int i = 0; i < changes.size(); i++) {
+                                String changeTyp = ((MavenBuildChange) changes.get(i)).getChangeType();
 
+                                switch (changeTyp) {
+
+                                    case "INSERT":
+                                        backgroundColorBuildDiff="#00b300";
+                                        textColorBuildDiff="#ffffff";
+                                        break;
+
+                                    case "UPDATE":
+                                        backgroundColorBuildDiff="#e6e600";
+                                        textColorBuildDiff="#000000";
+                                        break;
+
+                                    case "DELETE":
+                                        backgroundColorBuildDiff="#db0000";
+                                        textColorBuildDiff="#ffffff";
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+
+
+                                int startSrc = 0;
+                                int endSrc = 0;
                                 int startLineNumberSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getStartLineNumber();
                                 int endLineNumberSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getEndLineNumber();
 
-                                int startLineOffsetSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getStartLineOffset();
-                                int endLineOffsetSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getEndLineOffset();
+                                for (int j = 0; j < startLineNumberSource - 1; j++) {
+                                    startSrc = startSrc + source[j].length() + 1;
+                                }
+
+                                for (int j = 0; j < endLineNumberSource; j++) {
+                                    endSrc = endSrc + source[j].length() + 1;
+                                }
+
+                                IndexRange selectionSource = IndexRange.normalize(startSrc, endSrc);
+                                updateStyleInSelectionSource(TextStyle.backgroundColor(Color.web(backgroundColorBuildDiff)), selectionSource);
+                                updateStyleInSelectionSource(TextStyle.textColor(Color.web(textColorBuildDiff)), selectionSource);
 
 
+                                int startTrg = 0;
+                                int endTrg = 0;
+                                int startLineNumberTarget = ((MavenBuildChange) changes.get(i)).getDstPositionInfo().getStartLineNumber();
+                                int endLineNumberTarget = ((MavenBuildChange) changes.get(i)).getDstPositionInfo().getEndLineNumber();
 
-                                IndexRange selectionSource = IndexRange.normalize(startLineOffsetSource, endLineOffsetSource);
-                                updateStyleInSelectionSource(TextStyle.textColor(Color.web("#ff0000")), selectionSource);
+                                for (int j = 0; j < startLineNumberTarget - 1; j++) {
+                                    startTrg = startTrg + target[j].length() + 1;
+                                }
 
-                                int startLineOffsetTarget = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getStartLineOffset();
-                                int endLineOffsetTarget = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getEndLineOffset();
+                                for (int j = 0; j < endLineNumberTarget; j++) {
+                                    endTrg = endTrg + target[j].length() + 1;
+                                }
 
-                                IndexRange selectionTarget = IndexRange.normalize(startLineOffsetTarget, endLineOffsetTarget);
-                                updateStyleInSelectionTarget(TextStyle.textColor(Color.web("#ff0000")), selectionTarget);
+                                IndexRange selectionTarget = IndexRange.normalize(startTrg, endTrg);
+                                updateStyleInSelectionTarget(TextStyle.backgroundColor(Color.web(backgroundColorBuildDiff)), selectionTarget);
+                                updateStyleInSelectionTarget(TextStyle.textColor(Color.web(textColorBuildDiff)), selectionTarget);
 
                             }
 
@@ -701,6 +696,31 @@ public class App extends Application {
 
                 }
             }
+        }
+    }
+
+    private Node createNode(StyledSegment<Either<String, LinkedImage>, TextStyle> seg,
+                            BiConsumer<? super TextExt, TextStyle> applyStyle) {
+        return seg.getSegment().unify(
+                text -> StyledTextArea.createStyledTextNode(text, seg.getStyle(), applyStyle),
+                LinkedImage::createNode
+        );
+    }
+
+    private void updateStyleInSelectionSource(TextStyle mixin, IndexRange selection) {
+        if (selection.getLength() != 0) {
+            StyleSpans<TextStyle> styles = areaSource.getStyleSpans(selection);
+            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
+            areaSource.setStyleSpans(selection.getStart(), newStyles);
+        }
+    }
+
+
+    private void updateStyleInSelectionTarget(TextStyle mixin, IndexRange selection) {
+        if (selection.getLength() != 0) {
+            StyleSpans<TextStyle> styles = areaTarget.getStyleSpans(selection);
+            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
+            areaTarget.setStyleSpans(selection.getStart(), newStyles);
         }
     }
 

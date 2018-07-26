@@ -179,9 +179,11 @@ public class App extends Application {
         // Set detailsTab to non-visible in the beginning
         tapPane.getTabs().remove(detailsTab);
         tapPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
+        // initialize tabListener
         tabListener = new TabOnCloseListener() {
             @Override
             public void tabOnClose() {
+                // remove Tab from ListView
                 Tab t = tapPane.getSelectionModel().getSelectedItem();
                 for (int i = 0; i < listView.getItems().size(); i++) {
                     if (listView.getItems().get(i).getProcessTab().equals(t)) {
@@ -190,15 +192,18 @@ public class App extends Application {
                 }
             }
         };
+        // initialize Progresslistener
         progressListener = new ProgressListener() {
             @Override
             public void changeProgress(Process process) {
+                // change Progress
                 process.getProgressBar().setProgress(process.getProgress());
                 process.getLabel().setText(process.getProgress() * 100 + "");
             }
 
             @Override
             public void progressFinished(Process process) {
+                // remove Process from ListView and update Progress
                 listView.getItems().remove(process);
                 process.getProgressBar().setProgress(1);
                 process.getLabel().setText("100%");
@@ -207,7 +212,7 @@ public class App extends Application {
             }
         };
 
-
+        // initialize processList
         processList = new ArrayList<Process>();
         //processList.add(new Process(null, detailsTab));
         processCounter = 0;
@@ -293,7 +298,7 @@ public class App extends Application {
         boolean isSelected = true;
         boolean isTxt = testForTxt();
         List<Class> allowedStrats = new ArrayList<Class>();
-
+        // add allowed Strategies
         if (add.isSelected())
             allowedStrats.add(AddRepositoryEntryAction.class);
 
@@ -328,12 +333,15 @@ public class App extends Application {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Missing Fields!");
             alert.show();
         } else {
+            // initialize new Process
             Process process = new Process(pomFile, stage, logPath);
             boolean isAlreadyRunning = false;
+            // check if Process had been started already
             for (Process p : processList) {
                 if (p.equals(process))
                     isAlreadyRunning = true;
             }
+            // add Process to processList and start it
             if (!isAlreadyRunning) {
                 processList.add(process);
                 processCounter++;
@@ -368,6 +376,7 @@ public class App extends Application {
 
     @FXML
     protected void cancelProgram(ActionEvent event) {
+        // get Selected Process
         ObservableList<Process> selectedItems = listView.getSelectionModel().getSelectedItems();
 
         if (listView.getItems().isEmpty()) {
@@ -389,7 +398,8 @@ public class App extends Application {
                     for (int i = 0; i < processList.size(); i++) {
                         Process p = processList.get(i);
                         if (p.equals(selP)) {
-                            p.getRepair().abortRepair();
+                            p.getRepair().abortRepair(); // cancel the process
+                            // remove Process from processList
                             processList.remove(p);
                             listView.getItems().remove(p);
                             processCounter--;
@@ -478,6 +488,7 @@ public class App extends Application {
 
 
     protected boolean testForPom() {
+        // checks if file is a pom.xml
         String s = textFieldPath.getText();
         try {
             File file = new File(s);
@@ -498,6 +509,7 @@ public class App extends Application {
     }
 
     protected boolean testForTxt() {
+        // checks if logFile is a .txt file
         String s = textFieldLog.getText();
         try {
             File file = new File(s);
@@ -519,6 +531,7 @@ public class App extends Application {
 
     @FXML
     protected void contextMenuListView(ActionEvent event) {
+        // change Tab via contextMenu show Details
         if (listView.getItems().size() != 0) {
             MultipleSelectionModel<Process> sel = listView.getSelectionModel();
             Process p = sel.getSelectedItem();

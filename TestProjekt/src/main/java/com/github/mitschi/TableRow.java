@@ -30,6 +30,7 @@ public class TableRow {
     }
 
     public TableRow(int step, String strategie, BuildLog buildResult, Stage stage, String filePath) {
+        // initialize Fields
         this.step = step;
         this.strategie = strategie;
         this.buildResult = buildResult;
@@ -38,8 +39,10 @@ public class TableRow {
         this.stage = stage;
         this.filePath = filePath;
         this.logWindow = new LogWindow(stage);
+        // set event handler for button
         this.showLog.setOnAction(
                 event -> {
+                    // open new LogWindow
                     logWindow.showDialog(filePath, step+"", buildResult);
 
                 }

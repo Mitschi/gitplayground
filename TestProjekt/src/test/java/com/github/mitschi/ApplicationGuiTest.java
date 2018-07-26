@@ -230,7 +230,6 @@ public class ApplicationGuiTest extends ApplicationTest {
         clickOn("#sourceField");
         eraseText(2);
         clickOn("Start");
-
     }
 
 

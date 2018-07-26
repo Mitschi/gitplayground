@@ -210,9 +210,9 @@ public class Process implements RepairListener{
                 addData(data);
                 // set the Results of the lines
                 table.getItems().get(i-1).setResult(buildLog.getBuildResult().toString());
-                table.getItems().get(i-1).getLogWindow().updateResult(buildLog.getBuildResult().toString(), buildLog.getBuildDuration());
+                table.getItems().get(i-1).getLogWindow().updateResult(buildLog.getBuildResult().toString(), buildLog.getBuildDuration(), buildLog);
                 table.getItems().get(i).setResult("---");
-                table.getItems().get(i).getLogWindow().updateResult("---", new BuildDuration(0,0,0));
+                table.getItems().get(i).getLogWindow().updateResult("---", new BuildDuration(0,0,0), new BuildLog());
 
                 currentStep++;
             }
@@ -233,7 +233,7 @@ public class Process implements RepairListener{
                 //TableRow(int step, String strategie, String buildResult, Stage stage, String filePath)
                 // change Build Results of the ended Step
                 table.getItems().get(i).setResult(buildLog.getBuildResult().toString());
-                table.getItems().get(i).getLogWindow().updateResult(buildLog.getBuildResult().toString(), buildLog.getBuildDuration());
+                table.getItems().get(i).getLogWindow().updateResult(buildLog.getBuildResult().toString(), buildLog.getBuildDuration(), buildLog);
                 table.refresh();
             }
         });
@@ -308,7 +308,7 @@ public class Process implements RepairListener{
                 ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(currentStep, null, startLog, stage, filePath));
                 addData(data);
                 table.getItems().get(0).setResult("---");
-                table.getItems().get(0).getLogWindow().updateResult("---", new BuildDuration(0,0,0));
+                table.getItems().get(0).getLogWindow().updateResult("---", new BuildDuration(0,0,0), new BuildLog());
                 currentStep++;
             }
         });

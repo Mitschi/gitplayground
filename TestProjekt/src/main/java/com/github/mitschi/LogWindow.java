@@ -246,7 +246,7 @@ public class LogWindow {
         }
     }
 
-    public void updateResult(String result, BuildDuration buildDuration){
+    public void updateResult(String result, BuildDuration buildDuration, BuildLog buildLog){
         // update Result and Build Duration in LogWindow
         getlblBuildResult.setText(result);
         seconds = buildDuration.getSeconds();
@@ -259,6 +259,11 @@ public class LogWindow {
         } else {
             getlblBuildResult.setTextFill(Color.web("#db0000"));
         }
+
+        getLblFailingModuleName.setText(buildLog.getFailingModuleName());
+
+        getMissingDependencies.getItems().addAll(buildLog.getMissingDependencies());
+        getMissingTypes.getItems().addAll(buildLog.getMissingTypes());
 
     }
 
@@ -278,10 +283,10 @@ public class LogWindow {
 
         //set text
         getlblBuildResult.setText(result);
-        getLblFailingModuleName.setText(buildLog.getFailingModuleName());
-
-        getMissingDependencies.getItems().addAll(buildLog.getMissingDependencies());
-        getMissingTypes.getItems().addAll(buildLog.getMissingTypes());
+//        getLblFailingModuleName.setText(buildLog.getFailingModuleName());
+//
+//        getMissingDependencies.getItems().addAll(buildLog.getMissingDependencies());
+//        getMissingTypes.getItems().addAll(buildLog.getMissingTypes());
 
         //There is nothing in buildLog.getFailingPlugins()
         // getFailingPlugins.getItems().addAll(buildLog.getFailingPlugins());

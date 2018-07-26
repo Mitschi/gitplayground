@@ -62,15 +62,9 @@ public class LogWindow {
     private final LinkedImageOps<TextStyle> linkedImageOps = new LinkedImageOps<>();
 
 
-    private Node createNode(StyledSegment<Either<String, LinkedImage>, TextStyle> seg,
-                            BiConsumer<? super TextExt, TextStyle> applyStyle) {
-        return seg.getSegment().unify(
-                text -> StyledTextArea.createStyledTextNode(text, seg.getStyle(), applyStyle),
-                LinkedImage::createNode
-        );
-    }
-
     public LogWindow(Stage primaryStage) {
+
+        //initialize
         dialog = new Stage();
         dialog.initOwner(primaryStage);
         dialog.initModality(Modality.APPLICATION_MODAL);
@@ -78,7 +72,6 @@ public class LogWindow {
         textEnd = 0;
         dialog.setMinHeight(800);
         dialog.setMinWidth(920);
-
         dialog.setResizable(false);
         dialog.setMaximized(false);
 
@@ -188,7 +181,7 @@ public class LogWindow {
         getFailingPlugins.setTranslateX(620);
         getFailingPlugins.setTranslateY(100);
 
-
+        //Initialize GenericStyledArea area;
         area = new GenericStyledArea<>(
                 ParStyle.EMPTY,                                                 // default paragraph style
                 (paragraph, style) -> paragraph.setStyle(style.toCss()),        // paragraph style setter
@@ -201,18 +194,28 @@ public class LogWindow {
         area.setStyleCodecs(
                 ParStyle.CODEC,
                 Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
-        area.setPrefSize(880, 610);
+        area.setPrefSize(880, 610); //set size
 
-        VirtualizedScrollPane<GenericStyledArea> vsPane = new VirtualizedScrollPane(area);
+        VirtualizedScrollPane<GenericStyledArea> vsPane = new VirtualizedScrollPane(area); //Add area to VirtualizedScrollPaneTo "vsPane" to get a scrollbar
 
         this.textPane.setContent(vsPane);
         textPane.setTranslateX(20);
         textPane.setTranslateY(160);
 
+        //add all controls and container to the main pane
         pane.getChildren().addAll(lblPath, txtPath, lblStep, txtStep, textPane, separator1, separator2, lblBuildDuration, getlblBuildDurationMin, getlblBuildDurationSec, lblBuildResult, getlblBuildResult, lblFailingModuleName, lblFailingPlugins, lblMissingDependencies, lblMissingTypes, getFailingPlugins, getLblFailingModuleName, getMissingDependencies, getMissingTypes);
     }
 
+    private Node createNode(StyledSegment<Either<String, LinkedImage>, TextStyle> seg,
+                            BiConsumer<? super TextExt, TextStyle> applyStyle) {
+        return seg.getSegment().unify(
+                text -> StyledTextArea.createStyledTextNode(text, seg.getStyle(), applyStyle),
+                LinkedImage::createNode
+        );
+    }
+
     private void updateStyleInSelection(TextStyle mixin, IndexRange selection) {
+        //color text in IndexRange "selection"
         if (selection.getLength() != 0) {
             StyleSpans<TextStyle> styles = area.getStyleSpans(selection);
             StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
@@ -222,10 +225,12 @@ public class LogWindow {
     }
 
     public void updateLogWindow(){
-
+        //patternArray = words you want to color
         String[] patternArray = {"\\[INFO\\]", "\\[ERROR\\]", "\\[WARNING\\]", "BUILD FAILURE", "ERROR", "BUILD SUCCESS", "SUCCESS", "\\@.*\\---", "FAILURE"};
+        //for each word in patternArray is a color in patternColor
         String[] patternColor = {"#006edb", "#db0000", "#e6b800", "#db0000", "#db0000", "#009900", "#009900", "#ff9090", "#db0000"};
 
+        //find the words from patternArray in area and set textColor
         for (int i = 0; i < patternArray.length; i++) {
             Pattern pattern = Pattern.compile(patternArray[i]);
             Matcher matcher = pattern.matcher(area.getText());
@@ -257,19 +262,20 @@ public class LogWindow {
     }
 
     public void showDialog(String filePath, String step, BuildLog buildLog) {
+        //set text
         txtPath.setText(filePath);
         txtStep.setText(step);
-
         getlblBuildDurationMin.setText(minutes + " min ");
         getlblBuildDurationSec.setText(seconds + " sec");
 
-
+        //set color of getlblBuildResult
         if (result.equals("SUCCESS")) {
             getlblBuildResult.setTextFill(Color.web("#009900"));
         } else {
             getlblBuildResult.setTextFill(Color.web("#db0000"));
         }
 
+        //set text
         getlblBuildResult.setText(result);
         getLblFailingModuleName.setText(buildLog.getFailingModuleName());
 

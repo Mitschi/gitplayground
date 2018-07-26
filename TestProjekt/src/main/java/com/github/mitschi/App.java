@@ -624,7 +624,6 @@ public class App extends Application {
                         }
                         try {
                             List<Change> changes = differ.extractChanges(new File(sourcePath), new File(targetPath));
-                            //((MavenBuildChange)changes.get(0)).getDstPositionInfo().getStartLineNumber();
 
                             for (int i = 0; i < changes.size(); i++) {
                                 String changeTyp = ((MavenBuildChange) changes.get(i)).getChangeType();

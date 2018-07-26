@@ -203,6 +203,36 @@ public class ApplicationGuiTest extends ApplicationTest {
         clickOn("Yes");
     }
 
+    @Test
+    public void testBuildDiffSourceEmpty(){
+        clickOn("BuildDiff");
+        clickOn("#sourceField");
+        TextField source = (TextField) stage.getScene().lookup("#sourceField");
+        eraseText(source.getText().length());
+        clickOn("Start");
+    }
+
+    @Test
+    public void testBuildDiffSameInput(){
+        clickOn("BuildDiff");
+        TextField source = (TextField) stage.getScene().lookup("#sourceField");
+        TextField target = (TextField) stage.getScene().lookup("#targetField");
+        doubleClickOn(target);
+        type(KeyCode.DELETE);
+        clickOn(target);
+        write(source.getText());
+        clickOn("Start");
+    }
+
+    @Test
+    public void testBuildDiffNotPom(){
+        clickOn("BuildDiff");
+        clickOn("#sourceField");
+        eraseText(2);
+        clickOn("Start");
+
+    }
+
 
 //    @BeforeClass
 //    public static void setupSpec() throws Exception{

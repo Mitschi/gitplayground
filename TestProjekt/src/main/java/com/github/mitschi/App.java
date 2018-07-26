@@ -286,10 +286,14 @@ public class App extends Application {
             pomFile = startProperties.getProperty("pomFile");
             maxSteps = Integer.parseInt(startProperties.getProperty("max_steps"));
             revision = startProperties.getProperty("revision");
+            targetPath = startProperties.getProperty("targetPath");
+            sourcePath = startProperties.getProperty("sourcePath");
             choiceBox.setValue(maxSteps + "");
             textFieldLog.setText(logPath);
             textFieldPath.setText(pomFile);
             textFieldRevision.setText(revision);
+            targetField.setText(targetPath);
+            sourceField.setText(sourcePath);
 
         } catch (Exception e) {
 
@@ -498,6 +502,8 @@ public class App extends Application {
         properties.setProperty("pomFile", pomFile);
         properties.setProperty("max_steps", maxSteps + "");
         properties.setProperty("revision", revision);
+        properties.setProperty("targetPath", targetPath);
+        properties.setProperty("sourcePath", sourcePath);
 
         try {
             // write properties to C:\Users\%USERPROFILE%\.buildMedic\config.properties if non-existing, Path will be created
@@ -579,12 +585,20 @@ public class App extends Application {
         fileChooser.setTitle("Choose pom.xml");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Extensible Markup Language", "*.xml"));
         // Open FileChooser and wait for Input
-        File file = fileChooser.showOpenDialog(lblPath.getScene().getWindow());
+        try {
+            File file = fileChooser.showOpenDialog(lblPath.getScene().getWindow());
 
-        if (file.exists()) {
-            sourceField.setText(file.getPath());
-            sourcePath = file.getPath();
+            if (file.exists()) {
+                sourceField.setText(file.getPath());
+                sourcePath = file.getPath();
+            }else{
+                Alert alert = new Alert(Alert.AlertType.ERROR, "File could not be found");
+                alert.show();
+            }
+        }catch (Exception e){
+
         }
+
     }
 
     @FXML
@@ -594,12 +608,21 @@ public class App extends Application {
         fileChooser.setTitle("Choose pom.xml");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Extensible Markup Language", "*.xml"));
         // Open FileChooser and wait for Input
-        File file = fileChooser.showOpenDialog(lblPath.getScene().getWindow());
 
-        if (file.exists()) {
-            targetField.setText(file.getPath());
-            targetPath = file.getPath();
+        try{
+            File file = fileChooser.showOpenDialog(lblPath.getScene().getWindow());
+
+            if (file.exists()) {
+                targetField.setText(file.getPath());
+                targetPath = file.getPath();
+            }else{
+                Alert alert = new Alert(Alert.AlertType.ERROR, "File could not be found");
+                alert.show();
+            }
+        }catch (Exception e){
+
         }
+
     }
 
     @FXML
@@ -619,58 +642,63 @@ public class App extends Application {
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Source and Target have to be pom.xml files!");
                     alert.show();
                 } else {
-                    areaTarget.clear();
-                    areaSource.clear();
-
-                    MavenBuildFileDiffer differ = new MavenBuildFileDiffer();
-                    try {
-                        BufferedReader brS = new BufferedReader(new FileReader(sourcePath));
-                        BufferedReader brT = new BufferedReader(new FileReader(targetPath));
-
-                        String s = "";
-
-                        while ((s = brS.readLine()) != null) {
-                            areaSource.appendText(s+"\n");
-                        }
-
-                        while ((s = brT.readLine()) != null) {
-                            areaTarget.appendText(s + "\n");
-                        }
-
-                    } catch (Exception e) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR, "Unable to read files!");
+                    if(!new File(sourcePath).exists() || !new File(targetPath).exists()){
+                        Alert alert = new Alert(Alert.AlertType.ERROR, "File could not be found!");
                         alert.show();
-                    }
-                    try {
-                        List<Change> changes = differ.extractChanges(new File(sourcePath), new File(targetPath));
-                        //((MavenBuildChange)changes.get(0)).getDstPositionInfo().getStartLineNumber();
+                    }else{
+                        areaTarget.clear();
+                        areaSource.clear();
 
-                        for (int i = 0; i < changes.size(); i++) {
+                        MavenBuildFileDiffer differ = new MavenBuildFileDiffer();
+                        try {
+                            BufferedReader brS = new BufferedReader(new FileReader(sourcePath));
+                            BufferedReader brT = new BufferedReader(new FileReader(targetPath));
 
-                            int startLineNumberSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getStartLineNumber();
-                            int endLineNumberSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getEndLineNumber();
+                            String s = "";
 
-                            int startLineOffsetSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getStartLineOffset();
-                            int endLineOffsetSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getEndLineOffset();
-                            System.out.println(startLineOffsetSource);
-                            System.out.println(endLineOffsetSource);
+                            while ((s = brS.readLine()) != null) {
+                                areaSource.appendText(s+"\n");
+                            }
+
+                            while ((s = brT.readLine()) != null) {
+                                areaTarget.appendText(s + "\n");
+                            }
+
+                        } catch (Exception e) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR, "Unable to read files!");
+                            alert.show();
+                        }
+                        try {
+                            List<Change> changes = differ.extractChanges(new File(sourcePath), new File(targetPath));
+                            //((MavenBuildChange)changes.get(0)).getDstPositionInfo().getStartLineNumber();
+
+                            for (int i = 0; i < changes.size(); i++) {
+
+                                int startLineNumberSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getStartLineNumber();
+                                int endLineNumberSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getEndLineNumber();
+
+                                int startLineOffsetSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getStartLineOffset();
+                                int endLineOffsetSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getEndLineOffset();
 
 
-                            IndexRange selectionSource = IndexRange.normalize(startLineOffsetSource, endLineOffsetSource);
-                            updateStyleInSelectionSource(TextStyle.textColor(Color.web("#ff0000")), selectionSource);
 
-                            int startLineOffsetTarget = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getStartLineOffset();
-                            int endLineOffsetTarget = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getEndLineOffset();
+                                IndexRange selectionSource = IndexRange.normalize(startLineOffsetSource, endLineOffsetSource);
+                                updateStyleInSelectionSource(TextStyle.textColor(Color.web("#ff0000")), selectionSource);
 
-                            IndexRange selectionTarget = IndexRange.normalize(startLineOffsetTarget, endLineOffsetTarget);
-                            updateStyleInSelectionTarget(TextStyle.textColor(Color.web("#ff0000")), selectionTarget);
+                                int startLineOffsetTarget = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getStartLineOffset();
+                                int endLineOffsetTarget = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getEndLineOffset();
+
+                                IndexRange selectionTarget = IndexRange.normalize(startLineOffsetTarget, endLineOffsetTarget);
+                                updateStyleInSelectionTarget(TextStyle.textColor(Color.web("#ff0000")), selectionTarget);
+
+                            }
+
+
+                        } catch (Exception e) {
 
                         }
-
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
+
                 }
             }
         }

@@ -100,7 +100,8 @@ public class Process implements RepairListener{
         repair.addRepairListener(this);
         this.filePath = filePath; // Set Filepath
         progressBar = new ProgressBar(); // initialize progressBar
-        table = new TableView<TableRow>(); // initialize Table
+        // initialize Table
+        table = new TableView<TableRow>();
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         this.processTab = new Tab();// initialize Tab
         processTab.setText(filePath); // set Title to Filepath
@@ -185,7 +186,7 @@ public class Process implements RepairListener{
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                App.progressListener.progressFinished(Process.this);
+                App.progressListener.progressFinished(Process.this); // call listener to delete Process
                 processTab.setClosable(true);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Repair finished!");
                 alert.setTitle(filePath);
@@ -204,9 +205,10 @@ public class Process implements RepairListener{
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-
+                // Add new line to table
                 ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(i, null, buildLog, stage, filePath));
                 addData(data);
+                // set the Results of the lines
                 table.getItems().get(i-1).setResult(buildLog.getBuildResult().toString());
                 table.getItems().get(i-1).getLogWindow().updateResult(buildLog.getBuildResult().toString(), buildLog.getBuildDuration());
                 table.getItems().get(i).setResult("---");
@@ -229,7 +231,7 @@ public class Process implements RepairListener{
                 label.setText(String.format("%.2f", progress) + "%");
 
                 //TableRow(int step, String strategie, String buildResult, Stage stage, String filePath)
-
+                // change Build Results of the ended Step
                 table.getItems().get(i).setResult(buildLog.getBuildResult().toString());
                 table.getItems().get(i).getLogWindow().updateResult(buildLog.getBuildResult().toString(), buildLog.getBuildDuration());
                 table.refresh();
@@ -254,12 +256,14 @@ public class Process implements RepairListener{
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                // write log to LogWindow
                 table.getItems().get(currentStep-1).getLogWindow().area.appendText(line+"\n");
                 table.getItems().get(currentStep-1).getLogWindow().area.requestFollowCaret();
                 table.getItems().get(currentStep-1).getLogWindow().updateLogWindow();
 
                 if(logExists){
                     try {
+                        // write Log in log File
                         bw.write(line+"\n");
                         bw.flush();
                     } catch (IOException e) {
@@ -271,7 +275,21 @@ public class Process implements RepairListener{
 
     @Override
     public void repairAborted() {
-
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                App.progressListener.progressFinished(Process.this); // call listener to delete Process
+                processTab.setClosable(true);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Repair cancelled!");
+                alert.setTitle(filePath);
+                alert.show();
+                try {
+                    bw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
@@ -284,6 +302,7 @@ public class Process implements RepairListener{
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                // Initialize Step 0
                 BuildLog startLog = new BuildLog();
                 startLog.setBuildDuration(new BuildDuration(0,0,0));
                 ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(currentStep, null, startLog, stage, filePath));
@@ -302,8 +321,12 @@ public class Process implements RepairListener{
                     isRunning.setValue(true);
                     if(repair == null){
 
-                    }else
+                    }else{
+                        // Start Repairtool
                         repair.repair(repoFolder, revision, max_steps,"statistic", allowedStrategies);
+                    }
+
+
 
                 } catch (FileNotFoundException | ParseException e) {
                     e.printStackTrace();
@@ -314,6 +337,7 @@ public class Process implements RepairListener{
     }
 
     public void cancel(){
+        // cancel Repair
         repair.abortRepair();
     }
 }

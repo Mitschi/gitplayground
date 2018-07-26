@@ -196,7 +196,7 @@ public class LogWindow {
                 Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
         area.setPrefSize(880, 610); //set size
 
-        VirtualizedScrollPane<GenericStyledArea> vsPane = new VirtualizedScrollPane(area); //Add area to VirtualizedScrollPaneTo "vsPane" to get a scrollbar
+        VirtualizedScrollPane<GenericStyledArea> vsPane = new VirtualizedScrollPane(area); //add area to VirtualizedScrollPaneTo "vsPane" to get a scrollbar
 
         this.textPane.setContent(vsPane);
         textPane.setTranslateX(20);

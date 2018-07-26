@@ -120,8 +120,8 @@ public class App extends Application {
     protected Pane scrollPaneTarget;
 
 
-
     public void initialize() {
+        //initialize areaSource
         areaSource = new GenericStyledArea<>(
                 ParStyle.EMPTY,                                                 // default paragraph style
                 (paragraph, style) -> paragraph.setStyle(style.toCss()),        // paragraph style setter
@@ -136,6 +136,7 @@ public class App extends Application {
                 Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
         areaSource.setPrefSize(scrollPaneSource.getPrefWidth(), scrollPaneSource.getPrefHeight());
 
+        //add line number to areaSource
         IntFunction<Node> numberFactoryS = LineNumberFactory.get(areaSource);
         IntFunction<Node> graphicFactoryS = line -> {
             HBox hbox = new HBox(numberFactoryS.apply(line));
@@ -143,10 +144,10 @@ public class App extends Application {
             return hbox;
         };
         areaSource.setParagraphGraphicFactory(graphicFactoryS);
-        VirtualizedScrollPane<GenericStyledArea> vsPaneS = new VirtualizedScrollPane(areaSource);
+        VirtualizedScrollPane<GenericStyledArea> vsPaneS = new VirtualizedScrollPane(areaSource); //add areaSource to VirtualizedScrollPaneTo "vsPane" to get a scrollbar
         scrollPaneSource.getChildren().add(vsPaneS);
 
-
+        //initialize areaTarget
         areaTarget = new GenericStyledArea<>(
                 ParStyle.EMPTY,                                                 // default paragraph style
                 (paragraph, style) -> paragraph.setStyle(style.toCss()),        // paragraph style setter
@@ -159,10 +160,9 @@ public class App extends Application {
         areaTarget.setStyleCodecs(
                 ParStyle.CODEC,
                 Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
-
         areaTarget.setPrefSize(scrollPaneTarget.getPrefWidth(), scrollPaneTarget.getPrefHeight());
 
-
+        //add line number to areaTarget
         IntFunction<Node> numberFactoryT = LineNumberFactory.get(areaTarget);
         IntFunction<Node> graphicFactoryT = line -> {
             HBox hbox = new HBox(numberFactoryT.apply(line));
@@ -170,10 +170,7 @@ public class App extends Application {
             return hbox;
         };
         areaTarget.setParagraphGraphicFactory(graphicFactoryT);
-
-
-        VirtualizedScrollPane<GenericStyledArea> vsPaneT = new VirtualizedScrollPane(areaTarget);
-
+        VirtualizedScrollPane<GenericStyledArea> vsPaneT = new VirtualizedScrollPane(areaTarget);//add areaTarget to VirtualizedScrollPaneTo "vsPane" to get a scrollbar
         scrollPaneTarget.getChildren().add(vsPaneT);
 
         // Set detailsTab to non-visible in the beginning
@@ -355,9 +352,6 @@ public class App extends Application {
                 //Load maxSteps from ChoiceBox
                 String pick = choiceBox.getValue().toString();
                 maxSteps = Integer.parseInt(pick);
-
-//                ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1", "success", stage, pomFile), new TableRow(2, "strat2", "failed", stage, pomFile));
-//                process.addData(data);
 
                 try {
                     process.start(repoFile.getParentFile(), revision, maxSteps, allowedStrats);
@@ -590,44 +584,52 @@ public class App extends Application {
 
     @FXML
     protected void startDiffer(ActionEvent event) {
+        //get Text
         targetPath = targetField.getText();
         sourcePath = sourceField.getText();
 
+        //check if the paths are empty
         if (targetPath.isEmpty() || sourcePath.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Missing argument!");
             alert.show();
         } else {
+            //check if the paths are the same
             if (targetPath.equals(sourcePath)) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Source and Target cannot be the same!");
                 alert.show();
             } else {
+                //check if the paths are pom.xml datas
                 if (!targetPath.endsWith("pom.xml") || !sourcePath.endsWith("pom.xml")) {
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Source and Target have to be pom.xml files!");
                     alert.show();
                 } else {
+                    //check if the paths exists
                     if (!new File(sourcePath).exists() || !new File(targetPath).exists()) {
                         Alert alert = new Alert(Alert.AlertType.ERROR, "File could not be found!");
                         alert.show();
                     } else {
+                        //clear the areas
                         areaTarget.clear();
                         areaSource.clear();
 
                         MavenBuildFileDiffer differ = new MavenBuildFileDiffer();
                         try {
+                            //Read paths
                             BufferedReader brS = new BufferedReader(new FileReader(sourcePath));
                             BufferedReader brT = new BufferedReader(new FileReader(targetPath));
 
                             String s = "";
-
+                            //setText in areaSource formatted
                             while ((s = brS.readLine()) != null) {
                                 areaSource.appendText(s + "\n");
                             }
 
-
+                            //setText in areaTarget formatted
                             while ((s = brT.readLine()) != null) {
                                 areaTarget.appendText(s + "\n");
                             }
 
+                            //split the text after \n to write each line in a different array index
                             target = areaTarget.getText().split("\n");
                             source = areaSource.getText().split("\n");
 
@@ -636,26 +638,30 @@ public class App extends Application {
                             alert.show();
                         }
                         try {
+                            //get the differences between the paths
                             List<Change> changes = differ.extractChanges(new File(sourcePath), new File(targetPath));
 
+                            //for each change do
                             for (int i = 0; i < changes.size(); i++) {
+                                //get what changed
                                 String changeTyp = ((MavenBuildChange) changes.get(i)).getChangeType();
 
+                                //set the backgroundColor and textColor
                                 switch (changeTyp) {
 
                                     case "INSERT":
-                                        backgroundColorBuildDiff="#00b300";
-                                        textColorBuildDiff="#ffffff";
+                                        backgroundColorBuildDiff = "#00b300"; //green
+                                        textColorBuildDiff = "#ffffff";//white
                                         break;
 
                                     case "UPDATE":
-                                        backgroundColorBuildDiff="#e6e600";
-                                        textColorBuildDiff="#000000";
+                                        backgroundColorBuildDiff = "#e6e600";//yellow
+                                        textColorBuildDiff = "#000000";//black
                                         break;
 
                                     case "DELETE":
-                                        backgroundColorBuildDiff="#db0000";
-                                        textColorBuildDiff="#ffffff";
+                                        backgroundColorBuildDiff = "#db0000";//red
+                                        textColorBuildDiff = "#ffffff";//white
                                         break;
 
                                     default:
@@ -665,17 +671,20 @@ public class App extends Application {
 
                                 int startSrc = 0;
                                 int endSrc = 0;
+                                //get the line where sth changed
                                 int startLineNumberSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getStartLineNumber();
                                 int endLineNumberSource = ((MavenBuildChange) changes.get(i)).getSrcPositionInfo().getEndLineNumber();
 
+                                //get the startValue where you start to color the change
                                 for (int j = 0; j < startLineNumberSource - 1; j++) {
                                     startSrc = startSrc + source[j].length() + 1;
                                 }
-
+                                //get the endValue where you stop to color the change
                                 for (int j = 0; j < endLineNumberSource; j++) {
                                     endSrc = endSrc + source[j].length() + 1;
                                 }
 
+                                //set backgroundColor, textColor and range of coloring for source
                                 IndexRange selectionSource = IndexRange.normalize(startSrc, endSrc);
                                 updateStyleInSelectionSource(TextStyle.backgroundColor(Color.web(backgroundColorBuildDiff)), selectionSource);
                                 updateStyleInSelectionSource(TextStyle.textColor(Color.web(textColorBuildDiff)), selectionSource);
@@ -683,17 +692,20 @@ public class App extends Application {
 
                                 int startTrg = 0;
                                 int endTrg = 0;
+                                //get the line where sth changed
                                 int startLineNumberTarget = ((MavenBuildChange) changes.get(i)).getDstPositionInfo().getStartLineNumber();
                                 int endLineNumberTarget = ((MavenBuildChange) changes.get(i)).getDstPositionInfo().getEndLineNumber();
 
+                                //get the startValue where you start to color the change
                                 for (int j = 0; j < startLineNumberTarget - 1; j++) {
                                     startTrg = startTrg + target[j].length() + 1;
                                 }
-
+                                //get the endValue where you stop to color the change
                                 for (int j = 0; j < endLineNumberTarget; j++) {
                                     endTrg = endTrg + target[j].length() + 1;
                                 }
 
+                                //set backgroundColor, textColor and range of coloring for target
                                 IndexRange selectionTarget = IndexRange.normalize(startTrg, endTrg);
                                 updateStyleInSelectionTarget(TextStyle.backgroundColor(Color.web(backgroundColorBuildDiff)), selectionTarget);
                                 updateStyleInSelectionTarget(TextStyle.textColor(Color.web(textColorBuildDiff)), selectionTarget);
@@ -720,6 +732,7 @@ public class App extends Application {
     }
 
     private void updateStyleInSelectionSource(TextStyle mixin, IndexRange selection) {
+        //color text in IndexRange "selection"
         if (selection.getLength() != 0) {
             StyleSpans<TextStyle> styles = areaSource.getStyleSpans(selection);
             StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
@@ -729,6 +742,7 @@ public class App extends Application {
 
 
     private void updateStyleInSelectionTarget(TextStyle mixin, IndexRange selection) {
+        //color text in IndexRange "selection"
         if (selection.getLength() != 0) {
             StyleSpans<TextStyle> styles = areaTarget.getStyleSpans(selection);
             StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));

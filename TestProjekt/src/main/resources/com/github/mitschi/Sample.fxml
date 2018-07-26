@@ -81,7 +81,7 @@
                         </Pane>
                         <Pane layoutY="262.0" prefHeight="310.0" prefWidth="800.0">
                             <children>
-                                <Button fx:id="startButton" layoutX="20.0" layoutY="236.0" mnemonicParsing="false" onAction="#startProgram" prefHeight="25.0" prefWidth="110.0" text="Start" />
+                                <Button fx:id="startButton" layoutX="20.0" layoutY="236.0" mnemonicParsing="false" onAction="#startProgram" prefHeight="25.0" prefWidth="110.0" style="-fx-background-color: #5bb75b;" text="Start" textFill="WHITE" />
                                 <Button layoutX="140.0" layoutY="236.0" mnemonicParsing="false" onAction="#cancelProgram" prefHeight="25.0" prefWidth="110.0" text="Cancel" />
                         <Label layoutX="20.0" layoutY="288.0" prefHeight="17.0" prefWidth="240.0" text="Fields marked with * have to be selected" underline="true" />
                         <Label layoutX="20.0" layoutY="20.0" text="Revision:" />

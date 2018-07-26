@@ -247,6 +247,7 @@ public class LogWindow {
     }
 
     public void updateResult(String result, BuildDuration buildDuration){
+        // update Result and Build Duration in LogWindow
         getlblBuildResult.setText(result);
         seconds = buildDuration.getSeconds();
         minutes = buildDuration.getMinutes();

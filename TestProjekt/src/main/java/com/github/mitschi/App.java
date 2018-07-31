@@ -39,7 +39,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 import java.util.function.IntFunction;
 
 public class App extends Application {
@@ -122,56 +121,10 @@ public class App extends Application {
 
     public void initialize() {
         //initialize areaSource
-        areaSource = new GenericStyledArea<>(
-                ParStyle.EMPTY,                                                 // default paragraph style
-                (paragraph, style) -> paragraph.setStyle(style.toCss()),        // paragraph style setter
-
-                TextStyle.EMPTY.updateFontSize(10).updateFontFamily("Consolas").updateTextColor(Color.BLACK),  // default segment style
-                styledTextOps._or(linkedImageOps, (s1, s2) -> Optional.empty()),                            // segment operations
-                seg -> createNode(seg, (text, style) -> text.setStyle(style.toCss())));                     // Node creator and segment style setter
-        areaSource.setWrapText(true);
-        areaSource.setEditable(false);
-        areaSource.setStyleCodecs(
-                ParStyle.CODEC,
-                Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
-        areaSource.setPrefSize(scrollPaneSource.getPrefWidth(), scrollPaneSource.getPrefHeight());
-
-        //add line number to areaSource
-        IntFunction<Node> numberFactoryS = LineNumberFactory.get(areaSource);
-        IntFunction<Node> graphicFactoryS = line -> {
-            HBox hbox = new HBox(numberFactoryS.apply(line));
-            hbox.setAlignment(Pos.CENTER_LEFT);
-            return hbox;
-        };
-        areaSource.setParagraphGraphicFactory(graphicFactoryS);
-        VirtualizedScrollPane<GenericStyledArea> vsPaneS = new VirtualizedScrollPane(areaSource); //add areaSource to VirtualizedScrollPaneTo "vsPane" to get a scrollbar
-        scrollPaneSource.getChildren().add(vsPaneS);
+        initSourceArea();
 
         //initialize areaTarget
-        areaTarget = new GenericStyledArea<>(
-                ParStyle.EMPTY,                                                 // default paragraph style
-                (paragraph, style) -> paragraph.setStyle(style.toCss()),        // paragraph style setter
-
-                TextStyle.EMPTY.updateFontSize(10).updateFontFamily("Consolas").updateTextColor(Color.BLACK),  // default segment style
-                styledTextOps._or(linkedImageOps, (s1, s2) -> Optional.empty()),                            // segment operations
-                seg -> createNode(seg, (text, style) -> text.setStyle(style.toCss())));                     // Node creator and segment style setter
-        areaTarget.setWrapText(true);
-        areaTarget.setEditable(false);
-        areaTarget.setStyleCodecs(
-                ParStyle.CODEC,
-                Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
-        areaTarget.setPrefSize(scrollPaneTarget.getPrefWidth(), scrollPaneTarget.getPrefHeight());
-
-        //add line number to areaTarget
-        IntFunction<Node> numberFactoryT = LineNumberFactory.get(areaTarget);
-        IntFunction<Node> graphicFactoryT = line -> {
-            HBox hbox = new HBox(numberFactoryT.apply(line));
-            hbox.setAlignment(Pos.CENTER_LEFT);
-            return hbox;
-        };
-        areaTarget.setParagraphGraphicFactory(graphicFactoryT);
-        VirtualizedScrollPane<GenericStyledArea> vsPaneT = new VirtualizedScrollPane(areaTarget);//add areaTarget to VirtualizedScrollPaneTo "vsPane" to get a scrollbar
-        scrollPaneTarget.getChildren().add(vsPaneT);
+        initTargetArea();
 
         // Set detailsTab to non-visible in the beginning
         tapPane.getTabs().remove(detailsTab);
@@ -225,31 +178,84 @@ public class App extends Application {
         strategies.setCellValueFactory(new PropertyValueFactory<TableRow, String>("strategie"));
         buildResult.setCellValueFactory(new PropertyValueFactory<TableRow, String>("buildResult"));
 
-        //ObservableList<TableRow> data = FXCollections.observableArrayList(new TableRow(1, "strat1", "success", stage, pomFile), new TableRow(2, "strat2", "failed", stage, pomFile));
-
-        //tableView.setItems(data);
-
         // Load existing Properties
         try {
-            Properties startProperties = new Properties();
-            savePath = System.getProperty("user.home") + "\\.buildMedic"; // initializing savePath
-            startProperties.load(new FileReader(savePath + "\\config.properties"));
-            logPath = startProperties.getProperty("logPath");
-            pomFile = startProperties.getProperty("pomFile");
-            maxSteps = Integer.parseInt(startProperties.getProperty("max_steps"));
-            revision = startProperties.getProperty("revision");
-            targetPath = startProperties.getProperty("targetPath");
-            sourcePath = startProperties.getProperty("sourcePath");
-            choiceBox.setValue(maxSteps + "");
-            textFieldLog.setText(logPath);
-            textFieldPath.setText(pomFile);
-            textFieldRevision.setText(revision);
-            targetField.setText(targetPath);
-            sourceField.setText(sourcePath);
-
+            loadProperties();
         } catch (Exception e) {
 
         }
+    }
+
+    private void loadProperties() throws IOException {
+        Properties startProperties = new Properties();
+        savePath = System.getProperty("user.home") + "\\.buildMedic"; // initializing savePath
+        startProperties.load(new FileReader(savePath + "\\config.properties"));
+        logPath = startProperties.getProperty("logPath");
+        pomFile = startProperties.getProperty("pomFile");
+        maxSteps = Integer.parseInt(startProperties.getProperty("max_steps"));
+        revision = startProperties.getProperty("revision");
+        targetPath = startProperties.getProperty("targetPath");
+        sourcePath = startProperties.getProperty("sourcePath");
+        choiceBox.setValue(maxSteps + "");
+        textFieldLog.setText(logPath);
+        textFieldPath.setText(pomFile);
+        textFieldRevision.setText(revision);
+        targetField.setText(targetPath);
+        sourceField.setText(sourcePath);
+    }
+
+    private void initTargetArea() {
+        areaTarget = new GenericStyledArea<>(
+                ParStyle.EMPTY,                                                 // default paragraph style
+                (paragraph, style) -> paragraph.setStyle(style.toCss()),        // paragraph style setter
+
+                TextStyle.EMPTY.updateFontSize(10).updateFontFamily("Consolas").updateTextColor(Color.BLACK),  // default segment style
+                styledTextOps._or(linkedImageOps, (s1, s2) -> Optional.empty()),                            // segment operations
+                seg -> createNode(seg, (text, style) -> text.setStyle(style.toCss())));                     // Node creator and segment style setter
+        areaTarget.setWrapText(true);
+        areaTarget.setEditable(false);
+        areaTarget.setStyleCodecs(
+                ParStyle.CODEC,
+                Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
+        areaTarget.setPrefSize(scrollPaneTarget.getPrefWidth(), scrollPaneTarget.getPrefHeight());
+
+        //add line number to areaTarget
+        IntFunction<Node> numberFactoryT = LineNumberFactory.get(areaTarget);
+        IntFunction<Node> graphicFactoryT = line -> {
+            HBox hbox = new HBox(numberFactoryT.apply(line));
+            hbox.setAlignment(Pos.CENTER_LEFT);
+            return hbox;
+        };
+        areaTarget.setParagraphGraphicFactory(graphicFactoryT);
+        VirtualizedScrollPane<GenericStyledArea> vsPaneT = new VirtualizedScrollPane(areaTarget);//add areaTarget to VirtualizedScrollPaneTo "vsPane" to get a scrollbar
+        scrollPaneTarget.getChildren().add(vsPaneT);
+    }
+
+    private void initSourceArea() {
+        areaSource = new GenericStyledArea<>(
+                ParStyle.EMPTY,                                                 // default paragraph style
+                (paragraph, style) -> paragraph.setStyle(style.toCss()),        // paragraph style setter
+
+                TextStyle.EMPTY.updateFontSize(10).updateFontFamily("Consolas").updateTextColor(Color.BLACK),  // default segment style
+                styledTextOps._or(linkedImageOps, (s1, s2) -> Optional.empty()),                            // segment operations
+                seg -> createNode(seg, (text, style) -> text.setStyle(style.toCss())));                     // Node creator and segment style setter
+        areaSource.setWrapText(true);
+        areaSource.setEditable(false);
+        areaSource.setStyleCodecs(
+                ParStyle.CODEC,
+                Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
+        areaSource.setPrefSize(scrollPaneSource.getPrefWidth(), scrollPaneSource.getPrefHeight());
+
+        //add line number to areaSource
+        IntFunction<Node> numberFactoryS = LineNumberFactory.get(areaSource);
+        IntFunction<Node> graphicFactoryS = line -> {
+            HBox hbox = new HBox(numberFactoryS.apply(line));
+            hbox.setAlignment(Pos.CENTER_LEFT);
+            return hbox;
+        };
+        areaSource.setParagraphGraphicFactory(graphicFactoryS);
+        VirtualizedScrollPane<GenericStyledArea> vsPaneS = new VirtualizedScrollPane(areaSource); //add areaSource to VirtualizedScrollPaneTo "vsPane" to get a scrollbar
+        scrollPaneSource.getChildren().add(vsPaneS);
     }
 
 

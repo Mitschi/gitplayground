@@ -1,9 +1,7 @@
 package com.github.mitschi;
 
 import at.aau.building.BuildLog;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
 import javafx.stage.Stage;
 
 import java.util.Objects;

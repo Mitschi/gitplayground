@@ -102,6 +102,38 @@ public class LogWindow {
 
         dialog.setScene(scene);
 
+        setLayout();
+
+        //Initialize GenericStyledArea area;
+        initTextArea();
+
+        //add all controls and container to the main pane
+        pane.getChildren().addAll(lblPath, txtPath, lblStep, txtStep, textPane, separator1, separator2, lblBuildDuration, getlblBuildDurationMin, getlblBuildDurationSec, lblBuildResult, getlblBuildResult, lblFailingModuleName, lblFailingPlugins, lblMissingDependencies, lblMissingTypes, getFailingPlugins, getLblFailingModuleName, getMissingDependencies, getMissingTypes);
+    }
+
+    private void initTextArea() {
+        area = new GenericStyledArea<>(
+                ParStyle.EMPTY,                                                 // default paragraph style
+                (paragraph, style) -> paragraph.setStyle(style.toCss()),        // paragraph style setter
+
+                TextStyle.EMPTY.updateFontSize(10).updateFontFamily("Consolas").updateTextColor(Color.BLACK),  // default segment style
+                styledTextOps._or(linkedImageOps, (s1, s2) -> Optional.empty()),                            // segment operations
+                seg -> createNode(seg, (text, style) -> text.setStyle(style.toCss())));                     // Node creator and segment style setter
+        area.setWrapText(true);
+        area.setEditable(false);
+        area.setStyleCodecs(
+                ParStyle.CODEC,
+                Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
+        area.setPrefSize(880, 610); //set size
+
+        VirtualizedScrollPane<GenericStyledArea> vsPane = new VirtualizedScrollPane(area); //add area to VirtualizedScrollPaneTo "vsPane" to get a scrollbar
+
+        this.textPane.setContent(vsPane);
+        textPane.setTranslateX(20);
+        textPane.setTranslateY(160);
+    }
+
+    private void setLayout() {
         pane.setMinSize(920, 800);
 
         lblPath.setPrefSize(30, 20);
@@ -180,30 +212,6 @@ public class LogWindow {
         getFailingPlugins.setPrefSize(280, 50);
         getFailingPlugins.setTranslateX(620);
         getFailingPlugins.setTranslateY(100);
-
-        //Initialize GenericStyledArea area;
-        area = new GenericStyledArea<>(
-                ParStyle.EMPTY,                                                 // default paragraph style
-                (paragraph, style) -> paragraph.setStyle(style.toCss()),        // paragraph style setter
-
-                TextStyle.EMPTY.updateFontSize(10).updateFontFamily("Consolas").updateTextColor(Color.BLACK),  // default segment style
-                styledTextOps._or(linkedImageOps, (s1, s2) -> Optional.empty()),                            // segment operations
-                seg -> createNode(seg, (text, style) -> text.setStyle(style.toCss())));                     // Node creator and segment style setter
-        area.setWrapText(true);
-        area.setEditable(false);
-        area.setStyleCodecs(
-                ParStyle.CODEC,
-                Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
-        area.setPrefSize(880, 610); //set size
-
-        VirtualizedScrollPane<GenericStyledArea> vsPane = new VirtualizedScrollPane(area); //add area to VirtualizedScrollPaneTo "vsPane" to get a scrollbar
-
-        this.textPane.setContent(vsPane);
-        textPane.setTranslateX(20);
-        textPane.setTranslateY(160);
-
-        //add all controls and container to the main pane
-        pane.getChildren().addAll(lblPath, txtPath, lblStep, txtStep, textPane, separator1, separator2, lblBuildDuration, getlblBuildDurationMin, getlblBuildDurationSec, lblBuildResult, getlblBuildResult, lblFailingModuleName, lblFailingPlugins, lblMissingDependencies, lblMissingTypes, getFailingPlugins, getLblFailingModuleName, getMissingDependencies, getMissingTypes);
     }
 
     private Node createNode(StyledSegment<Either<String, LinkedImage>, TextStyle> seg,
@@ -265,6 +273,9 @@ public class LogWindow {
         getMissingDependencies.getItems().addAll(buildLog.getMissingDependencies());
         getMissingTypes.getItems().addAll(buildLog.getMissingTypes());
 
+        //There is nothing in buildLog.getFailingPlugins()
+        // getFailingPlugins.getItems().addAll(buildLog.getFailingPlugins());
+
     }
 
     public void showDialog(String filePath, String step, BuildLog buildLog) {
@@ -283,13 +294,8 @@ public class LogWindow {
 
         //set text
         getlblBuildResult.setText(result);
-//        getLblFailingModuleName.setText(buildLog.getFailingModuleName());
-//
-//        getMissingDependencies.getItems().addAll(buildLog.getMissingDependencies());
-//        getMissingTypes.getItems().addAll(buildLog.getMissingTypes());
 
-        //There is nothing in buildLog.getFailingPlugins()
-        // getFailingPlugins.getItems().addAll(buildLog.getFailingPlugins());
+
 
 
         dialog.show();
